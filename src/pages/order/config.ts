@@ -136,6 +136,56 @@ export const schema: TableProps['schema'] = {
           options: ['detail']
         }
       ]
+    },
+    {
+      title: '美团订单',
+      key: '2',
+      columns: [
+        {
+          fixed: true,
+          title: '订单编号',
+          dataIndex: 'orderNo',
+          width: 300
+        },
+        {
+          title: '订单金额/元',
+          dataIndex: 'originalPrice',
+          format: 'money',
+          width: 140
+        },
+        {
+          title: '优惠金额/元',
+          dataIndex: 'discountPrice',
+          format: 'money',
+          width: 140
+        },
+        {
+          title: '实付金额/元',
+          dataIndex: 'receivePrice',
+          format: 'money',
+          width: 140
+        },
+        {
+          title: '订单状态',
+          dataIndex: 'status',
+          options: [
+            { value: 'SUBMIT', label: '已结算' },
+            { value: 'CREATED', label: '未结算' }
+          ],
+          width: 140
+        },
+        {
+          title: '创建日期',
+          dataIndex: 'createTime',
+          format: 'time'
+        },
+        {
+          fixed: 'right',
+          title: '操作',
+          dataIndex: 'options',
+          options: ['detail']
+        }
+      ]
     }
   ],
   options: {

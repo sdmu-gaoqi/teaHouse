@@ -24,7 +24,8 @@ const payKey = 'payMethod'
 const schema: Schema = {
   type: 'object',
   rules: {
-    [payKey]: [{ required: true, message: '请选择支付方式' }]
+    [payKey]: [{ required: true, message: '请选择支付方式' }],
+    meituan: [{ required: true, message: '请输入美团金额' }]
   },
   properties: {
     orderNo: {
@@ -49,6 +50,10 @@ const schema: Schema = {
           {
             label: '会员',
             value: '1'
+          },
+          {
+            label: '美团',
+            value: '2'
           }
         ]
       },
@@ -178,7 +183,7 @@ const schema: Schema = {
       title: '应收金额',
       type: 'string',
       widget: 'input',
-      span: 12,
+      span: 13,
       props: {
         readonly: true,
         bordered: false
@@ -186,20 +191,22 @@ const schema: Schema = {
       'ui:hidden':
         '(formState.value.settleType == 1 && !formState.value?.memberId?.memberId)'
     },
-    占位: {
-      span: 12
-    },
     discountPrice: {
       defaultValue: '0',
       title: '优惠',
       type: 'string',
-      span: 12,
+      span: 13,
       widget: 'input',
       'ui:hidden':
-        '(formState.value.settleType == 1 && !formState.value?.memberId?.memberId)'
+        '(formState.value.settleType == 1 && !formState.value?.memberId?.memberId) || formState.value.settleType == 2'
     },
-    占位1: {
-      span: 12
+    meituan: {
+      defaultValue: '0',
+      title: '美团金额',
+      type: 'string',
+      span: 12,
+      widget: 'input',
+      'ui:hidden': 'formState.value.settleType != 2'
     },
     receivePrice: {
       title: '实收金额',
@@ -215,7 +222,7 @@ const schema: Schema = {
         }
       },
       'ui:hidden':
-        '(formState.value.settleType == 1 && !formState.value?.memberId?.memberId)'
+        '(formState.value.settleType == 1 && !formState.value?.memberId?.memberId) || formState.value.settleType == 2'
     },
     store2: {
       title: '支付方式',
@@ -227,7 +234,7 @@ const schema: Schema = {
         bordered: false
       },
       'ui:hidden':
-        'formState.value.settleType != 1  || formState.value.memberId?.memberType != 1'
+        'formState.value.settleType != 1  || formState.value.memberId?.memberType != 1 || formState.value.settleType == 2'
     },
     占位11: {
       span: 12
@@ -244,6 +251,17 @@ const schema: Schema = {
       },
       'ui:hidden':
         'formState.value.settleType != 1  || formState.value.memberId?.memberType != 2'
+    },
+    store4: {
+      title: '支付方式',
+      type: 'string',
+      widget: 'input',
+      defaultValue: '美团核销',
+      props: {
+        readonly: true,
+        bordered: false
+      },
+      'ui:hidden': 'formState.value.settleType != 2'
     },
     z1: {
       widget: 'input',
@@ -297,7 +315,7 @@ const schema: Schema = {
         bordered: false
       },
       'ui:hidden':
-        '(formState.value.settleType == 1 && !formState.value?.memberId?.memberId) || formState.value.settleType == 0'
+        '(formState.value.settleType == 1 && !formState.value?.memberId?.memberId) || formState.value.settleType == 0 || formState.value.settleType == 2'
     },
     [payKey]: {
       title: '支付方式',
