@@ -288,6 +288,10 @@ const MarketingDetail = defineComponent({
             onCancel={() => {
               open.value = false
             }}
+            modalProps={{
+              okText: '确定',
+              cancelText: '返回'
+            }}
           />
         </div>
       )

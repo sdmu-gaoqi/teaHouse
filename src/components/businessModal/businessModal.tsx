@@ -1,4 +1,4 @@
-import { Modal } from 'ant-design-vue'
+import { Modal, ModalProps } from 'ant-design-vue'
 import { computed, defineComponent, toRef } from 'vue'
 import { BusinessModalTypes, BusinessModalType } from './businessModal.type'
 import memeberPayForm from './components/memeberPay.form'
@@ -23,6 +23,7 @@ interface BusinessModalProps {
   formState?: Record<string, any>
   onFinish: () => void
   title?: string
+  modalProps?: ModalProps
 }
 
 export default defineComponent({
@@ -32,7 +33,8 @@ export default defineComponent({
     onFinish: Function,
     type: String,
     formState: Object,
-    title: String
+    title: String,
+    modalProps: Object
   },
   // @ts-ignore
   setup(props: BusinessModalProps) {
@@ -134,6 +136,7 @@ export default defineComponent({
         class={`${styles.businessModal} ${
           isFormRender.value ? styles.formModal : ''
         }`}
+        {...props.modalProps}
       >
         <El.value {...props} />
       </Modal>
