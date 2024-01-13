@@ -231,6 +231,27 @@ const asyncRouter: any[] = [
     ]
   },
   {
+    path: '/marketing',
+    name: '营销管理',
+    children: [
+      {
+        path: 'list',
+        name: '限时秒杀活动',
+        component: () => import('./pages/marketing/list.tsx')
+      },
+      {
+        path: 'add',
+        name: '新建秒杀活动',
+        component: () => import('./pages/marketing/detail.tsx')
+      },
+      {
+        path: 'edit:/:id',
+        name: '编辑秒杀活动',
+        component: () => import('./pages/marketing/detail.tsx')
+      }
+    ]
+  },
+  {
     path: '/chart',
     name: '统计报表',
     redirect: () => {

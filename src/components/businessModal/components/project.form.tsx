@@ -3,6 +3,7 @@ import { FormRender, FormRenderProps, Schema } from 'store-operations-ui'
 import { defineComponent, onMounted, ref } from 'vue'
 import { editSchema } from '@/pages/setting/project/config'
 import { useStore } from 'vuex'
+import ProjectType from '@/components/ProjectType/projectType'
 
 export default defineComponent({
   props: {
@@ -31,6 +32,13 @@ export default defineComponent({
         })
       }
     })
+
+    const handleSolts = {
+      left: () => {
+        return <ProjectType className="w-[250px]"></ProjectType>
+      }
+    }
+
     return () => {
       return (
         <FormRender
@@ -46,6 +54,8 @@ export default defineComponent({
                 (v.giveBalance || 0)
             })
           }}
+          v-slots={handleSolts}
+          rowClassName="flex-1 pl-[50px] border-l-4 border-indigo-500"
         />
       )
     }

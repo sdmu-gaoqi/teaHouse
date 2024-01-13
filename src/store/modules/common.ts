@@ -8,6 +8,7 @@ import 运营 from '@/assets/运营.svg'
 import 设置 from '@/assets/设置.svg'
 import 日志 from '@/assets/日志.svg'
 import 工作台 from '@/assets/工作台.svg'
+import 美团 from '@/assets/美团.svg'
 import type { UserState } from './userInfo'
 import { transformMenuByPerms } from '@/utils/menu'
 import { toRaw } from 'vue'
@@ -109,6 +110,18 @@ const defaultMenu = [
     ],
     path: '/stores',
     icon: 门店
+  },
+  {
+    title: '营销管理',
+    icon: 美团,
+    access: ['marketingView'],
+    children: [
+      {
+        title: '限时秒杀活动',
+        path: '/marketing/list',
+        access: ['marketingView']
+      }
+    ]
   },
   {
     title: '统计报表',

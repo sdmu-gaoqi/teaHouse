@@ -6,13 +6,10 @@
         :on-cancel="onCancel"
         :schema="editSchema"
         className="pro-form"
-        rowClassName="flex-1"
+        rowClassName="pro-form-row"
       >
         <template #left>
-          <ProjectType
-            className="w-[200px]"
-            style="border: 1px solid #eee; border-top: none"
-          ></ProjectType>
+          <ProjectType className="w-[250px]" :edit="true"></ProjectType>
         </template>
       </FormRender>
     </template>
@@ -71,6 +68,11 @@ const onCancel = debounce(() => {
   }
   .wa-form-render > div {
     padding: 20px 10px;
+  }
+  .pro-form-row {
+    flex: 1;
+    padding-left: 50px !important;
+    border-left: 1px solid #eee;
   }
 }
 </style>

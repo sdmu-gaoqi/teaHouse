@@ -102,8 +102,11 @@ export const editSchema = {
     pzRoyalty: [{ required: true, message: '请输入' }]
   },
   properties: {
+    'op-group-0': {
+      title: '项目基础信息'
+    },
     serviceName: {
-      title: '服务项目',
+      title: '项目名称',
       type: 'string',
       props: {
         placeholder: '请输入'
@@ -142,26 +145,6 @@ export const editSchema = {
         bordered: false
       }
     },
-    pzRoyalty: {
-      title: '项目排钟提成',
-      type: 'number',
-      props: {
-        placeholder: '请输入',
-        suffix: 'money',
-        type: 'number'
-      },
-      widget: 'input'
-    },
-    dzRoyalty: {
-      title: '项目点钟提成',
-      type: 'number',
-      props: {
-        placeholder: '请输入',
-        suffix: 'money',
-        type: 'number'
-      },
-      widget: 'input'
-    },
     canDiscount: {
       title: '是否参与折扣优惠',
       widget: 'radio',
@@ -182,6 +165,72 @@ export const editSchema = {
       },
       widget: 'textArea',
       span: 24
+    },
+    'op-group-1': {
+      title: '项目提成信息'
+    },
+    'op-desc-1': {
+      title: '注(线下：顾客直接在收银台买单；线上：顾客在美团团购买单)'
+    },
+    pzRoyalty: {
+      title: '线下排钟提成',
+      type: 'number',
+      props: {
+        placeholder: '请输入',
+        suffix: 'money',
+        type: 'number'
+      },
+      widget: 'input'
+    },
+    dzRoyalty: {
+      title: '线下点钟提成',
+      type: 'number',
+      props: {
+        placeholder: '请输入',
+        suffix: 'money',
+        type: 'number'
+      },
+      widget: 'input'
+    },
+    xsPzRoyalty: {
+      title: '线上排钟提成',
+      type: 'number',
+      props: {
+        placeholder: '请输入',
+        suffix: 'money',
+        type: 'number'
+      },
+      widget: 'input'
+    },
+    xsDzRoyalty: {
+      title: '线上点钟提成',
+      type: 'number',
+      props: {
+        placeholder: '请输入',
+        suffix: 'money',
+        type: 'number'
+      },
+      widget: 'input'
+    },
+    xsZtRoyalty: {
+      title: '线下自推提成',
+      type: 'number',
+      props: {
+        placeholder: '请输入',
+        suffix: 'money',
+        type: 'number'
+      },
+      widget: 'input'
+    },
+    xxZtRoyalty: {
+      title: '线上自推提成',
+      type: 'number',
+      props: {
+        placeholder: '请输入',
+        suffix: 'money',
+        type: 'number'
+      },
+      widget: 'input'
     }
   },
   displayType: 'row',
