@@ -181,6 +181,7 @@ const schema: Schema = {
     },
     originalPrice: {
       title: '应收金额',
+      labelClass: 'text-orange-500 text-[14px]',
       type: 'string',
       widget: 'input',
       span: 13,
@@ -190,15 +191,6 @@ const schema: Schema = {
       },
       'ui:hidden':
         '(formState.value.settleType == 1 && !formState.value?.memberId?.memberId)'
-    },
-    discountPrice: {
-      defaultValue: '0',
-      title: '优惠',
-      type: 'string',
-      span: 13,
-      widget: 'input',
-      'ui:hidden':
-        '(formState.value.settleType == 1 && !formState.value?.memberId?.memberId) || formState.value.settleType == 2'
     },
     meituan: {
       defaultValue: '0',
@@ -210,16 +202,34 @@ const schema: Schema = {
     },
     receivePrice: {
       title: '实收金额',
+      labelClass: 'text-orange-500 text-[14px]',
       type: 'string',
       span: 12,
       widget: 'input',
+      // props: {
+      //   readonly: true,
+      //   bordered: false,
+      //   style: {
+      //     color: 'red',
+      //     fontWeight: 'bold'
+      //   }
+      // },
+      'ui:hidden':
+        '(formState.value.settleType == 1 && !formState.value?.memberId?.memberId) || formState.value.settleType == 2'
+    },
+    discountPrice: {
+      defaultValue: '0',
+      title: '优惠',
+      type: 'string',
+      span: 13,
+      widget: 'input',
       props: {
         readonly: true,
-        bordered: false,
-        style: {
-          color: 'red',
-          fontWeight: 'bold'
-        }
+        bordered: false
+        // style: {
+        //   color: 'red',
+        //   fontWeight: 'bold'
+        // }
       },
       'ui:hidden':
         '(formState.value.settleType == 1 && !formState.value?.memberId?.memberId) || formState.value.settleType == 2'
@@ -413,23 +423,23 @@ export default defineComponent({
           value.target.value = 0
           run({
             ...params.value?.[0],
-            discountPrice: 0,
+            receivePrice: 0,
             settleType
           })
           return message.error('请输入正确的数字')
         }
         if (+inputValue >= +originalPrice) {
-          message.error('优惠金额不能大于应收金额')
+          message.error('实收金额不能大于应收金额')
           value.target.value = 0
           run({
             ...params.value?.[0],
-            discountPrice: 0,
+            receivePrice: 0,
             settleType
           })
         } else {
           run({
             ...params.value?.[0],
-            discountPrice: value.target.value,
+            receivePrice: value.target.value,
             settleType
           })
         }
@@ -474,6 +484,7 @@ export default defineComponent({
             const formValue = formRef.value.formRef.getFieldsValue()
             const settleType = +formValue.settleType
             const originalPrice = formValue?.originalPrice
+            const receivePrice = formValue?.receivePrice
             const orderId = props.formState?.orderId
             const orderNo = props.formState?.orderNo
             const user = formValue?.memberId
@@ -566,10 +577,17 @@ export default defineComponent({
                 }
               }
             }
-            if (key === 'discountPrice') {
+            // if (key === 'discountPrice') {
+            //   changeNum(value, {
+            //     originalPrice,
+            //     settleType
+            //   })
+            // }
+            if (key === 'receivePrice') {
               changeNum(value, {
-                originalPrice,
-                settleType
+                receivePrice,
+                settleType,
+                originalPrice
               })
             }
           }}
