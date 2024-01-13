@@ -39,9 +39,11 @@
 
   .engineerGroup {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     flex-wrap: wrap;
     padding-left: 0;
+    height: 450px;
+    overflow: hidden auto;
   }
 }
 
