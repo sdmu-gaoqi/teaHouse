@@ -4,6 +4,8 @@ import { defineComponent, onMounted, ref } from 'vue'
 import { editSchema } from '@/pages/setting/project/config'
 import { useStore } from 'vuex'
 import ProjectType from '@/components/ProjectType/projectType'
+import common from '@/servers/common'
+import selectProject from './selectProject'
 
 export default defineComponent({
   props: {
@@ -17,7 +19,11 @@ export default defineComponent({
   ) => {
     const formRef = ref()
     const store = useStore()
-    onMounted(() => {
+    const defaultType = ref<number[]>()
+    const typeRef = ref()
+    onMounted(async () => {
+      const detail = (await common.projectDetail(props.formState.id)) as any
+      defaultType.value = [detail.data.categoryId]
       const schema = editSchema
       // @ts-ignore
       schema.properties.store.defaultValue =
@@ -28,14 +34,27 @@ export default defineComponent({
           beforeDepositBalance:
             props.formState?.availableBalance -
             props.formState?.totalSpendBalance,
-          payMethod: 1
+          payMethod: 1,
+          pzRoyalty: detail.data.pzRoyalty,
+          pzRoyaltyOl: detail.data.pzRoyaltyOl,
+          dzRoyalty: detail.data.dzRoyalty,
+          dzRoyaltyOl: detail.data.dzRoyaltyOl,
+          ztRoyalty: detail.data.ztRoyalty,
+          ztRoyaltyOl: detail.data.ztRoyaltyOl
         })
       }
     })
 
     const handleSolts = {
       left: () => {
-        return <ProjectType className="w-[250px]"></ProjectType>
+        return (
+          <ProjectType
+            className="w-[250px]"
+            defaultSelect={defaultType.value}
+            key={defaultType.value as any}
+            ref={typeRef}
+          ></ProjectType>
+        )
       }
     }
 
@@ -43,7 +62,12 @@ export default defineComponent({
       return (
         <FormRender
           schema={editSchema}
-          onFinish={props.onFinish}
+          onFinish={(v: any) =>
+            props.onFinish({
+              ...(v || {}),
+              categoryId: typeRef?.value?.selectedKeys?.[0]
+            })
+          }
           onCancel={props.onCancel}
           ref={formRef}
           onFieldsChanged={(v) => {

@@ -84,7 +84,7 @@ export default defineComponent({
       [BusinessModalType.权限配置]: 900,
       [BusinessModalType.营业额详情]: 1200,
       [BusinessModalType.贡献营业额详情]: 1200,
-      [BusinessModalType.选择项目]: 900
+      [BusinessModalType.选择项目]: 1000
     }
     const footer = computed(
       () =>

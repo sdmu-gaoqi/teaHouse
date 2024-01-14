@@ -1,5 +1,5 @@
-import { Modal, Tree, TreeProps } from 'ant-design-vue'
-import { defineComponent, ref } from 'vue'
+import { Modal, Tree, TreeProps, message } from 'ant-design-vue'
+import { Ref, computed, defineComponent, onMounted, ref, toRaw } from 'vue'
 import styles from './index.module.scss'
 import {
   PlusSquareTwoTone,
@@ -7,18 +7,36 @@ import {
   CloseSquareTwoTone
 } from '@ant-design/icons-vue'
 import { FormRender } from 'store-operations-ui'
+import common from '@/servers/common'
+import { cloneDeep, isEmpty } from 'wa-utils'
+import { transformProjectTypeTree } from '@/utils'
+import { ProjectTypeItem } from '@/types'
 
 const addSchema = {
   type: 'object',
+  rules: {
+    categoryName: [
+      { required: true, message: '请输入名称' },
+      { max: 15, message: '最多输入15个字符' }
+    ]
+  },
   properties: {
-    parent: {
+    parentId: {
       title: '父节点',
-      widget: 'select',
+      type: 'string',
+      widget: 'input',
+      span: 0
+    },
+    parentName: {
+      title: '父节点',
+      type: 'string',
+      widget: 'input',
       props: {
-        placeholder: '请选择'
+        bordered: false,
+        readonly: true
       }
     },
-    name: {
+    categoryName: {
       title: '名称',
       type: 'string',
       col: 24,
@@ -34,8 +52,26 @@ const addSchema = {
 const editSchema = {
   type: 'object',
   col: 24,
+  rules: {
+    categoryName: [
+      { required: true, message: '请输入名称' },
+      { max: 15, message: '最多输入15个字符' }
+    ]
+  },
   properties: {
-    name: {
+    id: {
+      title: 'id',
+      type: 'string',
+      widget: 'input',
+      span: 0
+    },
+    parentId: {
+      title: '父节点',
+      type: 'string',
+      widget: 'input',
+      span: 0
+    },
+    categoryName: {
       title: '名称',
       type: 'string',
       props: {
@@ -47,105 +83,109 @@ const editSchema = {
   }
 }
 
-const formatTreeData = (data: any[], level = 0): any => {
-  return data?.map((item: any) => ({
-    ...item,
-    level,
-    children: formatTreeData(item.children, level + 1)
-  }))
-}
-
 const ProjectType = defineComponent({
   name: 'ProjectType',
   props: {
     className: String,
-    edit: Boolean
+    edit: Boolean,
+    defaultSelect: Array,
+    onChange: Function,
+    canSelectMain: Boolean
   },
   setup(props, ctx) {
     const { edit = true } = props
     const open = ref(false)
+    const target = ref({
+      level: 0,
+      title: '',
+      key: 0,
+      isEdit: false,
+      parentId: undefined
+    })
     const type = ref<'add' | 'edit'>('add')
-    const treeData: TreeProps['treeData'] = [
-      {
-        title: '价目表分类',
-        key: '0',
-        children: [
-          {
-            title: '养生类',
-            key: '0-0-0',
-            children: [
-              { title: 'leaf', key: '0-0-0-0', disableCheckbox: true },
-              { title: 'leaf', key: '0-0-0-1' },
-              { title: 'leaf', key: '0-0-0-2' },
-              { title: 'leaf', key: '0-0-0-3' },
-              { title: 'leaf', key: '0-0-0-4' },
-              { title: 'leaf', key: '0-0-0-5' },
-              { title: 'leaf', key: '0-0-0-6' },
-              { title: 'leaf', key: '0-0-0-7' },
-              { title: 'leaf', key: '0-0-0-8' },
-              { title: 'leaf', key: '0-0-0-9' }
-            ]
-          },
-          {
-            title: '套餐类',
-            key: '0-0-1',
-            children: [
-              { key: '0-0-1-0', title: 'sss' },
-              { key: '0-0-1-1', title: 'sss' },
-              { key: '0-0-1-2', title: 'sss' },
-              { key: '0-0-1-3', title: 'sss' },
-              { key: '0-0-1-4', title: 'sss' },
-              { key: '0-0-1-5', title: 'sss' },
-              { key: '0-0-1-6', title: 'sss' },
-              { key: '0-0-1-7', title: 'sss' },
-              { key: '0-0-1-8', title: 'sss' },
-              { key: '0-0-1-9', title: 'sss' }
-            ]
-          }
-        ],
-        displayType: 'row',
-        column: 1
+    const selectedKeys = ref(props.defaultSelect)
+    const realSchema = computed(() => {
+      const cloneAdd = cloneDeep(addSchema)
+      const cloneEdit = cloneDeep(editSchema)
+      if (type.value === 'add') {
+        if (target.value.level !== -1) {
+          cloneAdd.properties.parentId.defaultValue = target.value.key
+          cloneAdd.properties.parentName.defaultValue = target.value.title
+        }
+        return target.value.level === -1 ? editSchema : cloneAdd
       }
-    ]
+      cloneEdit.properties.categoryName.defaultValue = target.value.title
+      cloneEdit.properties.id.defaultValue = target.value.key
+      return cloneEdit
+    })
+    const treeData = ref<ProjectTypeItem[]>()
 
-    const handleDelete = () => {}
+    const init = async () => {
+      const res: any = await common.projectTypeList()
+      const data = transformProjectTypeTree(res.data)
+      treeData.value = data
+    }
+
+    onMounted(() => {
+      init()
+    })
 
     const handleSlot = {
       title: (rest: any) => {
-        const { isLeaf, key, title, level } = rest
+        const { categoryId, categoryName, level, parentId } = rest
         return (
-          <div key={key} class="flex justify-between items-center">
-            <div class="ell">{title}</div>
+          <div key={categoryId} class="flex justify-between items-center">
+            <div class="ell">{categoryName}</div>
             <div class="ml-[10px] shrink-0">
               {edit && (
                 <PlusSquareTwoTone
-                  hidden={level >= 2}
-                  class="fill-primary"
+                  hidden={level >= 1}
+                  class="fill-primary mr-[10px]"
                   onClick={() => {
                     open.value = true
                     type.value = 'add'
+                    target.value = {
+                      title: categoryName,
+                      key: categoryId,
+                      level,
+                      isEdit: false,
+                      parentId
+                    }
                   }}
                 />
               )}
-              {edit && (
+              {edit && level !== -1 && (
                 <EditTwoTone
-                  class="mx-[10px] fill-primary!"
+                  class="mr-[10px] fill-primary!"
                   onClick={() => {
                     open.value = true
                     type.value = 'edit'
+                    target.value = {
+                      title: categoryName,
+                      key: categoryId,
+                      level,
+                      isEdit: true,
+                      parentId
+                    }
                   }}
                 />
               )}
-              {key !== '0' && edit && (
+              {categoryId !== '0' && edit && (
                 <CloseSquareTwoTone
                   class="fill-primary!"
                   onClick={() => {
                     Modal.confirm({
                       title: '提示',
-                      content: '确认删除?',
+                      content: `确认删除${categoryName}?`,
                       okText: '确定',
                       cancelText: '取消',
-                      onOk: handleDelete
+                      onOk: async () => {
+                        await common.deleteProjectType({
+                          id: categoryId
+                        })
+                        message.success('删除分类成功')
+                        await init()
+                      }
                     })
                   }}
                 />
@@ -155,17 +195,41 @@ const ProjectType = defineComponent({
         )
       }
     }
+
+    ctx.expose({
+      selectedKeys: selectedKeys
+    })
+
     // @ts-ignore
     return (props) => {
       return (
         <div class={`${props.className} shrink-0 ${styles.tree}`}>
-          <Tree
-            treeData={formatTreeData(treeData)}
-            blockNode
-            v-slots={handleSlot}
-            virtual
-            height={500}
-          ></Tree>
+          {Array.isArray(treeData.value) && (
+            <Tree
+              treeData={treeData.value as any}
+              blockNode
+              v-slots={handleSlot}
+              virtual
+              height={500}
+              fieldNames={{
+                title: 'categoryName',
+                key: 'categoryId',
+                children: 'categoryItems'
+              }}
+              defaultExpandAll={true}
+              autoExpandParent={true}
+              showLine={true}
+              selectedKeys={selectedKeys.value as any}
+              onSelect={(v) => {
+                props?.onChange?.(v)
+                if (v?.[0] === 0 && !props.canSelectMain) {
+                  selectedKeys.value = selectedKeys.value
+                  return
+                }
+                selectedKeys.value = v
+              }}
+            ></Tree>
+          )}
           <Modal
             title="新增分类"
             open={open.value}
@@ -174,13 +238,28 @@ const ProjectType = defineComponent({
             onCancel={() => {
               open.value = false
             }}
+            destroyOnClose={true}
           >
             <FormRender
-              schema={type.value === 'add' ? addSchema : editSchema}
+              schema={realSchema.value}
               onCancel={() => {
                 open.value = false
               }}
-              key={type.value}
+              key={type.value + target.value.level}
+              onFinish={async (value) => {
+                if (type.value === 'add') {
+                  await common.createProjectType(value)
+                  message.success('新增分类成功')
+                  await init()
+                  open.value = false
+                  return
+                }
+                await common.updateProjectType(value)
+                message.success('更新分类成功')
+                await init()
+                open.value = false
+                return
+              }}
             />
           </Modal>
         </div>

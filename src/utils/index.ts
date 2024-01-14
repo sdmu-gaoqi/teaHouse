@@ -1,3 +1,4 @@
+import { ProjectTypeItem } from '@/types'
 import { cookie, isEmpty } from 'wa-utils'
 
 export const isLogin = () => {
@@ -72,4 +73,19 @@ export const moneyRule = ({
       return Promise.resolve()
     }
   }
+}
+
+export const transformProjectTypeTree = (
+  data: ProjectTypeItem[],
+  memoMain = true
+) => {
+  const main = [
+    {
+      categoryName: '价目表分类',
+      categoryId: 0,
+      level: -1,
+      categoryItems: data
+    }
+  ] as ProjectTypeItem[]
+  return memoMain ? main : data
 }

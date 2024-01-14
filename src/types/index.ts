@@ -99,3 +99,12 @@ export const StatusMap = [
     value: StatusGlobal.停用
   }
 ]
+
+export type ProjectTypeItem = {
+  categoryId: number
+  categoryName: string
+  level: number
+  orderNum: number
+  parentId: number
+  categoryItems: ProjectTypeItem[]
+}

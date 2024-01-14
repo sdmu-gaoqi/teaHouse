@@ -9,7 +9,11 @@
         rowClassName="pro-form-row"
       >
         <template #left>
-          <ProjectType className="w-[250px]" :edit="true"></ProjectType>
+          <ProjectType
+            className="w-[250px]"
+            :edit="true"
+            ref="treeRef"
+          ></ProjectType>
         </template>
       </FormRender>
     </template>
@@ -25,12 +29,14 @@ import common from '@/servers/common'
 import { message } from 'ant-design-vue'
 import { useStore } from 'vuex'
 import ProjectType from '@/components/ProjectType/projectType'
+import { ref, toRaw } from 'vue'
 
 const {
   params: { id }
 } = useRoute()
 const isEdit = !!id
 const store = useStore()
+const treeRef = ref()
 
 const schema = editSchema
 // @ts-ignore
@@ -43,10 +49,14 @@ const onFinish = async (value: Record<string, any>) => {
   if (isEdit) {
     await common.updateProject({
       ...value,
-      serviceProjectId: id
+      serviceProjectId: id,
+      categoryId: treeRef.value.selectedKeys?.[0]
     })
   } else {
-    await common.addProject(value)
+    await common.addProject({
+      ...value,
+      categoryId: treeRef.value.selectedKeys?.[0]
+    })
   }
   message.success('保存成功')
   await sleep(300)

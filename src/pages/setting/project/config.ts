@@ -192,7 +192,7 @@ export const editSchema = {
       },
       widget: 'input'
     },
-    xsPzRoyalty: {
+    pzRoyaltyOl: {
       title: '线上排钟提成',
       type: 'number',
       props: {
@@ -202,7 +202,7 @@ export const editSchema = {
       },
       widget: 'input'
     },
-    xsDzRoyalty: {
+    dzRoyaltyOl: {
       title: '线上点钟提成',
       type: 'number',
       props: {
@@ -212,7 +212,7 @@ export const editSchema = {
       },
       widget: 'input'
     },
-    xsZtRoyalty: {
+    ztRoyalty: {
       title: '线下自推提成',
       type: 'number',
       props: {
@@ -222,7 +222,7 @@ export const editSchema = {
       },
       widget: 'input'
     },
-    xxZtRoyalty: {
+    ztRoyaltyOl: {
       title: '线上自推提成',
       type: 'number',
       props: {
