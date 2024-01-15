@@ -110,6 +110,9 @@ const Marketing = defineComponent({
         )
       },
       bodyCell: ({ data }: any) => {
+        if (data.column.dataIndex === 'projectList') {
+          return data.record.projectList?.length || 0
+        }
         if (data.column.dataIndex === 'options') {
           const isEnd = data.record.status === 2
           return (

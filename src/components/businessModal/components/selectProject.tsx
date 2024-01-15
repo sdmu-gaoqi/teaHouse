@@ -9,14 +9,19 @@ export default defineComponent({
   props: {
     onFinish: Function,
     onCancel: Function,
-    formState: Object
+    formState: Object,
+    changeState: Function
   },
   // @ts-ignore
   setup: (
-    props: FormRenderProps & { formState: Record<string, any>; onFinish?: any }
+    props: FormRenderProps & {
+      formState: Record<string, any>
+      onFinish?: any
+      changeState: any
+    }
   ) => {
     const selectKey = ref()
-    const refSelectedRowKeys = ref([])
+    const refSelectedRowKeys = ref(props.formState?.selectList || [])
     return () => {
       const schema: TableProps['schema'] = {
         title: '选择项目',
@@ -66,7 +71,24 @@ export default defineComponent({
           selectedRowKeys: (string | number)[],
           selectedRows: any[]
         ) => {
-          refSelectedRowKeys.value = toRaw(selectedRowKeys) as any
+          let list = [
+            ...refSelectedRowKeys.value,
+            ...(toRaw(selectedRows) as any)?.map((item: any) => ({
+              ...item,
+              projectName: item.serviceName,
+              projectId: item.id
+            }))
+          ]
+          list = list?.reduce((result, item) => {
+            if (result.some((i: any) => i.projectId === item.projectId)) {
+              return result
+            }
+            return [...result, item]
+          }, [])
+          refSelectedRowKeys.value = list
+          if (props.changeState) {
+            props.changeState(list)
+          }
         },
         onSelect: (record: any, selected: boolean, selectedRows: any[]) => {},
         onSelectAll: (
@@ -74,7 +96,7 @@ export default defineComponent({
           selectedRows: any[],
           changeRows: any[]
         ) => {},
-        selectedRowKeys: refSelectedRowKeys.value
+        selectedRowKeys: refSelectedRowKeys.value?.map((item: any) => item.id)
       })
       return (
         <div class="flex">
@@ -91,12 +113,16 @@ export default defineComponent({
             tableProps={{
               scroll: 1200,
               rowSelection: rowSelection.value,
-              rowKey: 'id'
+              rowKey: 'id',
+              pagination: {
+                pageSize: 100
+              }
             }}
             key={selectKey.value}
             request={(params: any) => {
               return common.projectList({
                 ...params,
+                pageSize: 100,
                 categoryId: selectKey.value
               })
             }}

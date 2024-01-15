@@ -24,6 +24,7 @@ interface BusinessModalProps {
   onFinish: () => void
   title?: string
   modalProps?: ModalProps
+  changeState?: (data: any) => void
 }
 
 export default defineComponent({
@@ -34,7 +35,8 @@ export default defineComponent({
     type: String,
     formState: Object,
     title: String,
-    modalProps: Object
+    modalProps: Object,
+    changeState: Function
   },
   // @ts-ignore
   setup(props: BusinessModalProps) {
@@ -101,7 +103,8 @@ export default defineComponent({
           BusinessModalType.编辑权限点,
           BusinessModalType.权限配置,
           BusinessModalType.营业额详情,
-          BusinessModalType.贡献营业额详情
+          BusinessModalType.贡献营业额详情,
+          [BusinessModalType.选择项目]
         ].includes(props.type)
     )
     const isFormRender = computed(() =>

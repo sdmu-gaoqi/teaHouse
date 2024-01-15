@@ -7,6 +7,7 @@ import {
   InputNumber,
   Modal,
   Radio,
+  Select,
   Table,
   TimePicker,
   message
@@ -19,6 +20,17 @@ import { BusinessModalType } from '@/components/businessModal/businessModal.type
 import dayjs from 'dayjs'
 import { isEmpty } from 'wa-utils'
 import common from '@/servers/common'
+
+type SelectListItem = {
+  discountTimeBeforeAfter: 0 | 1 // 0前 1后
+  discountTime: string
+  discountPrice: string
+  price: string
+  projectName: string
+  projectId: number
+  seckillId: number
+  id: number
+}
 
 const MarketingDetail = defineComponent({
   setup(props) {
@@ -36,30 +48,8 @@ const MarketingDetail = defineComponent({
       discountTime: undefined
     })
     const form = ref()
-
-    const selectedList = ref<
-      {
-        discountTimeBeforeAfter: 0 | 1 // 0前 1后
-        discountTime: string
-        discountPrice: string
-        price: string
-        projectName: string
-        projectId: number
-        seckillId: number
-        id: number
-      }[]
-    >([
-      {
-        discountTimeBeforeAfter: 0, // 0前 1后
-        discountTime: '',
-        discountPrice: '',
-        price: '',
-        projectName: 'string',
-        projectId: 1,
-        seckillId: 1,
-        id: 1
-      }
-    ])
+    const selectList = ref([])
+    const listValue = ref<SelectListItem[]>([])
 
     const columns = [
       {
@@ -73,6 +63,7 @@ const MarketingDetail = defineComponent({
       {
         title: '秒杀时段',
         dataInde: 'discountTime',
+        width: 300,
         slots: {
           customRender: 'discountTime'
         }
@@ -99,7 +90,7 @@ const MarketingDetail = defineComponent({
         record
       }: {
         index: number
-        record: (typeof selectedList.value)[0]
+        record: (typeof listValue.value)[0]
       }) => {
         return (
           <Button
@@ -113,7 +104,7 @@ const MarketingDetail = defineComponent({
                 okText: '确定',
                 cancelText: '取消',
                 onOk: () => {
-                  selectedList.value = selectedList.value.filter(
+                  listValue.value = listValue.value.filter(
                     (item, i) => i !== index
                   )
                 }
@@ -129,22 +120,21 @@ const MarketingDetail = defineComponent({
         record
       }: {
         index: number
-        record: (typeof selectedList.value)[0]
+        record: (typeof listValue.value)[0]
       }) => {
         return (
           <div>
-            <TimePicker
-              showSecond={false}
-              value={
-                record.discountTime
-                  ? dayjs(`2020-10-01 ${record.discountTime}`)
-                  : undefined
-              }
+            <Select
+              options={Array.from({ length: 23 }).map((item, index) => {
+                const value = (index >= 10 ? index : `0${index}`) + ':00'
+                return { label: value, value }
+              })}
+              value={record.discountTime}
               onChange={(v: any) => {
-                const value = v.format('HH:mm:ss')
-                record.discountTime = value
+                record.discountTime = v
               }}
-            ></TimePicker>
+              style={{ width: '100px' }}
+            ></Select>
             <Radio.Group
               class="ml-[10px]"
               value={record.discountTimeBeforeAfter}
@@ -164,7 +154,7 @@ const MarketingDetail = defineComponent({
         record
       }: {
         index: number
-        record: (typeof selectedList.value)[0]
+        record: (typeof listValue.value)[0]
       }) => {
         return (
           <InputNumber
@@ -224,7 +214,7 @@ const MarketingDetail = defineComponent({
             </Form.Item>
             <Table
               columns={columns}
-              dataSource={selectedList.value}
+              dataSource={listValue.value}
               v-slots={tableSlots}
             />
           </div>
@@ -233,12 +223,12 @@ const MarketingDetail = defineComponent({
     }
 
     const submit = () => {
-      if (isEmpty(selectedList.value)) {
+      if (isEmpty(listValue.value)) {
         return message.warning('请选择参与活动项目')
       }
       let value: any = {}
-      for (let i of selectedList.value) {
-        if (!i.discountTime) {
+      for (let i of listValue.value) {
+        if (!i.discountTime || !(i.discountTimeBeforeAfter + 1)) {
           message.error(`请完善${i.projectName}的秒杀时段`)
           return
         }
@@ -256,7 +246,9 @@ const MarketingDetail = defineComponent({
           dayjs(res.discountTime[0]).format('YYYY-MM-DD HH:mm:ss') +
           '~' +
           dayjs(res.discountTime[1]).format('YYYY-MM-DD HH:mm:ss')
-        value.projectList = toRaw(selectedList.value)
+        value.projectList = toRaw(listValue.value)
+        value.status = 1
+        value.isUpdates = 1
         if (id) {
           await common.updateMs(value)
         }
@@ -288,9 +280,27 @@ const MarketingDetail = defineComponent({
             onCancel={() => {
               open.value = false
             }}
+            formState={{
+              selectList: selectList.value
+            }}
             modalProps={{
               okText: '确定',
-              cancelText: '返回'
+              cancelText: '返回',
+              onOk: () => {
+                listValue.value = selectList.value
+                open.value = false
+              },
+              onCancel: () => {
+                selectList.value = []
+                open.value = false
+              }
+            }}
+            changeState={(data: any) => {
+              selectList.value = data?.map((item: any) => ({
+                ...item,
+                projectName: item.serviceName,
+                projectId: item.id
+              }))
             }}
           />
         </div>
