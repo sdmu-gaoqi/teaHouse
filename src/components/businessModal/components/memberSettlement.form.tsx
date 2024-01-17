@@ -4,15 +4,16 @@
 import common from '@/servers/common'
 import { MemberType, payTypes } from '@/types'
 import { formatMoney } from '@/utils'
-import { Input, message } from 'ant-design-vue'
+import { Input, Radio, Table, message } from 'ant-design-vue'
 import {
   FormCard,
   FormRender,
   FormRenderProps,
-  Schema
+  Schema,
+  TableRender
 } from 'store-operations-ui'
 import { Member } from 'store-request'
-import { defineComponent, onMounted, ref, toRaw, watch } from 'vue'
+import { defineComponent, onMounted, ref, toRaw, unref, watch } from 'vue'
 import { useRequest } from 'vue-hooks-plus'
 import { cloneDeep, debounce, isEmpty, sleep } from 'wa-utils'
 import '../styles/memberSettlement.form.scss'
@@ -79,104 +80,15 @@ const schema: Schema = {
       widget: 'searchSelect',
       'ui:hidden': 'formState.value.settleType != 1'
     },
-    table1: {
-      widget: 'table',
-      props: {
-        columns: [
-          {
-            title: '会员卡号',
-            dataIndex: 'memberNo'
-          },
-          {
-            title: '姓名',
-            dataIndex: 'memberName'
-          },
-          {
-            title: '手机号',
-            dataIndex: 'phone'
-          },
-          {
-            title: '会员类型',
-            dataIndex: 'memberTypeName'
-          },
-          {
-            title: '优惠方式',
-            dataIndex: 'discountRate'
-          },
-          {
-            title: '会员卡余额',
-            dataIndex: 'availableBalance'
-          }
-        ],
-        pagination: false
+    memberTable: {
+      slots: {
+        customRender: 'memberTable'
       },
-      'ui:hidden':
-        'formState.value.settleType != 1 || formState.value.memberId?.memberType != 1'
+      'ui:hidden': 'formState.value.settleType != 1'
     },
-    table2: {
-      widget: 'table',
-      props: {
-        columns: [
-          {
-            title: '会员卡号',
-            dataIndex: 'memberNo'
-          },
-          {
-            title: '姓名',
-            dataIndex: 'memberName'
-          },
-          {
-            title: '手机号',
-            dataIndex: 'phone'
-          },
-          {
-            title: '会员类型',
-            dataIndex: 'memberTypeName'
-          },
-          {
-            title: '优惠方式',
-            dataIndex: 'discountRate'
-          },
-          {
-            title: '会员卡余额',
-            dataIndex: 'availableBalance'
-          }
-        ],
-        pagination: false
-      },
-      'ui:hidden':
-        'formState.value.settleType != 1 || formState.value.memberId?.memberType != 2'
-    },
-    table: {
-      widget: 'table',
-      props: {
-        columns: [
-          {
-            title: '项目名称',
-            dataIndex: 'serviceProjectName'
-          },
-          {
-            title: '单价',
-            dataIndex: 'unitPrice'
-          },
-          {
-            title: '客数',
-            dataIndex: 'customNum'
-          },
-          {
-            title: '上钟数',
-            dataIndex: 'serviceNum'
-          },
-          {
-            title: '优惠',
-            dataIndex: 'money'
-          },
-          {
-            title: '小计',
-            dataIndex: 'discountPrice'
-          }
-        ],
-        pagination: false
+    projectTable: {
+      slots: {
+        customRender: 'projectTable'
       }
     },
     originalPrice: {
@@ -192,6 +104,16 @@ const schema: Schema = {
       'ui:hidden':
         '(formState.value.settleType == 1 && !formState.value?.memberId?.memberId)'
     },
+    'op-group-1': {
+      title: '活动优惠',
+      'ui:hidden': 'formState.value.settleType != 0'
+    },
+    msTable: {
+      slots: {
+        customRender: 'msTable'
+      },
+      'ui:hidden': 'formState.value.settleType != 0'
+    },
     meituan: {
       defaultValue: '0',
       title: '美团金额',
@@ -206,14 +128,6 @@ const schema: Schema = {
       type: 'string',
       span: 12,
       widget: 'input',
-      // props: {
-      //   readonly: true,
-      //   bordered: false,
-      //   style: {
-      //     color: 'red',
-      //     fontWeight: 'bold'
-      //   }
-      // },
       'ui:hidden':
         '(formState.value.settleType == 1 && !formState.value?.memberId?.memberId) || formState.value.settleType == 2'
     },
@@ -368,6 +282,7 @@ export default defineComponent({
   ) => {
     const formRef = ref()
     const defaultValue = ref<any>({})
+    const memberList = ref<any>([])
     const { run, data, params } = useRequest(common.preSettle, {
       manual: true,
       onSuccess: (res: any) => {
@@ -377,8 +292,13 @@ export default defineComponent({
           receivePrice: formatMoney(res?.data?.receivePrice),
           replenishPrice: formatMoney(res?.data?.replenishPrice || 0),
           discountPrice: res?.data?.discountPrice,
-          oldDiscountPrice: formatMoney(res?.data?.receivePrice),
-          table: res?.data?.preOrderItemList?.map((item: any) => ({
+          oldDiscountPrice: formatMoney(res?.data?.receivePrice)
+        }
+        formRef.value.changeState(v)
+        defaultValue.value = {
+          ...v,
+          metaData: res?.data,
+          projectList: res?.data?.preOrderItemList?.map((item: any) => ({
             ...item,
             unitPrice: formatMoney(item?.unitPrice),
             money: formatMoney(
@@ -386,11 +306,6 @@ export default defineComponent({
             ),
             discountPrice: formatMoney(item?.discountPrice)
           }))
-        }
-        formRef.value.changeState(v)
-        defaultValue.value = {
-          ...v,
-          metaData: res?.data
         }
       },
       onError: (err: any) => {
@@ -403,6 +318,11 @@ export default defineComponent({
         }
       }
     })
+    const {
+      run: getMsPr,
+      data: msPr,
+      loading
+    } = useRequest(common.msProjectList)
     const selectUser = ref<any>()
     onMounted(() => {
       const orderId = props.formState?.orderId
@@ -495,9 +415,6 @@ export default defineComponent({
                   orderId,
                   orderNo,
                   settleType: '0'
-                  // memberId: selectUser?.value?.memberId,
-                  // phone: selectUser?.value?.phone,
-                  // discountPrice: newDiscountedPrice
                 })
               } else {
                 if (user?.memberId) {
@@ -512,53 +429,29 @@ export default defineComponent({
                     }),
                     memberId: user?.memberId,
                     phone: user?.phone
-                    // discountPrice: newDiscountedPrice
                   })
                 }
               }
-              // const newDiscountedPrice = formValue?.memberId
-              //   ? ((100 - formValue?.memberId?.discountRate * 100) / 100) *
-              //     originalPrice
-              //   : 0
-              // formRef.value.changeState({
-              //   discountPrice:
-              //     value?.target?.value == '0' ? 0 : newDiscountedPrice,
-              //   ...(value?.target?.value == '0' && {
-              //     receivePrice: formValue?.originalPrice
-              //   })
-              //   ...value?.target?.value == '1' && {
-              //   }
-              // })
             }
             if (key === 'memberId') {
               selectUser.value = value.option
               if (value.option) {
-                const newDiscountedPrice =
-                  ((100 - value?.option?.discountRate * 100) / 100) *
-                  originalPrice
-                formRef.value.changeState({
-                  table1: [
-                    {
-                      memberNo: value?.option?.memberNo,
-                      memberName: value?.option?.memberName,
-                      phone: value?.option?.phone,
-                      memberTypeName: '折扣卡',
-                      discountRate: `${value?.option?.discountRate * 10}折`,
-                      availableBalance: `${value?.option?.availableBalance}元`
-                    }
-                  ],
-                  table2: [
-                    {
-                      memberNo: value?.option?.memberNo,
-                      memberName: value?.option?.memberName,
-                      phone: value?.option?.phone,
-                      memberTypeName: '次卡',
-                      discountRate: `${value?.option?.totalRewardTimes}次`,
-                      availableBalance: `${value?.option?.availableBalance}元`
-                    }
-                  ]
-                  // discountPrice: newDiscountedPrice
-                })
+                memberList.value = [
+                  {
+                    memberNo: value?.option?.memberNo,
+                    memberName: value?.option?.memberName,
+                    phone: value?.option?.phone,
+                    memberTypeName:
+                      value.option?.memberType === MemberType.折扣卡
+                        ? '折扣卡'
+                        : '次卡',
+                    discountRate:
+                      value.option?.memberType === MemberType.折扣卡
+                        ? `${value?.option?.discountRate * 10}折`
+                        : `${value?.option?.totalRewardTimes}次`,
+                    availableBalance: `${value?.option?.availableBalance}元`
+                  }
+                ]
                 const orderId = props.formState?.orderId
                 const orderNo = props.formState?.orderNo
 
@@ -572,17 +465,10 @@ export default defineComponent({
                     settleType: settleType,
                     memberId: selectUser?.value?.memberId,
                     phone: selectUser?.value?.phone
-                    // discountPrice: newDiscountedPrice
                   })
                 }
               }
             }
-            // if (key === 'discountPrice') {
-            //   changeNum(value, {
-            //     originalPrice,
-            //     settleType
-            //   })
-            // }
             if (key === 'receivePrice') {
               changeNum(value, {
                 receivePrice,
@@ -592,6 +478,137 @@ export default defineComponent({
             }
           }}
           ref={formRef}
+          v-slots={{
+            projectTable: () => {
+              return (
+                <>
+                  <Table
+                    columns={[
+                      {
+                        title: '项目名称',
+                        dataIndex: 'serviceProjectName'
+                      },
+                      {
+                        title: '单价',
+                        dataIndex: 'unitPrice'
+                      },
+                      {
+                        title: '客数',
+                        dataIndex: 'customNum'
+                      },
+                      {
+                        title: '上钟数',
+                        dataIndex: 'serviceNum'
+                      },
+                      {
+                        title: '小计',
+                        dataIndex: 'discountPrice'
+                      },
+                      {
+                        title: '是否自推',
+                        dataIndex: 'isZt',
+                        slots: {
+                          customRender: 'isZt'
+                        }
+                      }
+                    ]}
+                    dataSource={defaultValue?.value?.projectList || []}
+                    pagination={false}
+                    v-slots={{
+                      isZt: (data: any) => {
+                        return (
+                          <Radio.Group
+                            value={data.record?.isZt || 0}
+                            onChange={(v) => {
+                              console.log(v)
+                              data.record.isZt = v.target.value
+                            }}
+                          >
+                            <Radio value={0}>否</Radio>
+                            <Radio value={1}>是</Radio>
+                          </Radio.Group>
+                        )
+                      }
+                    }}
+                  />
+                </>
+              )
+            },
+            memberTable: () => {
+              return (
+                <>
+                  <Table
+                    columns={[
+                      {
+                        title: '会员卡号',
+                        dataIndex: 'memberNo'
+                      },
+                      {
+                        title: '姓名',
+                        dataIndex: 'memberName'
+                      },
+                      {
+                        title: '手机号',
+                        dataIndex: 'phone'
+                      },
+                      {
+                        title: '会员类型',
+                        dataIndex: 'memberTypeName'
+                      },
+                      {
+                        title: '优惠方式',
+                        dataIndex: 'discountRate'
+                      },
+                      {
+                        title: '会员卡余额',
+                        dataIndex: 'availableBalance'
+                      }
+                    ]}
+                    dataSource={memberList.value}
+                    pagination={false}
+                    locale={{
+                      emptyText: '请选择会员'
+                    }}
+                  />
+                </>
+              )
+            },
+            msTable: () => {
+              return (
+                <>
+                  <Table
+                    columns={[
+                      {
+                        title: '项目名称',
+                        dataIndex: 'projectName'
+                      },
+                      {
+                        title: '单价/原价',
+                        dataIndex: ''
+                      },
+                      {
+                        title: '秒杀时段',
+                        dataIndex: ''
+                      },
+                      {
+                        title: '秒杀价',
+                        dataIndex: ''
+                      },
+                      {
+                        title: '参与订单结算',
+                        dataIndex: ''
+                      }
+                    ]}
+                    dataSource={(msPr.value as any)?.data}
+                    loading={loading.value}
+                    locale={{
+                      emptyText: '暂无活动项目'
+                    }}
+                  />
+                </>
+              )
+            }
+          }}
         ></FormRender>
       )
     }

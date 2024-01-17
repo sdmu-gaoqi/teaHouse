@@ -1,12 +1,18 @@
 import { ProjectTypeItem } from '@/types'
-import { cookie, isEmpty } from 'wa-utils'
+import { Storage, isEmpty } from 'wa-utils'
+const storage = new Storage('local')
 
 export const isLogin = () => {
-  return !isEmpty(cookie.get('Admin-Token'))
+  return !isEmpty(storage.baseGet('Admin-Token'))
 }
 
 export const logout = () => {
-  cookie.remove('Admin-Token')
+  storage.remove('Admin-Token')
+}
+
+export const getToken = () => {
+  const token = storage.baseGet('Admin-Token')
+  return token
 }
 
 export function getParameterByName(name = '', byHash = false) {

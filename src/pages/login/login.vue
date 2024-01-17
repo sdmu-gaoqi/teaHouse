@@ -3,8 +3,8 @@
     <Login
       ref="loginRef"
       class="m-auto"
-      :login-after="onFinish"
       :get-code="getCode"
+      :login-after="onFinish"
     ></Login>
   </div>
 </template>
@@ -32,6 +32,7 @@ interface FormState {
 }
 
 const onFinish = (res: any) => {
+  console.log(res, 'rrrrrr')
   dispatch('userInfo/changeUser', { data: res.user })
   dispatch('userInfo/setPerms', { data: res.permissions })
   dispatch('common/changeMenus', { data: res.permissions })

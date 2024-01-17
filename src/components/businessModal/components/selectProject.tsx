@@ -22,6 +22,7 @@ export default defineComponent({
   ) => {
     const selectKey = ref()
     const refSelectedRowKeys = ref(props.formState?.selectList || [])
+    const dataList = ref([])
     return () => {
       const schema: TableProps['schema'] = {
         title: '选择项目',
@@ -71,8 +72,21 @@ export default defineComponent({
           selectedRowKeys: (string | number)[],
           selectedRows: any[]
         ) => {
+          const oldValue = refSelectedRowKeys.value?.reduce(
+            (result: any, item: any) => {
+              const inThisPage = dataList?.value?.some(
+                (i: any) => item.id === i?.id
+              )
+              const select = selectedRows?.some((i: any) => i.id === item.id)
+              if (inThisPage && !select) {
+                return result
+              }
+              return [...result, item]
+            },
+            []
+          )
           let list = [
-            ...refSelectedRowKeys.value,
+            ...oldValue,
             ...(toRaw(selectedRows) as any)?.map((item: any) => ({
               ...item,
               projectName: item.serviceName,
@@ -120,11 +134,16 @@ export default defineComponent({
             }}
             key={selectKey.value}
             request={(params: any) => {
-              return common.projectList({
-                ...params,
-                pageSize: 100,
-                categoryId: selectKey.value
-              })
+              return common
+                .projectList({
+                  ...params,
+                  pageSize: 100,
+                  categoryId: selectKey.value
+                })
+                .then((res: any) => {
+                  dataList.value = res?.rows as any
+                  return res
+                })
             }}
             cardStyle={{ flex: 1 }}
           />

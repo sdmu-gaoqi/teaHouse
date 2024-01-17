@@ -7,13 +7,14 @@ import {
   createWebHistory
 } from 'vue-router'
 import Layout from './components/layout/layout.vue'
-import { cookie, isEmpty } from 'wa-utils'
+import { isEmpty } from 'wa-utils'
 import user from './servers/user'
 import { Store as S } from 'store-request'
 import { useStore } from 'vuex'
 import { toRaw } from 'vue'
 import { transformRoute } from './utils/menu'
 import { adminPerm } from './constant'
+import { getToken } from './utils'
 
 const baseRouter: any[] = [
   {
@@ -491,15 +492,15 @@ const initUserInfo = async () => {
 
 route.beforeEach(async (to, from, next) => {
   const toPath = to?.path
-  if (cookie.get('Admin-Token') && ['/login'].includes(toPath)) {
+  if (getToken() && ['/login'].includes(toPath)) {
     next('/workbench')
     return
   }
-  if (!['/login', '/test'].includes(toPath) && !cookie.get('Admin-Token')) {
+  if (!['/login', '/test'].includes(toPath) && !getToken()) {
     next('/login')
     return
   }
-  if (['/login', '/404', '/'].includes(toPath) || !cookie.get('Admin-Token')) {
+  if (['/login', '/404', '/'].includes(toPath) || !getToken()) {
     next()
     return
   }

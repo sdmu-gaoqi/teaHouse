@@ -53,6 +53,7 @@ export default defineComponent({
             defaultSelect={defaultType.value}
             key={defaultType.value as any}
             ref={typeRef}
+            edit={true}
           ></ProjectType>
         )
       }

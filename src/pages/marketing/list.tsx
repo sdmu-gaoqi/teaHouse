@@ -1,5 +1,5 @@
 import { TableProps, TableRender } from 'store-operations-ui'
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 import { Button, Modal } from 'ant-design-vue'
 import { useRouter } from 'vue-router'
 import common from '@/servers/common'
@@ -97,6 +97,7 @@ export const schema: TableProps['schema'] = {
 const Marketing = defineComponent({
   setup(props) {
     const router = useRouter()
+    const tableRef = ref()
     const handleSlots = {
       formButton: () => {
         return (
@@ -117,8 +118,19 @@ const Marketing = defineComponent({
           const isEnd = data.record.status === 2
           return (
             <div class="flex">
-              <Button type="link" style={{ paddingLeft: 0 }}>
-                {data.record.status === 0 ? '上架' : '下架'}
+              <Button
+                type="link"
+                style={{ paddingLeft: 0 }}
+                onClick={async () => {
+                  const isUpdates = data.record.isUpdates === 0 ? 2 : 1
+                  await common.updateMs({
+                    ...data.record,
+                    isUpdates
+                  })
+                  tableRef.value.run(tableRef.value.params?.[0])
+                }}
+              >
+                {data.record.isUpdates === 0 ? '上架' : '下架'}
               </Button>
               {!isEnd && (
                 <Button
@@ -145,7 +157,13 @@ const Marketing = defineComponent({
                     title: '提示',
                     content: '是否确认删除',
                     okText: '确定',
-                    cancelText: '取消'
+                    cancelText: '取消',
+                    onOk: async () => {
+                      await common.deleteMs({
+                        ids: [data.record.id]
+                      })
+                      tableRef.value.run(tableRef.value.params?.[0])
+                    }
                   })
                 }}
               >
@@ -164,6 +182,7 @@ const Marketing = defineComponent({
           tableProps={{ scroll: { x: 1200 } }}
           v-slots={handleSlots}
           request={common.msList}
+          ref={tableRef}
         ></TableRender>
       )
     }
