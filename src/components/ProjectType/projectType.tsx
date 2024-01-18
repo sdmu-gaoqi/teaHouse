@@ -1,4 +1,4 @@
-import { Modal, Tree, TreeProps, message } from 'ant-design-vue'
+import { Alert, Modal, Tooltip, Tree, TreeProps, message } from 'ant-design-vue'
 import { Ref, computed, defineComponent, onMounted, ref, toRaw } from 'vue'
 import styles from './index.module.scss'
 import {
@@ -8,7 +8,7 @@ import {
 } from '@ant-design/icons-vue'
 import { FormRender } from 'store-operations-ui'
 import common from '@/servers/common'
-import { cloneDeep, isEmpty } from 'wa-utils'
+import { cloneDeep } from 'wa-utils'
 import { transformProjectTypeTree } from '@/utils'
 import { ProjectTypeItem } from '@/types'
 
@@ -134,64 +134,74 @@ const ProjectType = defineComponent({
       title: (rest: any) => {
         const { categoryId, categoryName, level, parentId } = rest
         return (
-          <div key={categoryId} class="flex justify-between items-center">
-            <div class="ell">{categoryName}</div>
-            <div class="ml-[10px] shrink-0">
-              {edit && (
-                <PlusSquareTwoTone
-                  hidden={level >= 1}
-                  class="fill-primary mr-[10px]"
-                  onClick={() => {
-                    open.value = true
-                    type.value = 'add'
-                    target.value = {
-                      title: categoryName,
-                      key: categoryId,
-                      level,
-                      isEdit: false,
-                      parentId
-                    }
-                  }}
-                />
-              )}
-              {edit && level !== -1 && (
-                <EditTwoTone
-                  class="mr-[10px] fill-primary!"
-                  onClick={() => {
-                    open.value = true
-                    type.value = 'edit'
-                    target.value = {
-                      title: categoryName,
-                      key: categoryId,
-                      level,
-                      isEdit: true,
-                      parentId
-                    }
-                  }}
-                />
-              )}
-              {categoryId !== '0' && edit && (
-                <CloseSquareTwoTone
-                  class="fill-primary!"
-                  onClick={() => {
-                    Modal.confirm({
-                      title: '提示',
-                      content: `确认删除${categoryName}?`,
-                      okText: '确定',
-                      cancelText: '取消',
-                      onOk: async () => {
-                        await common.deleteProjectType({
-                          id: categoryId
-                        })
-                        message.success('删除分类成功')
-                        await init()
+          <Tooltip
+            color="#fff"
+            placement="left"
+            title={
+              edit ? (
+                <div>
+                  <PlusSquareTwoTone
+                    hidden={level >= 1}
+                    class="fill-primary mr-[10px]"
+                    onClick={() => {
+                      open.value = true
+                      type.value = 'add'
+                      target.value = {
+                        title: categoryName,
+                        key: categoryId,
+                        level,
+                        isEdit: false,
+                        parentId
                       }
-                    })
-                  }}
-                />
-              )}
+                    }}
+                  />
+                  {edit && level !== -1 && (
+                    <EditTwoTone
+                      class="mr-[10px] fill-primary!"
+                      onClick={() => {
+                        open.value = true
+                        type.value = 'edit'
+                        target.value = {
+                          title: categoryName,
+                          key: categoryId,
+                          level,
+                          isEdit: true,
+                          parentId
+                        }
+                      }}
+                    />
+                  )}
+                  {categoryId !== '0' && edit && (
+                    <CloseSquareTwoTone
+                      class="fill-primary!"
+                      onClick={() => {
+                        Modal.confirm({
+                          title: '提示',
+                          content: `确认删除${categoryName}?`,
+                          okText: '确定',
+                          cancelText: '取消',
+                          onOk: async () => {
+                            await common.deleteProjectType({
+                              id: categoryId
+                            })
+                            message.success('删除分类成功')
+                            await init()
+                          }
+                        })
+                      }}
+                    />
+                  )}
+                </div>
+              ) : null
+            }
+          >
+            <div
+              key={categoryId}
+              class="flex justify-between items-center h-[32px]"
+            >
+              <div class="ell">{categoryName}</div>
             </div>
-          </div>
+          </Tooltip>
         )
       }
     }
@@ -205,30 +215,41 @@ const ProjectType = defineComponent({
       return (
         <div class={`${props.className} shrink-0 ${styles.tree}`}>
           {Array.isArray(treeData.value) && (
-            <Tree
-              treeData={treeData.value as any}
-              blockNode
-              v-slots={handleSlot}
-              virtual
-              height={500}
-              fieldNames={{
-                title: 'categoryName',
-                key: 'categoryId',
-                children: 'categoryItems'
-              }}
-              defaultExpandAll={true}
-              autoExpandParent={true}
-              showLine={true}
-              selectedKeys={selectedKeys.value as any}
-              onSelect={(v) => {
-                props?.onChange?.(v)
-                if (v?.[0] === 0 && !props.canSelectMain) {
-                  selectedKeys.value = selectedKeys.value
-                  return
+            <div>
+              <Alert
+                message={
+                  <div class="text-slate-950">
+                    {edit && <div>悬浮在类型上可管理类型</div>}
+                    <div>点击可选择项目分类</div>
+                  </div>
                 }
-                selectedKeys.value = v
-              }}
-            ></Tree>
+                class="mb-[10px]"
+              ></Alert>
+              <Tree
+                treeData={treeData.value as any}
+                blockNode
+                v-slots={handleSlot}
+                virtual
+                height={500}
+                fieldNames={{
+                  title: 'categoryName',
+                  key: 'categoryId',
+                  children: 'categoryItems'
+                }}
+                defaultExpandAll={true}
+                autoExpandParent={true}
+                showLine={false}
+                selectedKeys={selectedKeys.value as any}
+                onSelect={(v) => {
+                  props?.onChange?.(v)
+                  if (v?.[0] === 0 && !props.canSelectMain) {
+                    selectedKeys.value = selectedKeys.value
+                    return
+                  }
+                  selectedKeys.value = v
+                }}
+              ></Tree>
+            </div>
           )}
           <Modal
             title="新增分类"

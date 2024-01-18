@@ -7,6 +7,7 @@
         :schema="editSchema"
         className="pro-form"
         rowClassName="pro-form-row"
+        bodyClassName="project-body"
       >
         <template #left>
           <ProjectType
@@ -83,6 +84,9 @@ const onCancel = debounce(() => {
     flex: 1;
     padding-left: 50px !important;
     border-left: 1px solid #eee;
+  }
+  .project-body {
+    padding-left: 0;
   }
 }
 </style>

@@ -125,12 +125,11 @@ export default defineComponent({
           <TableRender
             schema={schema}
             tableProps={{
-              scroll: 1200,
+              scroll: { y: '50vh' },
               rowSelection: rowSelection.value,
               rowKey: 'id',
-              pagination: {
-                pageSize: 100
-              }
+              pagination: false,
+              size: 'small'
             }}
             key={selectKey.value}
             request={(params: any) => {

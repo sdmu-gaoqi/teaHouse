@@ -22,7 +22,7 @@
     <template #bodyCell="{ data }">
       <div
         v-if="data?.column?.dataIndex === 'options'"
-        class="flex justify-center items-center"
+        class="flex items-center"
       >
         <a
           type="link"
