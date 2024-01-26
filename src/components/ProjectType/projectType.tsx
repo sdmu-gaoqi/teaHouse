@@ -1,5 +1,5 @@
 import { Alert, Modal, Tooltip, Tree, TreeProps, message } from 'ant-design-vue'
-import { Ref, computed, defineComponent, onMounted, ref, toRaw } from 'vue'
+import { Ref, computed, defineComponent, onMounted, ref, watch } from 'vue'
 import styles from './index.module.scss'
 import {
   PlusSquareTwoTone,
@@ -90,7 +90,8 @@ const ProjectType = defineComponent({
     edit: Boolean,
     defaultSelect: Array,
     onChange: Function,
-    canSelectMain: Boolean
+    canSelectMain: Boolean,
+    selectValue: Number
   },
   setup(props, ctx) {
     const { edit = true } = props
@@ -129,6 +130,13 @@ const ProjectType = defineComponent({
     onMounted(() => {
       init()
     })
+
+    watch(
+      () => props.selectValue,
+      () => {
+        selectedKeys.value = [props.selectValue]
+      }
+    )
 
     const handleSlot = {
       title: (rest: any) => {

@@ -1,5 +1,6 @@
 // @ts-nocheck
 
+import ProjectType from '@/components/ProjectType/projectType'
 import common from '@/servers/common'
 import employee from '@/servers/employee'
 import { RoyaltyType, royaltyTypeMap } from '@/types'
@@ -11,6 +12,7 @@ import {
   Modal,
   Popconfirm,
   Select,
+  Spin,
   Table,
   message
 } from 'ant-design-vue'
@@ -24,6 +26,7 @@ import {
   render,
   toRaw,
   toRef,
+  unref,
   watch
 } from 'vue'
 import { useRequest } from 'vue-hooks-plus'
@@ -49,7 +52,11 @@ const CreateOrderModal = defineComponent({
   setup(props: Props) {
     const room = new Room()
     const apps = reactive([])
-    const { data: projectList, run } = useRequest<any>(common.projectList, {
+    const {
+      data: projectList,
+      run,
+      loading
+    } = useRequest<any>(common.projectList, {
       manual: true
     })
     const { data: roomList, run: runRoom } = useRequest<any>(room.list, {
@@ -64,6 +71,7 @@ const CreateOrderModal = defineComponent({
     const deleteItems = ref([])
     const inputRef = ref<string>()
     const orderServiceItemList = ref<any[]>([])
+    const categoryId = ref(0)
     watch(
       () => props.open,
       () => {
@@ -423,66 +431,110 @@ const CreateOrderModal = defineComponent({
           if (props.onCancel) {
             props.onCancel()
           }
+          inputRef.value = ''
+          categoryId.value = 0
         }}
         v-slots={slot.value}
         onOk={onFinish}
+        destroyOnClose
       >
         <div>
           <div class="text-[14px] py-[10px]">选择项目</div>
           <div class="flex">
-            <Input
-              class="w-[300px] mr-[50px]"
-              value={inputRef.value || undefined}
-              onChange={(v) => (inputRef.value = v.target.value)}
-            />
-            <Button
-              type="primary"
-              onClick={(e) => {
-                const search = inputRef.value
+            <ProjectType
+              canSelectMain={true}
+              selectValue={categoryId.value}
+              defaultSelect={[0]}
+              onChange={(v) => {
                 run({
-                  pageSize: 100,
-                  serviceName: search
+                  ...(v?.[0] && {
+                    categoryId: v?.[0]
+                  }),
+                  ...(inputRef.value && {
+                    serviceName: inputRef.value?.trim()
+                  })
                 })
+                categoryId.value = v?.[0]
+                inputRef.value = ''
               }}
-            >
-              查询
-            </Button>
-          </div>
-          <div class="apps flex mt-[20px] flex-wrap">
-            {projectList.value?.rows?.map((item: any) => {
-              // @ts-ignore
-              const has = apps.some((appItem) => appItem?.id === item?.id)
-              return (
-                <div
-                  class={`rounded-md bg-indigo-100 mb-[10px] text-[#fff ] px-[20px] py-[10px] cursor-pointer select-none hover:shadow-md active:shadow-lg mr-[10px]`}
-                  style={{ border: '1px solid #bbb' }}
-                  onClick={() => {
-                    orderServiceItemList.value = [
-                      ...orderServiceItemList.value,
-                      {
-                        customNum: 1, // 客数
-                        operateUserId: '', // 技师id
-                        roomId: '', // 房间id
-                        roomNo: '', // 确认房间号
-                        royaltyType: RoyaltyType.排钟,
-                        serviceNum: 1, // 上钟数
-                        serviceProjectId: item.id, // 服务项目id
-                        serviceProjectName: item.serviceName, // 服务项目
-                        duration: item.duration,
-                        price: item.price,
-                        operate: 'add',
-                        ...(props.orderInfo?.roomNo && {
-                          roomNo: props.orderInfo?.roomNo,
-                          roomId: props.orderInfo?.roomId
-                        })
-                      }
-                    ]
+            />
+            <div class="apps pl-[20px]">
+              <div class="flex mb-[20px]">
+                <Input
+                  class="w-[300px] mr-[50px]"
+                  value={inputRef.value || undefined}
+                  onChange={(v) => (inputRef.value = v.target.value)}
+                  allowClear
+                  placeholder="请输入关键字"
+                />
+                <Button
+                  type="primary"
+                  onClick={(e) => {
+                    const search = inputRef.value
+                    run({
+                      pageSize: 100,
+                      serviceName: search
+                    })
+                    categoryId.value = 0
                   }}
                 >
-                  {item?.serviceName}
-                </div>
-              )
-            })}
+                  查询
+                </Button>
+              </div>
+              <Spin spinning={loading.value}>
+                {projectList.value?.rows?.map((item: any) => {
+                  const isHuodong = true
+                  // @ts-ignore
+                  const has = apps.some((appItem) => appItem?.id === item?.id)
+                  return (
+                    <div
+                      style={{ border: '1px solid #bbb' }}
+                      class="rounded-md relative overflow-hidden inline-flex bg-indigo-100 mb-[10px] cursor-pointer select-none hover:shadow-md active:shadow-lg mr-[10px]"
+                    >
+                      {isHuodong && (
+                        <div
+                          class=" bg-rose-300 text-[#fff] flex justify-center px-[5px]"
+                          style={{ writingMode: 'vertical-lr' }}
+                        >
+                          活动
+                        </div>
+                      )}
+                      <div
+                        class={`text-[#fff ] px-[20px] py-[5px]`}
+                        onClick={() => {
+                          orderServiceItemList.value = [
+                            ...orderServiceItemList.value,
+                            {
+                              customNum: 1, // 客数
+                              operateUserId: '', // 技师id
+                              roomId: '', // 房间id
+                              roomNo: '', // 确认房间号
+                              royaltyType: RoyaltyType.排钟,
+                              serviceNum: 1, // 上钟数
+                              serviceProjectId: item.id, // 服务项目id
+                              serviceProjectName: item.serviceName, // 服务项目
+                              duration: item.duration,
+                              price: item.price,
+                              operate: 'add',
+                              ...(props.orderInfo?.roomNo && {
+                                roomNo: props.orderInfo?.roomNo,
+                                roomId: props.orderInfo?.roomId
+                              })
+                            }
+                          ]
+                        }}
+                      >
+                        {item?.serviceName}
+                        <span class="mr-[2px]"></span>
+                        {'('}
+                        {item.duration}分钟/
+                        {item.price}元{')'}
+                      </div>
+                    </div>
+                  )
+                })}
+              </Spin>
+            </div>
           </div>
         </div>
         <div>

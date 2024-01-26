@@ -1,3 +1,6 @@
+/**
+ * @file 选择项目
+ * */
 import { MemberType, payTypes } from '@/types'
 import { formatMoney } from '@/utils'
 import { FormRenderProps, TableProps, TableRender } from 'store-operations-ui'

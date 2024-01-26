@@ -1,4 +1,4 @@
-import { defineComponent, ref, toRaw } from 'vue'
+import { defineComponent, onUnmounted, ref, toRaw } from 'vue'
 import {
   Button,
   DatePicker,
@@ -18,7 +18,7 @@ import { useRoute, useRouter } from 'vue-router'
 import BusinessModal from '@/components/businessModal/businessModal'
 import { BusinessModalType } from '@/components/businessModal/businessModal.type'
 import dayjs from 'dayjs'
-import { isEmpty } from 'wa-utils'
+import { Storage, isEmpty } from 'wa-utils'
 import common from '@/servers/common'
 
 type SelectListItem = {
@@ -38,18 +38,29 @@ const MarketingDetail = defineComponent({
       params: { id }
     } = useRoute()
     const isEdit = !!id
+    const session = new Storage('session')
+    const marketingData = session.baseGet('marketingData')
+    const isSame = String(marketingData?.id) === String(id)
 
     const router = useRouter()
 
     const open = ref(false)
 
     const formState = ref<Record<'name' | 'discountTime', any>>({
-      name: '',
-      discountTime: undefined
+      name: isSame ? marketingData?.name : undefined,
+      discountTime:
+        isSame && !isEmpty(marketingData?.discountTime)
+          ? [
+              dayjs(marketingData?.discountTime?.split('~')[0]),
+              dayjs(marketingData?.discountTime?.split('~')[1])
+            ]
+          : undefined
     })
     const form = ref()
     const selectList = ref([])
-    const listValue = ref<SelectListItem[]>([])
+    const listValue = ref<SelectListItem[]>(
+      isSame ? marketingData?.projectList || [] : []
+    )
 
     const columns = [
       {
@@ -164,6 +175,7 @@ const MarketingDetail = defineComponent({
             onChange={(v) => {
               record.discountPrice = v as string
             }}
+            min={0}
           ></InputNumber>
         )
       }
@@ -251,10 +263,17 @@ const MarketingDetail = defineComponent({
         value.isUpdates = 1
         if (id) {
           await common.updateMs(value)
+        } else {
+          await common.addMs(value)
         }
-        await common.addMs(value)
+        message.success('保存成功')
+        router.go(-1)
       })
     }
+
+    onUnmounted(() => {
+      session.remove('marketingData')
+    })
 
     return () => {
       return (
@@ -296,11 +315,18 @@ const MarketingDetail = defineComponent({
               }
             }}
             changeState={(data: any) => {
-              selectList.value = data?.map((item: any) => ({
-                ...item,
-                projectName: item.serviceName,
-                projectId: item.id
-              }))
+              selectList.value = data?.map((item: any) => {
+                const newItem = {
+                  seckillId: id,
+                  projectId: item.id,
+                  projectName: item.serviceName,
+                  price: item.price,
+                  discountPrice: 1,
+                  discountTime: '00:00',
+                  discountTimeBeforeAfter: 0
+                }
+                return newItem
+              })
             }}
           />
         </div>
