@@ -51,8 +51,8 @@ const MarketingDetail = defineComponent({
       discountTime:
         isSame && !isEmpty(marketingData?.discountTime)
           ? [
-              dayjs(marketingData?.discountTime?.split('~')[0]),
-              dayjs(marketingData?.discountTime?.split('~')[1])
+              marketingData?.discountTime?.split('~')[0],
+              marketingData?.discountTime?.split('~')[1]
             ]
           : undefined
     })
@@ -207,6 +207,7 @@ const MarketingDetail = defineComponent({
               <Form.Item label="活动时间" name="discountTime">
                 <DatePicker.RangePicker
                   showTime
+                  valueFormat="YYYY-MM-DD HH:mm:ss"
                   value={formState.value.discountTime}
                   onUpdate:value={(v) => (formState.value.discountTime = v)}
                 ></DatePicker.RangePicker>
