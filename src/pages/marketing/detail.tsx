@@ -306,6 +306,9 @@ const MarketingDetail = defineComponent({
               okText: '确定',
               cancelText: '返回',
               onOk: () => {
+                if (isEmpty(selectList.value)) {
+                  return message.error('请选择项目')
+                }
                 listValue.value = selectList.value
                 open.value = false
               },
