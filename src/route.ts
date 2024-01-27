@@ -249,6 +249,11 @@ const asyncRouter: any[] = [
         path: 'edit:/:id',
         name: '编辑秒杀活动',
         component: () => import('./pages/marketing/detail.tsx')
+      },
+      {
+        path: 'detail:/:id',
+        name: '秒杀活动详情',
+        component: () => import('./pages/marketing/detail.tsx')
       }
     ]
   },

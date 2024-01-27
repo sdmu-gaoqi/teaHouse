@@ -134,28 +134,39 @@ const Marketing = defineComponent({
         }
         if (data.column.dataIndex === 'options') {
           const isEnd = data.record.status === 2
+          const isIng = data.record.status === 1
           return (
             <div class="flex justify-center">
-              <Button
-                type="link"
-                style={{ paddingLeft: 0 }}
-                onClick={async () => {
-                  const isUpdates = +data.record.isUpdates === 1 ? 2 : 1
-                  await common.updateMs({
-                    ...data.record,
-                    projectList: data?.record?.projectList || [],
-                    isUpdates
-                  })
-                  message.success('保存成功')
-                  data.record.isUpdates = isUpdates
-                  tableRef.value.run(tableRef.value.params?.[0])
-                }}
-              >
-                {+data.record.isUpdates === 1 ? '下架' : '上架'}
-              </Button>
               {!isEnd && (
                 <Button
-                  style={{ paddingLeft: 0 }}
+                  type="link"
+                  style={{ padding: '0 6px' }}
+                  danger={isIng}
+                  onClick={async () => {
+                    const isUpdates = +data.record.isUpdates === 1 ? 2 : 1
+                    const open = isUpdates === 1
+                    await common.updateMs({
+                      ...data.record,
+                      projectList: data?.record?.projectList || [],
+                      isUpdates,
+                      ...(open && {
+                        status: 1
+                      }),
+                      ...(!open && {
+                        status: 2
+                      })
+                    })
+                    message.success('保存成功')
+                    data.record.isUpdates = isUpdates
+                    tableRef.value.run(tableRef.value.params?.[0])
+                  }}
+                >
+                  {+data.record.isUpdates === 1 ? '下架' : '上架'}
+                </Button>
+              )}
+              {!isEnd && (
+                <Button
+                  style={{ padding: '0 6px' }}
                   type="link"
                   onClick={() => {
                     router.push(`/marketing/edit/${data.record.id}`)
@@ -166,32 +177,41 @@ const Marketing = defineComponent({
                 </Button>
               )}
               {isEnd && (
-                <Button style={{ paddingLeft: 0 }} type="link">
+                <Button
+                  style={{ padding: '0 6px' }}
+                  type="link"
+                  onClick={() => {
+                    router.push(`/marketing/detail/${data.record.id}`)
+                    session.baseSet('marketingData', data.record)
+                  }}
+                >
                   详情
                 </Button>
               )}
-              <Button
-                style={{ paddingLeft: 0, paddingRight: 0 }}
-                type="link"
-                danger
-                onClick={() => {
-                  Modal.confirm({
-                    title: '提示',
-                    content: '是否确认删除',
-                    okText: '确定',
-                    cancelText: '取消',
-                    onOk: async () => {
-                      await common.deleteMs({
-                        ids: data.record.id + ''
-                      })
-                      message.success('删除成功')
-                      tableRef.value.run(tableRef.value.params?.[0])
-                    }
-                  })
-                }}
-              >
-                删除
-              </Button>
+              {!isIng && (
+                <Button
+                  style={{ padding: '0 6px' }}
+                  type="link"
+                  danger
+                  onClick={() => {
+                    Modal.confirm({
+                      title: '提示',
+                      content: '是否确认删除',
+                      okText: '确定',
+                      cancelText: '取消',
+                      onOk: async () => {
+                        await common.deleteMs({
+                          ids: data.record.id + ''
+                        })
+                        message.success('删除成功')
+                        tableRef.value.run(tableRef.value.params?.[0])
+                      }
+                    })
+                  }}
+                >
+                  删除
+                </Button>
+              )}
             </div>
           )
         }

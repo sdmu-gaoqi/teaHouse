@@ -42,6 +42,9 @@ const MarketingDetail = defineComponent({
     const marketingData = session.baseGet('marketingData')
     const isSame = String(marketingData?.id) === String(id)
 
+    const route = useRoute()
+    const isDetail = route?.path.includes('/marketing/detail')
+
     const router = useRouter()
 
     const open = ref(false)
@@ -62,7 +65,7 @@ const MarketingDetail = defineComponent({
       isSame ? marketingData?.projectList || [] : []
     )
 
-    const columns = [
+    let columns = [
       {
         title: '项目名称',
         dataIndex: 'projectName'
@@ -94,6 +97,10 @@ const MarketingDetail = defineComponent({
         }
       }
     ]
+
+    if (isDetail) {
+      columns.pop()
+    }
 
     const tableSlots = {
       options: ({
@@ -145,6 +152,8 @@ const MarketingDetail = defineComponent({
                 record.discountTime = v
               }}
               style={{ width: '100px' }}
+              bordered={!isDetail}
+              disabled={isDetail}
             ></Select>
             <Radio.Group
               class="ml-[10px]"
@@ -156,6 +165,7 @@ const MarketingDetail = defineComponent({
                 { label: '前', value: 0 },
                 { label: '后', value: 1 }
               ]}
+              disabled={isDetail}
             />
           </div>
         )
@@ -176,6 +186,8 @@ const MarketingDetail = defineComponent({
               record.discountPrice = v as string
             }}
             min={0}
+            disabled={isDetail}
+            bordered={!isDetail}
           ></InputNumber>
         )
       }
@@ -202,33 +214,45 @@ const MarketingDetail = defineComponent({
                   value={formState.value.name}
                   class="max-w-[500px]"
                   onUpdate:value={(v) => (formState.value.name = v)}
+                  readonly={isDetail}
+                  bordered={!isDetail}
                 ></Input>
               </Form.Item>
               <Form.Item label="活动时间" name="discountTime">
-                <DatePicker.RangePicker
-                  showTime
-                  valueFormat="YYYY-MM-DD HH:mm:ss"
-                  value={formState.value.discountTime}
-                  onUpdate:value={(v) => (formState.value.discountTime = v)}
-                ></DatePicker.RangePicker>
+                {isDetail ? (
+                  <div>
+                    {formState?.value.discountTime?.[0]} ~{' '}
+                    {formState?.value.discountTime?.[1]}
+                  </div>
+                ) : (
+                  <DatePicker.RangePicker
+                    showTime
+                    valueFormat="YYYY-MM-DD HH:mm:ss"
+                    value={formState.value.discountTime}
+                    onUpdate:value={(v) => (formState.value.discountTime = v)}
+                  ></DatePicker.RangePicker>
+                )}
               </Form.Item>
             </Form>
             <FormGroup title="活动优惠" />
-            <Form.Item label="参与活动项目" required labelCol={{ span: 6 }}>
-              <Button
-                type="link"
-                class="text-primary pl-0"
-                onClick={() => {
-                  open.value = true
-                }}
-              >
-                选择项目
-              </Button>
-            </Form.Item>
+            {!isDetail && (
+              <Form.Item label="参与活动项目" required labelCol={{ span: 6 }}>
+                <Button
+                  type="link"
+                  class="text-primary pl-0"
+                  onClick={() => {
+                    open.value = true
+                  }}
+                >
+                  选择项目
+                </Button>
+              </Form.Item>
+            )}
             <Table
               columns={columns}
               dataSource={listValue.value}
               v-slots={tableSlots}
+              style={{ marginTop: isDetail ? '10px' : 0 }}
             />
           </div>
         )
@@ -260,11 +284,13 @@ const MarketingDetail = defineComponent({
           '~' +
           dayjs(res.discountTime[1]).format('YYYY-MM-DD HH:mm:ss')
         value.projectList = toRaw(listValue.value)
-        value.status = 1
-        value.isUpdates = 1
         if (id) {
+          value.status = marketingData.status
+          value.isUpdates = marketingData.isUpdates
           await common.updateMs(value)
         } else {
+          value.status = 0
+          value.isUpdates = 0
           await common.addMs(value)
         }
         message.success('保存成功')
