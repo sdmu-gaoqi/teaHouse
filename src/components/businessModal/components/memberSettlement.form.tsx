@@ -483,6 +483,7 @@ export default defineComponent({
               return (
                 <>
                   <Table
+                    size="small"
                     columns={[
                       {
                         title: '项目名称',
@@ -538,6 +539,7 @@ export default defineComponent({
               return (
                 <>
                   <Table
+                    size="small"
                     columns={[
                       {
                         title: '会员卡号',
@@ -577,6 +579,7 @@ export default defineComponent({
               return (
                 <>
                   <Table
+                    pagination={false}
                     columns={[
                       {
                         title: '项目名称',
@@ -584,19 +587,31 @@ export default defineComponent({
                       },
                       {
                         title: '单价/原价',
-                        dataIndex: ''
+                        dataIndex: 'price',
+                        slots: {
+                          customRender: 'price'
+                        }
                       },
                       {
                         title: '秒杀时段',
-                        dataIndex: ''
+                        dataIndex: 'discountTime',
+                        slots: {
+                          customRender: 'time'
+                        }
                       },
                       {
                         title: '秒杀价',
-                        dataIndex: ''
+                        dataIndex: 'discountPrice',
+                        slots: {
+                          customRender: 'price'
+                        }
                       },
                       {
                         title: '参与订单结算',
-                        dataIndex: ''
+                        dataIndex: '',
+                        slots: {
+                          customRender: 'opt'
+                        }
                       }
                     ]}
                     dataSource={(msPr.value as any)?.data}
@@ -604,6 +619,28 @@ export default defineComponent({
                     locale={{
                       emptyText: '暂无活动项目'
                     }}
+                    v-slots={{
+                      price: (data: any) => {
+                        return formatMoney(data.text)
+                      },
+                      time: (data: any) => {
+                        return (
+                          data.text +
+                          (data.record?.discountTimeBeforeAfter === 0
+                            ? '前'
+                            : '后')
+                        )
+                      },
+                      opt: (data: any) => {
+                        return (
+                          <div>
+                            <Radio checked={data?.in} />
+                            参与
+                          </div>
+                        )
+                      }
+                    }}
+                    size="small"
                   />
                 </>
               )

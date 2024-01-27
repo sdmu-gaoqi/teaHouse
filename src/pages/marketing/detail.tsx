@@ -136,8 +136,8 @@ const MarketingDetail = defineComponent({
         return (
           <div>
             <Select
-              options={Array.from({ length: 23 }).map((item, index) => {
-                const value = (index >= 10 ? index : `0${index}`) + ':00'
+              options={Array.from({ length: 11 }).map((item, index) => {
+                const value = 11 + index + ':00'
                 return { label: value, value }
               })}
               value={record.discountTime}
@@ -321,12 +321,12 @@ const MarketingDetail = defineComponent({
             changeState={(data: any) => {
               selectList.value = data?.map((item: any) => {
                 const newItem = {
-                  seckillId: id,
+                  seckillId: id || '',
                   projectId: item.id,
                   projectName: item.serviceName,
                   price: item.price,
                   discountPrice: 1,
-                  discountTime: '00:00',
+                  discountTime: '11:00',
                   discountTimeBeforeAfter: 0
                 }
                 return newItem
