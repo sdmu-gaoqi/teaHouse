@@ -226,7 +226,6 @@ const MarketingDetail = defineComponent({
                   </div>
                 ) : (
                   <DatePicker.RangePicker
-                    showTime
                     valueFormat="YYYY-MM-DD HH:mm:ss"
                     value={formState.value.discountTime}
                     onUpdate:value={(v) => (formState.value.discountTime = v)}
@@ -280,9 +279,9 @@ const MarketingDetail = defineComponent({
         }
         value.name = res.name
         value.discountTime =
-          dayjs(res.discountTime[0]).format('YYYY-MM-DD HH:mm:ss') +
+          dayjs(res.discountTime[0]).format('YYYY-MM-DD 00:00:00') +
           '~' +
-          dayjs(res.discountTime[1]).format('YYYY-MM-DD HH:mm:ss')
+          dayjs(res.discountTime[1]).format('YYYY-MM-DD 23:59:59')
         value.projectList = toRaw(listValue.value)
         if (id) {
           value.status = marketingData.status
