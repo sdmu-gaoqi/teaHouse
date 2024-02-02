@@ -4,7 +4,7 @@
 import common from '@/servers/common'
 import { MemberType, payTypes } from '@/types'
 import { formatMoney } from '@/utils'
-import { Input, Radio, Table, message } from 'ant-design-vue'
+import { Input, Radio, Switch, Table, message } from 'ant-design-vue'
 import {
   FormCard,
   FormRender,
@@ -26,7 +26,8 @@ const schema: Schema = {
   type: 'object',
   rules: {
     [payKey]: [{ required: true, message: '请选择支付方式' }],
-    meituan: [{ required: true, message: '请输入美团金额' }]
+    meituan: [{ required: true, message: '请输入美团金额' }],
+    payPrice: [{ required: true, message: '请输入实收金额' }]
   },
   properties: {
     orderNo: {
@@ -91,7 +92,7 @@ const schema: Schema = {
         customRender: 'projectTable'
       }
     },
-    originalPrice: {
+    receivePrice: {
       title: '应收金额',
       labelClass: 'text-orange-500 text-[14px]',
       type: 'string',
@@ -122,7 +123,7 @@ const schema: Schema = {
       widget: 'input',
       'ui:hidden': 'formState.value.settleType != 2'
     },
-    receivePrice: {
+    payPrice: {
       title: '实收金额',
       labelClass: 'text-orange-500 text-[14px]',
       type: 'string',
@@ -283,18 +284,20 @@ export default defineComponent({
     const formRef = ref()
     const defaultValue = ref<any>({})
     const memberList = ref<any>([])
+    const yhItems = ref<any[]>([])
     const { run, data, params } = useRequest(common.preSettle, {
       manual: true,
       onSuccess: (res: any) => {
         const v = {
           orderNo: res?.data?.orderNo,
-          originalPrice: formatMoney(res?.data?.originalPrice),
           receivePrice: formatMoney(res?.data?.receivePrice),
           replenishPrice: formatMoney(res?.data?.replenishPrice || 0),
           discountPrice: res?.data?.discountPrice,
-          oldDiscountPrice: formatMoney(res?.data?.receivePrice)
+          payPrice: formatMoney(res?.data?.payPrice),
+          meituan: formatMoney(res.data?.payPrice)
         }
         formRef.value.changeState(v)
+        formRef.value.formRef.clearValidate()
         defaultValue.value = {
           ...v,
           metaData: res?.data,
@@ -336,31 +339,64 @@ export default defineComponent({
       }
     })
 
+    // 根据优惠设置项目信息
+    const memoProject = (yhList: any[], projectList: any[]) => {
+      const items = projectList?.map((item: any) => {
+        const yhItems = yhList?.filter(
+          (i: any) => i.projectId === item.serviceProjectId
+        )
+        const promotionInfoList = yhItems?.map((i: any) => ({
+          promotionId: i?.seckillId,
+          promotionItemId: i?.id
+        }))
+        return {
+          serviceProjectId: item.serviceProjectId,
+          promotionInfoList
+        }
+      })
+      return items
+    }
+
+    const changeYhList = (yhList: any[]) => {
+      const orderItemList = memoProject(
+        yhList,
+        defaultValue?.value?.projectList
+      )
+      run({
+        ...params.value?.[0],
+        orderItemList
+      })
+    }
+
     const changeNum = debounce(
-      (value: any, { originalPrice, settleType }: any) => {
+      (value: any, { receivePrice, settleType }: any) => {
         const inputValue = value.target.value
+        const orderItemList = memoProject(
+          yhItems.value,
+          defaultValue?.value?.projectList
+        )
         if (isNaN(Number(inputValue))) {
           value.target.value = 0
           run({
             ...params.value?.[0],
-            receivePrice: 0,
-            settleType
+            payPrice: 0,
+            settleType,
+            orderItemList
           })
           return message.error('请输入正确的数字')
         }
-        if (+inputValue >= +originalPrice) {
+        if (+inputValue >= +receivePrice) {
           message.error('实收金额不能大于应收金额')
           value.target.value = 0
           run({
-            ...params.value?.[0],
-            receivePrice: 0,
-            settleType
+            ...params.value?.[0]
           })
         } else {
           run({
             ...params.value?.[0],
-            receivePrice: value.target.value,
-            settleType
+            payPrice: value.target.value,
+            settleType,
+            orderItemList
           })
         }
       },
@@ -385,11 +421,18 @@ export default defineComponent({
               orderId: defaultValue?.value?.metaData?.orderId,
               orderNo: v?.orderNo,
               settleType: v?.settleType,
-              discountPrice: formatMoney(v?.discountPrice),
+              discountPrice: defaultValue?.value?.metaData?.discountPrice,
               remark: v?.remark || '',
               receivePrice: formatMoney(v?.receivePrice),
               payMethod: v?.payMethod,
-              originalPrice: formatMoney(v?.originalPrice)
+              originalPrice: defaultValue?.value?.metaData?.originalPrice,
+              orderItemList: toRaw(
+                defaultValue?.value?.metaData?.preOrderItemList
+              ),
+              promotionList: toRaw(
+                defaultValue?.value?.metaData?.promotionInfoList
+              ),
+              payPrice: v?.payPrice
             }
             if (v?.settleType === '1' && !v?.memberId?.memberId) {
               return message.error('请选择会员')
@@ -403,8 +446,8 @@ export default defineComponent({
             await sleep(0)
             const formValue = formRef.value.formRef.getFieldsValue()
             const settleType = +formValue.settleType
-            const originalPrice = formValue?.originalPrice
             const receivePrice = formValue?.receivePrice
+            const payPrice = formValue?.payPrice
             const orderId = props.formState?.orderId
             const orderNo = props.formState?.orderNo
             const user = formValue?.memberId
@@ -416,10 +459,14 @@ export default defineComponent({
                   orderNo,
                   settleType: '0'
                 })
+              } else if (tab === '2') {
+                run({
+                  orderId,
+                  orderNo,
+                  settleType: '2'
+                })
               } else {
                 if (user?.memberId) {
-                  const newDiscountedPrice =
-                    ((100 - user?.discountRate * 100) / 100) * originalPrice
                   run({
                     orderId,
                     orderNo,
@@ -469,11 +516,18 @@ export default defineComponent({
                 }
               }
             }
-            if (key === 'receivePrice') {
+            if (key === 'payPrice') {
               changeNum(value, {
-                receivePrice,
+                payPrice,
                 settleType,
-                originalPrice
+                receivePrice
+              })
+            }
+            if (key === 'meituan') {
+              changeNum(value, {
+                payPrice,
+                settleType,
+                receivePrice
               })
             }
           }}
@@ -503,7 +557,7 @@ export default defineComponent({
                       },
                       {
                         title: '小计',
-                        dataIndex: 'discountPrice'
+                        dataIndex: 'payPrice'
                       },
                       {
                         title: '是否自推',
@@ -521,7 +575,6 @@ export default defineComponent({
                           <Radio.Group
                             value={data.record?.isZt || 0}
                             onChange={(v) => {
-                              console.log(v)
                               data.record.isZt = v.target.value
                             }}
                           >
@@ -614,7 +667,11 @@ export default defineComponent({
                         }
                       }
                     ]}
-                    dataSource={(msPr.value as any)?.data}
+                    dataSource={(msPr.value as any)?.data?.filter((i: any) => {
+                      return defaultValue?.value?.metaData?.preOrderItemList?.some(
+                        (item: any) => item.serviceProjectId === i?.projectId
+                      )
+                    })}
                     loading={loading.value}
                     locale={{
                       emptyText: '暂无活动项目'
@@ -634,8 +691,25 @@ export default defineComponent({
                       opt: (data: any) => {
                         return (
                           <div>
-                            <Radio checked={data?.in} />
-                            参与
+                            <Switch
+                              checkedChildren={'参与'}
+                              unCheckedChildren={'不参与'}
+                              checked={yhItems.value?.some(
+                                (i: any) => i.id === data?.record?.id
+                              )}
+                              onChange={(v) => {
+                                let newItems: any = [...yhItems.value]
+                                if (v) {
+                                  newItems = [...newItems, data?.record]
+                                } else {
+                                  newItems = newItems?.filter(
+                                    (i: any) => i?.id !== data?.record?.id
+                                  )
+                                }
+                                yhItems.value = newItems
+                                changeYhList(newItems)
+                              }}
+                            />
                           </div>
                         )
                       }

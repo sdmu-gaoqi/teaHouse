@@ -52,6 +52,7 @@ const CreateOrderModal = defineComponent({
   setup(props: Props) {
     const room = new Room()
     const apps = reactive([])
+    const yhList = ref<any[]>([])
     const {
       data: projectList,
       run,
@@ -68,6 +69,11 @@ const CreateOrderModal = defineComponent({
         manual: true
       }
     )
+    const { run: getYh } = useRequest<any>(common.msProjectList, {
+      onSuccess: (res) => {
+        yhList.value = res?.data
+      }
+    })
     const deleteItems = ref([])
     const inputRef = ref<string>()
     const orderServiceItemList = ref<any[]>([])
@@ -79,6 +85,7 @@ const CreateOrderModal = defineComponent({
           run({ pageSize: 100 })
           runRoom({ pageSize: 100 })
           runEm()
+          getYh()
         }
       }
     )
@@ -483,7 +490,9 @@ const CreateOrderModal = defineComponent({
               </div>
               <Spin spinning={loading.value}>
                 {projectList.value?.rows?.map((item: any) => {
-                  const isHuodong = true
+                  const isHuodong = yhList?.value?.some(
+                    (i: any) => i.projectId === item?.id
+                  )
                   // @ts-ignore
                   const has = apps.some((appItem) => appItem?.id === item?.id)
                   return (
@@ -491,13 +500,15 @@ const CreateOrderModal = defineComponent({
                       style={{ border: '1px solid #bbb' }}
                       class="rounded-md relative overflow-hidden inline-flex bg-indigo-100 mb-[10px] cursor-pointer select-none hover:shadow-md active:shadow-lg mr-[10px]"
                     >
-                      {isHuodong && (
+                      {isHuodong ? (
                         <div
                           class=" bg-rose-300 text-[#fff] flex justify-center px-[5px]"
                           style={{ writingMode: 'vertical-lr' }}
                         >
                           活动
                         </div>
+                      ) : (
+                        <div></div>
                       )}
                       <div
                         class={`text-[#fff ] px-[20px] py-[5px]`}

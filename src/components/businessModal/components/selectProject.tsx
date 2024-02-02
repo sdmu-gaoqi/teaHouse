@@ -4,7 +4,7 @@
 import { MemberType, payTypes } from '@/types'
 import { formatMoney } from '@/utils'
 import { FormRenderProps, TableProps, TableRender } from 'store-operations-ui'
-import { defineComponent, onMounted, ref, toRaw } from 'vue'
+import { defineComponent, onMounted, ref, toRaw, watch } from 'vue'
 import common from '@/servers/common'
 import ProjectType from '@/components/ProjectType/projectType'
 
@@ -69,7 +69,7 @@ export default defineComponent({
           roleId: []
         }
       }
-      const rowSelection = ref({
+      const rowSelection = {
         checkStrictly: false,
         onChange: (
           selectedRowKeys: (string | number)[],
@@ -93,7 +93,9 @@ export default defineComponent({
             ...(toRaw(selectedRows) as any)?.map((item: any) => ({
               ...item,
               projectName: item.serviceName,
-              projectId: item.id
+              projectId: item.id,
+              discountTime: oldValue?.find((i: any) => i.id === item.id)
+                ?.discountTime
             }))
           ]
           list = list?.reduce((result, item) => {
@@ -114,7 +116,7 @@ export default defineComponent({
           changeRows: any[]
         ) => {},
         selectedRowKeys: refSelectedRowKeys.value?.map((item: any) => item.id)
-      })
+      }
       return (
         <div class="flex">
           <ProjectType
@@ -129,7 +131,7 @@ export default defineComponent({
             schema={schema}
             tableProps={{
               scroll: { y: '50vh' },
-              rowSelection: rowSelection.value,
+              rowSelection: rowSelection,
               rowKey: 'id',
               pagination: false,
               size: 'small'

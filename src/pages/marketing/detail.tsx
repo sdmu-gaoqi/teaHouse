@@ -60,7 +60,13 @@ const MarketingDetail = defineComponent({
           : undefined
     })
     const form = ref()
-    const selectList = ref([])
+    const selectList = ref(
+      marketingData?.projectList?.map((item: any) => ({
+        ...item,
+        id: item?.projectId,
+        serviceName: item?.projectName
+      })) || []
+    )
     const listValue = ref<SelectListItem[]>(
       isSame ? marketingData?.projectList || [] : []
     )
@@ -241,6 +247,12 @@ const MarketingDetail = defineComponent({
                   class="text-primary pl-0"
                   onClick={() => {
                     open.value = true
+                    selectList.value =
+                      marketingData?.projectList?.map((item: any) => ({
+                        ...item,
+                        id: item?.projectId,
+                        serviceName: item?.projectName
+                      })) || []
                   }}
                 >
                   选择项目
@@ -344,15 +356,18 @@ const MarketingDetail = defineComponent({
               }
             }}
             changeState={(data: any) => {
+              if (marketingData) {
+                marketingData.projectList = data
+              }
               selectList.value = data?.map((item: any) => {
                 const newItem = {
                   seckillId: id || '',
                   projectId: item.id,
                   projectName: item.serviceName,
                   price: item.price,
-                  discountPrice: 1,
-                  discountTime: '11:00',
-                  discountTimeBeforeAfter: 0
+                  discountPrice: item?.discountPrice || 1,
+                  discountTime: item?.discountTime || '11:00',
+                  discountTimeBeforeAfter: item?.discountPrice || 0
                 }
                 return newItem
               })
