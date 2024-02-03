@@ -1,4 +1,4 @@
-import { CHANGEMENUDATA } from '../actions'
+import { CHANGEMENUDATA, CHANGESTORES } from '../actions'
 import 订单 from '@/assets/订单.svg'
 import 会员 from '@/assets/会员.svg'
 import 员工 from '@/assets/员工.svg'
@@ -15,6 +15,7 @@ import { toRaw } from 'vue'
 
 interface State {
   menus: Record<string, any>[]
+  stores: any[]
 }
 
 const defaultMenu = [
@@ -214,7 +215,8 @@ const defaultMenu = [
 ]
 
 const state: State = {
-  menus: []
+  menus: [],
+  stores: []
 }
 
 const getters = {
@@ -229,6 +231,12 @@ const actions = {
     payload: { type: string; data: typeof state.loginInfo }
   ) {
     commit(CHANGEMENUDATA, payload.data)
+  },
+  setStores(
+    { state, commit }: any,
+    payload: { type: string; data: typeof state.stores }
+  ) {
+    commit(CHANGESTORES, payload.data)
   }
 }
 
@@ -236,6 +244,9 @@ const mutations = {
   [CHANGEMENUDATA](state: State, data: UserState['perms']) {
     const newMenu = transformMenuByPerms(defaultMenu, data)
     state.menus = newMenu
+  },
+  [CHANGESTORES](state: State, data: UserState['perms']) {
+    state.stores = data
   }
 }
 

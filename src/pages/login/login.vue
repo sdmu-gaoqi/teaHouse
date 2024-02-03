@@ -32,11 +32,20 @@ interface FormState {
 }
 
 const onFinish = (res: any) => {
+  const urlSearch = new URLSearchParams(location.search)
   dispatch('userInfo/changeUser', { data: res.user })
   dispatch('userInfo/setPerms', { data: res.permissions })
   dispatch('common/changeMenus', { data: res.permissions })
   transformRoute(res.permissions)
-  location.reload()
+  const oldStr = urlSearch.toString()
+  urlSearch.set('storeCode', res?.user?.currentStoreCode)
+  const newStr = urlSearch.toString()
+  const newHref = `${location.origin}/?${newStr}#/`
+  if (oldStr === newStr) {
+    location.reload()
+  } else {
+    location.href = newHref
+  }
 }
 
 const getCode = (value: FormState) => {

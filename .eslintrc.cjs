@@ -48,6 +48,7 @@ module.exports = {
       },
       rules: {
         'no-console': 'off',
+        'vue/no-parsing-error': 'off',
         '@typescript-eslint/no-unused-vars': [
           'error',
           { vars: 'all', args: 'after-used', ignoreRestSiblings: true }

@@ -66,11 +66,11 @@
         >
           <a-select
             class="w-[200px] h-[32px]"
-            :options="data?.data"
+            :options="store?.state?.common?.stores"
             :fieldNames="{ label: 'name', value: 'code' }"
             :value="userInfo.userInfo.currentStoreCode"
             @change="
-              (_v: any, r: any) => {
+              (_: any, r: any) => {
                 common
                   .changeStore({ storeCode: r.code })
                   .then(() => {
@@ -88,7 +88,7 @@
                   查看版本日志
                 </div></template
               >
-              <div @click="goVersion">V1.0</div>
+              <div @click="goVersion">V1.2.0</div>
             </a-tooltip>
             <img
               :src="full ? notFullImg : fullImg"
@@ -189,7 +189,24 @@ const activeKey = ref<string[]>([])
 const matched = ref<Record<string, any>[]>([])
 const routerData = ref<Record<string, any>>({})
 const router = useRouter()
-const { data } = useRequest(() => s.list({ pageSize: 50 })) as any
+const urlSearch = new URLSearchParams(location.search)
+useRequest(() => s.list({ pageSize: 50 }), {
+  onSuccess: async (res: any) => {
+    const currentStoreCode = userInfo?.userInfo?.currentStoreCode
+    const hasLoginStore = res?.data?.find(
+      (item: any) => item?.code === currentStoreCode
+    )
+    if (!hasLoginStore) {
+      urlSearch.set('storeCode', res?.data?.[0]?.code)
+      await common.changeStore({ storeCode: res?.data?.[0]?.code })
+      location.search = `?${urlSearch?.toString()}`
+      return
+    }
+    store.dispatch('common/setStores', {
+      data: res?.data
+    })
+  }
+}) as any
 
 const path = useRoute()
 
