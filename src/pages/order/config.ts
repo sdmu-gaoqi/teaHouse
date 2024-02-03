@@ -40,6 +40,11 @@ export const schema: TableProps['schema'] = {
           width: 300
         },
         {
+          title: '项目名称',
+          dataIndex: 'serviceProjectName',
+          width: 300
+        },
+        {
           title: '订单金额/元',
           dataIndex: 'originalPrice',
           format: 'money',
@@ -53,7 +58,7 @@ export const schema: TableProps['schema'] = {
         },
         {
           title: '实付金额/元',
-          dataIndex: 'receivePrice',
+          dataIndex: 'payPrice',
           format: 'money',
           width: 140
         },
@@ -98,6 +103,11 @@ export const schema: TableProps['schema'] = {
           width: 300
         },
         {
+          title: '项目名称',
+          dataIndex: 'serviceProjectName',
+          width: 300
+        },
+        {
           title: '订单金额/元',
           dataIndex: 'originalPrice',
           format: 'money',
@@ -111,7 +121,7 @@ export const schema: TableProps['schema'] = {
         },
         {
           title: '实付金额/元',
-          dataIndex: 'receivePrice',
+          dataIndex: 'payPrice',
           format: 'money',
           width: 140
         },
@@ -148,6 +158,11 @@ export const schema: TableProps['schema'] = {
           width: 300
         },
         {
+          title: '项目名称',
+          dataIndex: 'serviceProjectName',
+          width: 300
+        },
+        {
           title: '订单金额/元',
           dataIndex: 'originalPrice',
           format: 'money',
@@ -161,7 +176,7 @@ export const schema: TableProps['schema'] = {
         },
         {
           title: '实付金额/元',
-          dataIndex: 'receivePrice',
+          dataIndex: 'payPrice',
           format: 'money',
           width: 140
         },
