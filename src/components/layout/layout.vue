@@ -250,8 +250,9 @@ const goPassword = () => {
 }
 
 const changeLoginSuccess = (code: any) => {
-  localStorage.setItem('storeCode', code)
-  location.reload()
+  // localStorage.setItem('storeCode', code)
+  urlSearch.set('storeCode', code)
+  location.search = urlSearch.toString()
 }
 const changeLoginErr = (err: any, code: any) => {
   if (err?.code == 500) {

@@ -490,6 +490,10 @@ const initUserInfo = async () => {
     return toRaw(state.userInfo)
   }
   const res = await user.getUserInfo()
+  const urlSearch = new URLSearchParams(location.search)
+  console.log(res?.user?.currentStoreCode, 'res?.user?.currentStoreCode')
+  urlSearch.set('storeCode', res?.user?.currentStoreCode)
+  location.search = urlSearch.toString()
   const storeList = await s.loginList({})
   const currentStoreCode = res?.user?.currentStoreCode
   const currentStoreName = storeList?.rows?.find(
