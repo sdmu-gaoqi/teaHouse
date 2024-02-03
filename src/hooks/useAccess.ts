@@ -34,7 +34,9 @@ const useAccess = () => {
     orderList: perms.includes('orderList') || perms.includes(adminPerm), // 订单列表
     workbench: perms.includes('workbench') || perms.includes(adminPerm), // 工作台
     returnMemberCard:
-      perms.includes('returnMemberCard') || perms.includes(adminPerm)
+      perms.includes('returnMemberCard') || perms.includes(adminPerm),
+    marketingEdit:
+      perms.includes('cs:marketing:edit') || perms.includes(adminPerm) // 秒杀活动编辑
   }
 }
 

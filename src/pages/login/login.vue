@@ -32,12 +32,11 @@ interface FormState {
 }
 
 const onFinish = (res: any) => {
-  console.log(res, 'rrrrrr')
   dispatch('userInfo/changeUser', { data: res.user })
   dispatch('userInfo/setPerms', { data: res.permissions })
   dispatch('common/changeMenus', { data: res.permissions })
   transformRoute(res.permissions)
-  router.replace('/')
+  location.reload()
 }
 
 const getCode = (value: FormState) => {

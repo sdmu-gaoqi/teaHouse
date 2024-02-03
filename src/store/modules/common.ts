@@ -114,12 +114,12 @@ const defaultMenu = [
   {
     title: '营销管理',
     icon: 美团,
-    access: ['marketingView'],
+    access: ['cs:marketing:view'],
     children: [
       {
         title: '限时秒杀活动',
         path: '/marketing/list',
-        access: ['marketingView']
+        access: ['cs:marketing:view']
       }
     ]
   },

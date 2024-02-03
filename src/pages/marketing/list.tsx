@@ -4,6 +4,7 @@ import { Button, Modal, message } from 'ant-design-vue'
 import { useRouter } from 'vue-router'
 import common from '@/servers/common'
 import { Storage, isEmpty } from 'wa-utils'
+import { useAccess } from '@/hooks'
 
 export const schema: TableProps['schema'] = {
   title: '限时秒杀活动',
@@ -102,8 +103,12 @@ const Marketing = defineComponent({
     const router = useRouter()
     const tableRef = ref()
     const session = new Storage('session')
+    const { marketingEdit } = useAccess()
     const handleSlots = {
       formButton: () => {
+        if (!marketingEdit) {
+          return null
+        }
         return (
           <Button
             type="primary"
@@ -137,7 +142,7 @@ const Marketing = defineComponent({
           const isIng = data.record.status === 1
           return (
             <div class="flex justify-center">
-              {!isEnd && (
+              {!isEnd && marketingEdit && (
                 <Button
                   type="link"
                   style={{ padding: '0 6px' }}
@@ -164,7 +169,7 @@ const Marketing = defineComponent({
                   {+data.record.isUpdates === 1 ? '下架' : '上架'}
                 </Button>
               )}
-              {!isEnd && (
+              {!isEnd && marketingEdit && (
                 <Button
                   style={{ padding: '0 6px' }}
                   type="link"
@@ -176,7 +181,7 @@ const Marketing = defineComponent({
                   编辑
                 </Button>
               )}
-              {isEnd && (
+              {(isEnd || !marketingEdit) && (
                 <Button
                   style={{ padding: '0 6px' }}
                   type="link"
@@ -188,7 +193,7 @@ const Marketing = defineComponent({
                   详情
                 </Button>
               )}
-              {!isIng && (
+              {!isIng && marketingEdit && (
                 <Button
                   style={{ padding: '0 6px' }}
                   type="link"

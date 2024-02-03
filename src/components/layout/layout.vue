@@ -15,7 +15,7 @@
           class="rounded-full w-[66px] h-[66px]"
         />
         <div class="w-[100%] text-[#fff] text-center text-[16px] my-[10px]">
-          {{ userInfo?.userInfo?.remark }}
+          {{ userInfo?.userInfo?.nickName }}
         </div>
       </div>
       <a-menu

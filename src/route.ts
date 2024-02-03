@@ -234,21 +234,36 @@ const asyncRouter: any[] = [
   {
     path: '/marketing',
     name: '营销管理',
+    redirect: () => {
+      return { path: 'list' }
+    },
     children: [
       {
         path: 'list',
         name: '限时秒杀活动',
-        component: () => import('./pages/marketing/list.tsx')
+        component: () => import('./pages/marketing/list.tsx'),
+        meta: {
+          access: ['cs:marketing:view'],
+          key: 'stores-list'
+        }
       },
       {
         path: 'add',
         name: '新建秒杀活动',
-        component: () => import('./pages/marketing/detail.tsx')
+        component: () => import('./pages/marketing/detail.tsx'),
+        meta: {
+          access: ['cs:marketing:edit'],
+          key: 'stores-list'
+        }
       },
       {
         path: 'edit:/:id',
         name: '编辑秒杀活动',
-        component: () => import('./pages/marketing/detail.tsx')
+        component: () => import('./pages/marketing/detail.tsx'),
+        meta: {
+          access: ['cs:marketing:edit'],
+          key: 'stores-list'
+        }
       },
       {
         path: 'detail:/:id',
