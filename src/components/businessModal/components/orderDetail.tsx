@@ -46,39 +46,6 @@ const OrderDetail = defineComponent({
           },
           widget: 'input'
         },
-        // table1: {
-        //   widget: 'table',
-        //   props: {
-        //     columns: [
-        //       {
-        //         title: '会员卡号',
-        //         dataIndex: 'memberNo'
-        //       },
-        //       {
-        //         title: '姓名',
-        //         dataIndex: 'memberName'
-        //       },
-        //       {
-        //         title: '手机号',
-        //         dataIndex: 'phone'
-        //       },
-        //       {
-        //         title: '会员类型',
-        //         dataIndex: 'memberTypeName'
-        //       },
-        //       {
-        //         title: '优惠方式',
-        //         dataIndex: 'discountRate'
-        //       },
-        //       {
-        //         title: '会员卡余额',
-        //         dataIndex: 'availableBalance'
-        //       }
-        //     ],
-        //     pagination: false
-        //   },
-        //   'ui:hidden': 'isEmpty(formState.value.discountPrice)'
-        // },
         originalPrice: {
           title: '应收金额',
           type: 'string',
@@ -91,9 +58,6 @@ const OrderDetail = defineComponent({
           'ui:hidden':
             '(formState.value.settleType == 1 && !formState.value?.memberId?.memberId)'
         },
-        // 占位: {
-        //   span: 12
-        // },
         receivePrice: {
           title: '实收金额',
           type: 'string',
@@ -113,7 +77,8 @@ const OrderDetail = defineComponent({
           props: {
             readonly: true,
             bordered: false
-          }
+          },
+          'ui:hidden': 'formState.value.settleType == "美团"'
         },
         payMethod: {
           title: '支付方式',
@@ -135,7 +100,8 @@ const OrderDetail = defineComponent({
             readonly: true,
             bordered: false
           },
-          'ui:hidden': 'isEmpty(formState.value.replenishPrice)'
+          'ui:hidden':
+            'isEmpty(formState.value.replenishPrice) || formState.value.settleType == "美团"'
         },
         remark: {
           title: ' 备注',

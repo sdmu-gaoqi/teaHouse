@@ -43,7 +43,7 @@ export default defineComponent({
             },
             {
               title: '消费金额',
-              dataIndex: 'giveBalance',
+              dataIndex: 'depositBalance',
               format: 'money'
             },
             {
