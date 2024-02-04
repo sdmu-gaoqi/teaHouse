@@ -285,6 +285,7 @@ export default defineComponent({
     const defaultValue = ref<any>({})
     const memberList = ref<any>([])
     const yhItems = ref<any[]>([])
+    const msList = ref<any>([])
     const { run, data, params } = useRequest(common.preSettle, {
       manual: true,
       onSuccess: (res: any) => {
@@ -310,6 +311,10 @@ export default defineComponent({
             discountPrice: formatMoney(item?.discountPrice)
           }))
         }
+        const ids = res?.data?.preOrderItemList
+          ?.map((item: any) => item?.serviceProjectId)
+          .join(',')
+        getMsIds(ids)
       },
       onError: (err: any) => {
         if (err?.code === 1025) {
@@ -321,11 +326,23 @@ export default defineComponent({
         }
       }
     })
-    const {
-      run: getMsPr,
-      data: msPr,
-      loading
-    } = useRequest(common.msProjectList)
+    const { data: msPr, loading } = useRequest(common.msProjectList)
+    const { run: getMsIds } = useRequest(
+      (ids: any) => {
+        return common
+          .markIds({
+            params: {
+              projectIds: ids
+            }
+          })
+          .then((res: any) => {
+            msList.value = res?.data
+          })
+      },
+      {
+        manual: true
+      }
+    )
     const selectUser = ref<any>()
     onMounted(() => {
       const orderId = props.formState?.orderId
@@ -667,11 +684,7 @@ export default defineComponent({
                         }
                       }
                     ]}
-                    dataSource={(msPr.value as any)?.data?.filter((i: any) => {
-                      return defaultValue?.value?.metaData?.preOrderItemList?.some(
-                        (item: any) => item.serviceProjectId === i?.projectId
-                      )
-                    })}
+                    dataSource={msList.value as any}
                     loading={loading.value}
                     locale={{
                       emptyText: '暂无活动项目'
@@ -700,6 +713,21 @@ export default defineComponent({
                               onChange={(v) => {
                                 let newItems: any = [...yhItems.value]
                                 if (v) {
+                                  const selectd = yhItems.value?.find(
+                                    (i: any) =>
+                                      i.projectId === data?.record?.projectId
+                                  )
+                                  if (
+                                    selectd &&
+                                    selectd?.seckillId !==
+                                      data?.record?.seckillId
+                                  ) {
+                                    newItems = newItems?.filter(
+                                      (item: any) =>
+                                        item.projectId !==
+                                        data?.record?.projectId
+                                    )
+                                  }
                                   newItems = [...newItems, data?.record]
                                 } else {
                                   newItems = newItems?.filter(
