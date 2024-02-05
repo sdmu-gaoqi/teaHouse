@@ -363,8 +363,8 @@ export default defineComponent({
           (i: any) => i.projectId === item.serviceProjectId
         )
         const promotionInfoList = yhItems?.map((i: any) => ({
-          promotionId: i?.seckillId,
-          promotionItemId: i?.id
+          promotionId: i?.seckillId + '',
+          promotionItemId: i?.id + ''
         }))
         return {
           serviceProjectId: item.serviceProjectId,
@@ -444,7 +444,12 @@ export default defineComponent({
               payMethod: v?.payMethod,
               originalPrice: defaultValue?.value?.metaData?.originalPrice,
               orderItemList: toRaw(
-                defaultValue?.value?.metaData?.preOrderItemList
+                defaultValue?.value?.projectList?.map((item: any) => {
+                  return {
+                    ...item,
+                    zt: item?.zt ? 1 : 0
+                  }
+                })
               ),
               promotionList: toRaw(
                 defaultValue?.value?.metaData?.promotionInfoList
@@ -590,9 +595,10 @@ export default defineComponent({
                       isZt: (data: any) => {
                         return (
                           <Radio.Group
-                            value={data.record?.isZt || 0}
+                            value={data.record?.zt || 0}
                             onChange={(v) => {
-                              data.record.isZt = v.target.value
+                              console.log(v.target.value, 'v.target.value')
+                              data.record.zt = v.target.value
                             }}
                           >
                             <Radio value={0}>否</Radio>

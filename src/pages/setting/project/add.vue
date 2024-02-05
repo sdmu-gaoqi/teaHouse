@@ -51,12 +51,12 @@ const onFinish = async (value: Record<string, any>) => {
     await common.updateProject({
       ...value,
       serviceProjectId: id,
-      categoryId: treeRef.value.selectedKeys?.[0]
+      categoryId: treeRef.value.selectedKeys?.[0] || ''
     })
   } else {
     await common.addProject({
       ...value,
-      categoryId: treeRef.value.selectedKeys?.[0]
+      categoryId: treeRef.value.selectedKeys?.[0] || ''
     })
   }
   message.success('保存成功')
