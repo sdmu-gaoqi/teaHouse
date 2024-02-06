@@ -379,7 +379,7 @@ export default defineComponent({
         yhList,
         defaultValue?.value?.projectList
       )
-      run({
+      return common.preSettle({
         ...params.value?.[0],
         orderItemList
       })
@@ -717,6 +717,7 @@ export default defineComponent({
                                 (i: any) => i.id === data?.record?.id
                               )}
                               onChange={(v) => {
+                                const oldValue = cloneDeep(yhItems.value)
                                 let newItems: any = [...yhItems.value]
                                 if (v) {
                                   const selectd = yhItems.value?.find(
@@ -741,7 +742,16 @@ export default defineComponent({
                                   )
                                 }
                                 yhItems.value = newItems
-                                changeYhList(newItems)
+                                changeYhList(newItems).catch((err) => {
+                                  if (err?.code === 1025) {
+                                    formRef.value.changeState({
+                                      settleType: '0',
+                                      discountPrice: '0'
+                                    })
+                                    message.error('会员卡余额为0,无法会员下单')
+                                  }
+                                  yhItems.value = oldValue
+                                })
                               }}
                             />
                           </div>
