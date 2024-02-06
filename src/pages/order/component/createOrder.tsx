@@ -14,6 +14,7 @@ import {
   Select,
   Spin,
   Table,
+  Tooltip,
   message
 } from 'ant-design-vue'
 import { nanoid } from 'nanoid'
@@ -490,14 +491,16 @@ const CreateOrderModal = defineComponent({
               </div>
               <Spin spinning={loading.value}>
                 {projectList.value?.rows?.map((item: any) => {
-                  const isHuodong = yhList?.value?.some(
+                  const isHuodong = yhList?.value?.find(
                     (i: any) => i.projectId === item?.id
                   )
                   // @ts-ignore
                   const has = apps.some((appItem) => appItem?.id === item?.id)
+                  const Wrapper = isHuodong ? Tooltip : 'div'
                   return (
-                    <div
+                    <Wrapper
                       style={{ border: '1px solid #bbb' }}
+                      title={`活动价: ${formatMoney(isHuodong.discountPrice)}`}
                       class="rounded-md relative overflow-hidden inline-flex bg-indigo-100 mb-[10px] cursor-pointer select-none hover:shadow-md active:shadow-lg mr-[10px]"
                     >
                       {isHuodong ? (
@@ -541,7 +544,7 @@ const CreateOrderModal = defineComponent({
                         {item.duration}分钟/
                         {item.price}元{')'}
                       </div>
-                    </div>
+                    </Wrapper>
                   )
                 })}
               </Spin>

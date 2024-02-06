@@ -286,6 +286,7 @@ const MarketingDetail = defineComponent({
         }
       }
       form.value.validateFields().then(async (res: any) => {
+        console.log(id, 'id')
         if (id) {
           value.id = id
         }
@@ -296,7 +297,7 @@ const MarketingDetail = defineComponent({
           dayjs(res.discountTime[1]).format('YYYY-MM-DD 23:59:59')
         value.projectList = toRaw(listValue.value)
         if (id) {
-          value.status = marketingData.status
+          value.status = marketingData?.status
           value.isUpdates = marketingData.isUpdates
           await common.updateMs(value)
         } else {
@@ -337,9 +338,6 @@ const MarketingDetail = defineComponent({
             onCancel={() => {
               open.value = false
             }}
-            formState={{
-              selectList: selectList.value
-            }}
             modalProps={{
               okText: '确定',
               cancelText: '返回',
@@ -347,7 +345,7 @@ const MarketingDetail = defineComponent({
                 if (isEmpty(selectList.value)) {
                   return message.error('请选择项目')
                 }
-                listValue.value = selectList.value
+                listValue.value = [...listValue.value, ...selectList.value]
                 open.value = false
               },
               onCancel: () => {
