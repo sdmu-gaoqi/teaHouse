@@ -133,12 +133,12 @@ export const editSchema = {
     storeCode: [{ required: true, message: '请选择所属门店' }]
   },
   properties: {
-    isLogin: {
-      title: '是否登录账号',
-      defaultValue: true,
-      widget: 'switch',
-      span: 4
-    },
+    // isLogin: {
+    //   title: '是否登录账号',
+    //   defaultValue: true,
+    //   widget: 'switch',
+    //   span: 4
+    // },
     isTechnician: {
       type: 'string',
       props: {

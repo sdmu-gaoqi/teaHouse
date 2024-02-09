@@ -500,7 +500,7 @@ const CreateOrderModal = defineComponent({
                   return (
                     <Wrapper
                       style={{ border: '1px solid #bbb' }}
-                      title={`活动价: ${formatMoney(isHuodong.discountPrice)}`}
+                      title={`活动价: ${formatMoney(isHuodong?.discountPrice)}`}
                       class="rounded-md relative overflow-hidden inline-flex bg-indigo-100 mb-[10px] cursor-pointer select-none hover:shadow-md active:shadow-lg mr-[10px]"
                     >
                       {isHuodong ? (

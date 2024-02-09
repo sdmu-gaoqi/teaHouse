@@ -57,7 +57,7 @@ onMounted(async () => {
       const storeNames = detail?.data?.storeName?.split(',')
       loading.value = false
       detailData.value = detail.data
-      cloneSchema.properties.isLogin.defaultValue = detail?.data?.isLogin == 1
+      // cloneSchema.properties.isLogin.defaultValue = detail?.data?.isLogin == 1
       cloneSchema.properties.userName.defaultValue = detail?.data.userName
       cloneSchema.properties.phonenumber.defaultValue = detail?.data.phonenumber
       cloneSchema.properties.sex.defaultValue = detail?.data.sex
@@ -95,7 +95,6 @@ const onFinish = async (value: Record<string, any>) => {
       ...value,
       nickName: value.userName,
       status: value.status ? 0 : 1,
-      isLogin: value?.isLogin ? 1 : 0,
       roles: value.role.map((item: any) => {
         return {
           roleId: item,
@@ -103,8 +102,9 @@ const onFinish = async (value: Record<string, any>) => {
         }
       }),
       roleIds: value.role.map((item: any) => item),
-      isLogin: Number(value?.isLogin || 0),
-      isTechnician: Number(value?.isTechnician || 0),
+      // isLogin: Number(value?.isLogin || 0),
+      isLogin: 1,
+      isTechnician: Number(value?.isTechnician) || 0,
       storeCode: value?.storeCode?.map((item) => item.code)?.join(','),
       storeName: value?.storeCode?.map((item) => item.name)?.join(','),
       currentStoreCode: store.state.userInfo?.userInfo?.currentStoreCode,
