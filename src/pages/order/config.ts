@@ -37,12 +37,12 @@ export const schema: TableProps['schema'] = {
           fixed: true,
           title: '订单编号',
           dataIndex: 'orderNo',
-          width: 300
+          width: 250
         },
         {
           title: '项目名称',
           dataIndex: 'serviceProjectName',
-          width: 300
+          width: 350
         },
         {
           title: '订单金额/元',
@@ -77,18 +77,21 @@ export const schema: TableProps['schema'] = {
         },
         {
           title: '手机号',
-          dataIndex: 'phone'
+          dataIndex: 'phone',
+          width: 140
         },
         {
           title: '创建日期',
           dataIndex: 'createTime',
-          format: 'time'
+          format: 'time',
+          width: 200
         },
         {
           fixed: 'right',
           title: '操作',
           dataIndex: 'options',
-          options: ['detail']
+          options: ['detail'],
+          width: 200
         }
       ]
     },
@@ -100,12 +103,12 @@ export const schema: TableProps['schema'] = {
           fixed: true,
           title: '订单编号',
           dataIndex: 'orderNo',
-          width: 300
+          width: 250
         },
         {
           title: '项目名称',
           dataIndex: 'serviceProjectName',
-          width: 300
+          width: 400
         },
         {
           title: '订单金额/元',
@@ -143,7 +146,8 @@ export const schema: TableProps['schema'] = {
           fixed: 'right',
           title: '操作',
           dataIndex: 'options',
-          options: ['detail']
+          options: ['detail'],
+          width: 200
         }
       ]
     },
@@ -160,7 +164,7 @@ export const schema: TableProps['schema'] = {
         {
           title: '项目名称',
           dataIndex: 'serviceProjectName',
-          width: 300
+          width: 350
         },
         {
           title: '订单金额/元',
@@ -198,7 +202,8 @@ export const schema: TableProps['schema'] = {
           fixed: 'right',
           title: '操作',
           dataIndex: 'options',
-          options: ['detail']
+          options: ['detail'],
+          width: 200
         }
       ]
     }

@@ -5,7 +5,7 @@
     :request="common.orderList"
     ref="tableRef"
     :tableProps="{
-      scroll: { x: 1600 }
+      scroll: { x: 1800 }
     }"
   >
     <template #bodyCell="{ data }">
@@ -51,6 +51,9 @@
           {{ data?.customer || data.text }}
         </div>
       </template>
+      <template v-else-if="data.column.dataIndex === 'payPrice'">{{
+        formatMoney(data?.record?.payPrice || data?.record?.receivePrice)
+      }}</template>
       <template v-else>{{ data?.customer || data.text }}</template>
     </template>
   </TableRender>
@@ -72,6 +75,7 @@ import { BusinessModalType } from '@/components/businessModal/businessModal.type
 import common from '@/servers/common'
 import { message } from 'ant-design-vue'
 import { useAccess } from '@/hooks'
+import { formatMoney } from '@/utils'
 const { orderSettlement } = useAccess()
 
 const access = useAccess()

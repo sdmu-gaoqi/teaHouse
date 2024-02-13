@@ -6,7 +6,7 @@
     :formatParams="formatParams"
     ref="tableRef"
     :table-props="{
-      scroll: { x: 1400 }
+      scroll: { x: 1200 }
     }"
   >
     <template #formButton>

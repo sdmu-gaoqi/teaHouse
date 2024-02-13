@@ -63,7 +63,8 @@ export const schema: TableProps['schema'] = {
           fixed: true,
           title: '会员卡号',
           dataIndex: 'memberNo',
-          ellipsis: true
+          ellipsis: true,
+          width: 200
         },
         {
           title: '姓名',
