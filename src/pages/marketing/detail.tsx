@@ -20,6 +20,7 @@ import { BusinessModalType } from '@/components/businessModal/businessModal.type
 import dayjs from 'dayjs'
 import { Storage, isEmpty } from 'wa-utils'
 import common from '@/servers/common'
+import { formatMoney } from '@/utils'
 
 type SelectListItem = {
   discountTimeBeforeAfter: 0 | 1 // 0前 1后
@@ -78,7 +79,11 @@ const MarketingDetail = defineComponent({
       },
       {
         title: '项目原价',
-        dataIndex: 'price'
+        dataIndex: 'price',
+        width: 300,
+        slots: {
+          customRender: 'price'
+        }
       },
       {
         title: '秒杀时段',
@@ -194,8 +199,15 @@ const MarketingDetail = defineComponent({
             min={0}
             disabled={isDetail}
             bordered={!isDetail}
+            precision={2}
           ></InputNumber>
         )
+      },
+      price: (data: any) => {
+        if (!data?.text) {
+          return ''
+        }
+        return formatMoney(data?.text)
       }
     }
 

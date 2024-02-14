@@ -416,7 +416,7 @@ const asyncRouter: any[] = [
   },
   {
     path: '/log',
-    name: '日支管理',
+    name: '日志管理',
     redirect: () => {
       return { path: 'login' }
     },

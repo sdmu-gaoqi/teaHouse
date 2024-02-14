@@ -127,7 +127,7 @@ export const editSchema = {
         }
       }
     ],
-    password: [{ required: true, message: '请输入登陆密码' }],
+    password: [{ required: true, message: '请输入登录密码' }],
     role: [{ required: true, message: '请选择角色' }],
     time: [{ required: true, message: '请选择入职日期' }],
     storeCode: [{ required: true, message: '请选择所属门店' }]

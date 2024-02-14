@@ -121,7 +121,7 @@ const onFinish = async (value: Record<string, any>) => {
     birthDate: birthDate ? +birthDate : value?.birthDate,
     ...(value.memberType == MemberType.折扣卡 && {
       memberDiscountInfo: {
-        discountRate: value?.discountRate1 || value?.discountRate,
+        discountRate: id ? value.discountRate1 : value?.discountRate,
         giveBalance: value?.giveBalance,
         payMethod: value?.payMethod,
         rechargeBalance: value?.rechargeBalance

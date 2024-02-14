@@ -100,7 +100,11 @@ const schema: Schema = {
       span: 13,
       props: {
         readonly: true,
-        bordered: false
+        bordered: false,
+        style: {
+          color: '#f97316',
+          fontWeight: 'bold'
+        }
       },
       'ui:hidden':
         '(formState.value.settleType == 1 && !formState.value?.memberId?.memberId)'
@@ -129,6 +133,12 @@ const schema: Schema = {
       type: 'string',
       span: 12,
       widget: 'input',
+      props: {
+        style: {
+          color: '#f97316',
+          fontWeight: 'bold'
+        }
+      },
       'ui:hidden':
         '(formState.value.settleType == 1 && !formState.value?.memberId?.memberId) || formState.value.settleType == 2'
     },
@@ -293,7 +303,7 @@ export default defineComponent({
           orderNo: res?.data?.orderNo,
           receivePrice: formatMoney(res?.data?.receivePrice),
           replenishPrice: formatMoney(res?.data?.replenishPrice || 0),
-          discountPrice: res?.data?.discountPrice,
+          discountPrice: formatMoney(res?.data?.discountPrice || 0),
           payPrice: formatMoney(res?.data?.payPrice),
           meituan: formatMoney(res.data?.payPrice)
         }
@@ -379,10 +389,39 @@ export default defineComponent({
         yhList,
         defaultValue?.value?.projectList
       )
-      return common.preSettle({
-        ...params.value?.[0],
-        orderItemList
-      })
+      return common
+        .preSettle({
+          ...params.value?.[0],
+          orderItemList
+        })
+        .then((res: any) => {
+          const v = {
+            orderNo: res?.data?.orderNo,
+            receivePrice: formatMoney(res?.data?.receivePrice),
+            replenishPrice: formatMoney(res?.data?.replenishPrice || 0),
+            discountPrice: formatMoney(res?.data?.discountPrice || 0),
+            payPrice: formatMoney(res?.data?.payPrice),
+            meituan: formatMoney(res.data?.payPrice)
+          }
+          formRef.value.changeState(v)
+          formRef.value.formRef.clearValidate()
+          defaultValue.value = {
+            ...v,
+            metaData: res?.data,
+            projectList: res?.data?.preOrderItemList?.map((item: any) => ({
+              ...item,
+              unitPrice: formatMoney(item?.unitPrice),
+              money: formatMoney(
+                (item?.originalPrice || 0) - (item?.discountPrice || 0)
+              ),
+              discountPrice: formatMoney(item?.discountPrice)
+            }))
+          }
+          const ids = res?.data?.preOrderItemList
+            ?.map((item: any) => item?.serviceProjectId)
+            .join(',')
+          getMsIds(ids)
+        })
     }
 
     const changeNum = debounce(
@@ -417,7 +456,7 @@ export default defineComponent({
           })
         }
       },
-      500
+      1500
     )
 
     return () => {
@@ -518,7 +557,9 @@ export default defineComponent({
                       value.option?.memberType === MemberType.折扣卡
                         ? `${value?.option?.discountRate * 10}折`
                         : `${value?.option?.totalRewardTimes}次`,
-                    availableBalance: `${value?.option?.availableBalance}元`
+                    availableBalance: formatMoney(
+                      value?.option?.availableBalance
+                    )
                   }
                 ]
                 const orderId = props.formState?.orderId
@@ -539,6 +580,9 @@ export default defineComponent({
               }
             }
             if (key === 'payPrice') {
+              if (!payPrice) {
+                return
+              }
               changeNum(value, {
                 payPrice,
                 settleType,
@@ -546,6 +590,9 @@ export default defineComponent({
               })
             }
             if (key === 'meituan') {
+              if (!value?.target?.value) {
+                return
+              }
               changeNum(value, {
                 payPrice,
                 settleType,
@@ -579,7 +626,10 @@ export default defineComponent({
                       },
                       {
                         title: '小计',
-                        dataIndex: 'payPrice'
+                        dataIndex: 'payPrice',
+                        slots: {
+                          customRender: 'payPrice'
+                        }
                       },
                       {
                         title: '是否自推',
@@ -597,7 +647,6 @@ export default defineComponent({
                           <Radio.Group
                             value={data.record?.zt || 0}
                             onChange={(v) => {
-                              console.log(v.target.value, 'v.target.value')
                               data.record.zt = v.target.value
                             }}
                           >
@@ -605,6 +654,9 @@ export default defineComponent({
                             <Radio value={1}>是</Radio>
                           </Radio.Group>
                         )
+                      },
+                      payPrice: (data: any) => {
+                        return formatMoney(data?.text)
                       }
                     }}
                   />

@@ -26,8 +26,14 @@ export const loginLogSchema: TableProps['schema'] = {
         placeholder: '手机号码'
       },
       {
+        type: 'search',
+        label: '登录IP地址',
+        key: 'ipaddr',
+        placeholder: '登录IP地址'
+      },
+      {
         type: 'date',
-        label: '系统登陆时间',
+        label: '系统登录时间',
         key: 'loginTime'
       }
     ]
@@ -55,15 +61,15 @@ export const loginLogSchema: TableProps['schema'] = {
           dataIndex: 'detail'
         },
         {
-          title: '系统登陆日期',
+          title: '系统登录日期',
           dataIndex: 'loginTime'
         },
         {
-          title: '登陆IP',
+          title: '登录IP',
           dataIndex: 'ipaddr'
         },
         {
-          title: '登陆状态',
+          title: '登录状态',
           dataIndex: 'status',
           options: [
             { label: '成功', value: '0' },

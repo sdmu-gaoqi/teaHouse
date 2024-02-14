@@ -3,6 +3,7 @@ import { Schema, TableProps } from 'store-operations-ui'
 import { isEmpty } from 'wa-utils'
 import { isTelNumber } from 'wa-utils/dist/regex/regex'
 import { Store } from 'store-request'
+import { discounts } from '@/constant'
 
 const storeRequest = new Store()
 
@@ -188,28 +189,7 @@ export const editSchema: Schema = {
       defaultValue: 0.9,
       props: {
         // type: 'number'
-        options: [
-          {
-            label: '0.7',
-            value: 0.7
-          },
-          {
-            label: '0.8',
-            value: 0.8
-          },
-          {
-            label: '0.85',
-            value: 0.85
-          },
-          {
-            label: '0.9',
-            value: 0.9
-          },
-          {
-            label: '0.95',
-            value: 0.95
-          }
-        ]
+        options: discounts
       },
       'ui:hidden':
         "formState.value.memberType == '2' || !formState.value.memberId"
@@ -242,7 +222,7 @@ export const editSchema: Schema = {
       widget: 'datePicker'
     },
     expiration: {
-      title: '有效期',
+      title: '会员卡有效期',
       type: 'string',
       defaultValue: '1',
       props: {
@@ -260,9 +240,12 @@ export const editSchema: Schema = {
       widget: 'radio'
     },
     youxiao: {
-      title: '自定义有效期',
+      title: '有效期截止日',
       type: 'string',
       widget: 'datePicker',
+      props: {
+        placeholder: '请选择'
+      },
       'ui:hidden': 'formState.value.expiration !== "2"'
     },
     remark: {
@@ -304,28 +287,7 @@ export const editSchema: Schema = {
       defaultValue: 0.9,
       props: {
         // type: 'number'
-        options: [
-          {
-            label: '0.7',
-            value: 0.7
-          },
-          {
-            label: '0.8',
-            value: 0.8
-          },
-          {
-            label: '0.85',
-            value: 0.85
-          },
-          {
-            label: '0.9',
-            value: 0.9
-          },
-          {
-            label: '0.95',
-            value: 0.95
-          }
-        ]
+        options: discounts
       },
       'ui:hidden':
         "formState.value.memberType == '2' || !!formState.value.memberId"

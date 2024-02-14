@@ -1,3 +1,7 @@
+/**
+ * @file 订单详情
+ * */
+
 import common from '@/servers/common'
 import { RoyaltyType } from '@/types'
 import { formatMoney } from '@/utils'
@@ -101,7 +105,7 @@ const OrderDetail = defineComponent({
             bordered: false
           },
           'ui:hidden':
-            'isEmpty(formState.value.replenishPrice) || formState.value.settleType == "美团"'
+            'isEmpty(formState.value.replenishPrice) || formState.value.replenishPrice == 0 || formState.value.settleType == "美团" || formState.value.settleType == "非会员"'
         },
         remark: {
           title: ' 备注',

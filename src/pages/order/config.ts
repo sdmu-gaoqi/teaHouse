@@ -13,6 +13,24 @@ export const schema: TableProps['schema'] = {
         key: 'orderNo'
       },
       {
+        type: 'search',
+        label: '会员卡号',
+        key: 'memberNo',
+        activeKey: '1'
+      },
+      {
+        type: 'search',
+        label: '会员姓名',
+        key: 'memberName',
+        activeKey: '1'
+      },
+      {
+        type: 'search',
+        label: '会员手机号',
+        key: 'phone',
+        activeKey: '1'
+      },
+      {
         type: 'range',
         label: '创建日期',
         placeholder: ['开始日期', '结束日期'],
@@ -29,6 +47,62 @@ export const schema: TableProps['schema'] = {
   },
   tabKey: 'settleType',
   tabs: [
+    {
+      title: '非会员订单',
+      key: '0',
+      columns: [
+        {
+          fixed: true,
+          title: '订单编号',
+          dataIndex: 'orderNo',
+          width: 250
+        },
+        {
+          title: '项目名称',
+          dataIndex: 'serviceProjectName',
+          width: 400
+        },
+        {
+          title: '订单金额/元',
+          dataIndex: 'originalPrice',
+          format: 'money',
+          width: 140
+        },
+        {
+          title: '优惠金额/元',
+          dataIndex: 'discountPrice',
+          format: 'money',
+          width: 140
+        },
+        {
+          title: '实付金额/元',
+          dataIndex: 'payPrice',
+          format: 'money',
+          width: 140
+        },
+        {
+          title: '订单状态',
+          dataIndex: 'status',
+          options: [
+            { value: 'SUBMIT', label: '已结算' },
+            { value: 'CREATED', label: '未结算' }
+          ],
+          width: 140
+        },
+        {
+          title: '创建日期',
+          dataIndex: 'createTime',
+          format: 'time'
+        },
+        {
+          fixed: 'right',
+          title: '操作',
+          dataIndex: 'options',
+          options: ['detail'],
+          width: 200
+        }
+      ]
+    },
     {
       title: '会员订单',
       key: '1',
@@ -85,62 +159,6 @@ export const schema: TableProps['schema'] = {
           dataIndex: 'createTime',
           format: 'time',
           width: 200
-        },
-        {
-          fixed: 'right',
-          title: '操作',
-          dataIndex: 'options',
-          options: ['detail'],
-          width: 200
-        }
-      ]
-    },
-    {
-      title: '非会员订单',
-      key: '0',
-      columns: [
-        {
-          fixed: true,
-          title: '订单编号',
-          dataIndex: 'orderNo',
-          width: 250
-        },
-        {
-          title: '项目名称',
-          dataIndex: 'serviceProjectName',
-          width: 400
-        },
-        {
-          title: '订单金额/元',
-          dataIndex: 'originalPrice',
-          format: 'money',
-          width: 140
-        },
-        {
-          title: '优惠金额/元',
-          dataIndex: 'discountPrice',
-          format: 'money',
-          width: 140
-        },
-        {
-          title: '实付金额/元',
-          dataIndex: 'payPrice',
-          format: 'money',
-          width: 140
-        },
-        {
-          title: '订单状态',
-          dataIndex: 'status',
-          options: [
-            { value: 'SUBMIT', label: '已结算' },
-            { value: 'CREATED', label: '未结算' }
-          ],
-          width: 140
-        },
-        {
-          title: '创建日期',
-          dataIndex: 'createTime',
-          format: 'time'
         },
         {
           fixed: 'right',

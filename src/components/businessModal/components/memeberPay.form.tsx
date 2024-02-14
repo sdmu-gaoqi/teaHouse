@@ -1,3 +1,4 @@
+import { discounts } from '@/constant'
 import { MemberType, payTypes } from '@/types'
 import { formatMoney } from '@/utils'
 import { FormRender, FormRenderProps, Schema } from 'store-operations-ui'
@@ -88,28 +89,7 @@ const schema: Schema = {
       widget: 'input',
       props: {
         // type: 'number'
-        options: [
-          {
-            label: '0.7',
-            value: 0.7
-          },
-          {
-            label: '0.8',
-            value: 0.8
-          },
-          {
-            label: '0.85',
-            value: 0.85
-          },
-          {
-            label: '0.9',
-            value: 0.9
-          },
-          {
-            label: '0.95',
-            value: 0.95
-          }
-        ]
+        options: discounts
       },
       'ui:hidden': 'formState.value.memberType === 2'
     },
@@ -148,7 +128,11 @@ const schema: Schema = {
       widget: 'input',
       props: {
         readOnly: true,
-        bordered: false
+        bordered: false,
+        style: {
+          color: 'red',
+          fontWeight: 'bold'
+        }
       }
     },
     money4: {
@@ -157,7 +141,11 @@ const schema: Schema = {
       widget: 'input',
       props: {
         readOnly: true,
-        bordered: false
+        bordered: false,
+        style: {
+          color: 'red',
+          fontWeight: 'bold'
+        }
       }
     },
     remark: {

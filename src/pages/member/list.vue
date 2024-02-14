@@ -141,9 +141,7 @@ const goAdd = () => {
   router.push('/member/add')
 }
 
-const changeTab = (tab: any) => {
-  console.log(tab, 'tttttt')
-}
+const changeTab = (tab: any) => {}
 
 const onFinish = async (v: any, type: string) => {
   if (type === 'returnCard') {
