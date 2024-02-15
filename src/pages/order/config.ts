@@ -80,7 +80,7 @@ export const schema: TableProps['schema'] = {
         },
         {
           title: '结算日期',
-          dataIndex: 'startTime',
+          dataIndex: 'endTime',
           format: 'time'
         },
         {
@@ -132,7 +132,7 @@ export const schema: TableProps['schema'] = {
         },
         {
           title: '结算日期',
-          dataIndex: 'startTime',
+          dataIndex: 'endTime',
           format: 'time'
         },
         {
@@ -177,7 +177,7 @@ export const schema: TableProps['schema'] = {
         },
         {
           title: '结算日期',
-          dataIndex: 'startTime',
+          dataIndex: 'endTime',
           format: 'time'
         },
         {
