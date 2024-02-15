@@ -73,7 +73,7 @@
       <template v-else-if="data.column.dataIndex === 'member'">
         <div class="flex">
           <div class="w-[80px] text-right font-bold">会员姓名：</div>
-          {{ data?.record?.memberNo }}
+          {{ data?.record?.memberName }}
         </div>
         <div class="flex">
           <div class="w-[80px] text-right font-bold">会员卡号：</div>
