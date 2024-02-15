@@ -492,23 +492,38 @@ const CreateOrderModal = defineComponent({
               </div>
               <Spin spinning={loading.value}>
                 {projectList.value?.rows?.map((item: any) => {
-                  const isHuodong = yhList?.value?.find(
+                  const hdList = yhList?.value?.filter(
                     (i: any) => i.projectId === item?.id
                   )
+                  const hasHd = !isEmpty(hdList)
                   // @ts-ignore
-                  const has = apps.some((appItem) => appItem?.id === item?.id)
-                  const Wrapper = isHuodong ? Tooltip : 'div'
+                  const Wrapper = hasHd ? Tooltip : 'div'
                   return (
                     <Wrapper
                       style={{ border: '1px solid #bbb' }}
                       title={
-                        isHuodong?.discountPrice
-                          ? `活动价: ${formatMoney(isHuodong?.discountPrice)}`
-                          : ''
+                        hasHd ? (
+                          <div>
+                            <div class="font-bold">{item.serviceName}：</div>
+                            {hdList?.map((item: any) => {
+                              return (
+                                <div>
+                                  {item.discountTime}
+                                  {item.discountTimeBeforeAfter === 1
+                                    ? '后'
+                                    : '前'}
+                                  ：{formatMoney(item.discountPrice)}
+                                </div>
+                              )
+                            })}
+                          </div>
+                        ) : (
+                          ''
+                        )
                       }
                       class="rounded-md relative overflow-hidden inline-flex bg-indigo-100 mb-[10px] cursor-pointer select-none hover:shadow-md active:shadow-lg mr-[10px]"
                     >
-                      {isHuodong ? (
+                      {hasHd ? (
                         <div
                           class=" bg-rose-300 text-[#fff] flex justify-center px-[5px]"
                           style={{ writingMode: 'vertical-lr' }}

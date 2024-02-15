@@ -5,7 +5,7 @@
     :request="common.orderList"
     ref="tableRef"
     :tableProps="{
-      scroll: { x: 1300 }
+      scroll: { x: 1400 }
     }"
   >
     <template #bodyCell="{ data }">

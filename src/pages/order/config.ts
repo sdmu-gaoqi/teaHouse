@@ -55,7 +55,7 @@ export const schema: TableProps['schema'] = {
           fixed: true,
           title: '订单编号',
           dataIndex: 'orderNo',
-          width: 250
+          width: 220
         },
         {
           title: '项目名称',
@@ -71,12 +71,16 @@ export const schema: TableProps['schema'] = {
           options: [
             { value: 'SUBMIT', label: '已结算' },
             { value: 'CREATED', label: '未结算' }
-          ],
-          width: 140
+          ]
         },
         {
           title: '创建日期',
           dataIndex: 'createTime',
+          format: 'time'
+        },
+        {
+          title: '结算日期',
+          dataIndex: 'startTime',
           format: 'time'
         },
         {
@@ -96,7 +100,7 @@ export const schema: TableProps['schema'] = {
           fixed: true,
           title: '订单编号',
           dataIndex: 'orderNo',
-          width: 250
+          width: 220
         },
         {
           title: '项目名称',
@@ -104,16 +108,8 @@ export const schema: TableProps['schema'] = {
         },
         {
           title: '金额/元',
-          dataIndex: 'price'
-        },
-        {
-          title: '订单状态',
-          dataIndex: 'status',
-          options: [
-            { value: 'SUBMIT', label: '已结算' },
-            { value: 'CREATED', label: '未结算' }
-          ],
-          width: 140
+          dataIndex: 'price',
+          width: 160
         },
         {
           title: '会员信息',
@@ -121,10 +117,23 @@ export const schema: TableProps['schema'] = {
           width: 200
         },
         {
+          title: '订单状态',
+          dataIndex: 'status',
+          options: [
+            { value: 'SUBMIT', label: '已结算' },
+            { value: 'CREATED', label: '未结算' }
+          ]
+        },
+        {
           title: '创建日期',
           dataIndex: 'createTime',
           format: 'time',
           width: 200
+        },
+        {
+          title: '结算日期',
+          dataIndex: 'startTime',
+          format: 'time'
         },
         {
           fixed: 'right',
@@ -143,7 +152,7 @@ export const schema: TableProps['schema'] = {
           fixed: true,
           title: '订单编号',
           dataIndex: 'orderNo',
-          width: 250
+          width: 220
         },
         {
           title: '项目名称',
@@ -159,12 +168,16 @@ export const schema: TableProps['schema'] = {
           options: [
             { value: 'SUBMIT', label: '已结算' },
             { value: 'CREATED', label: '未结算' }
-          ],
-          width: 140
+          ]
         },
         {
           title: '创建日期',
           dataIndex: 'createTime',
+          format: 'time'
+        },
+        {
+          title: '结算日期',
+          dataIndex: 'startTime',
           format: 'time'
         },
         {
