@@ -521,6 +521,13 @@ const CreateOrderModal = defineComponent({
                       <div
                         class={`text-[#fff ] px-[20px] py-[5px]`}
                         onClick={() => {
+                          const isHas = orderServiceItemList.value?.find(
+                            (i: any) => i.serviceProjectId === item.id
+                          )
+                          if (isHas) {
+                            message.warning(`当前订单已选择${item.serviceName}`)
+                            return
+                          }
                           orderServiceItemList.value = [
                             ...orderServiceItemList.value,
                             {
