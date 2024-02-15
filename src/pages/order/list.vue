@@ -5,7 +5,7 @@
     :request="common.orderList"
     ref="tableRef"
     :tableProps="{
-      scroll: { x: 1400 }
+      scroll: { x: 1500 }
     }"
   >
     <template #bodyCell="{ data }">
@@ -61,12 +61,20 @@
         </div>
         <div class="flex">
           <div class="w-[70px] text-right font-bold">优惠金额：</div>
-          {{ formatMoney(data?.record?.discountPrice) }}
+          {{
+            data.record?.status === 'SUBMIT'
+              ? formatMoney(data?.record?.discountPrice)
+              : '--'
+          }}
         </div>
         <div class="flex">
           <div class="w-[70px] text-right font-bold">实付金额：</div>
           {{
-            formatMoney(data?.record?.payPrice || data?.record?.receivePrice)
+            data.record?.status === 'SUBMIT'
+              ? formatMoney(
+                  data?.record?.payPrice || data?.record?.receivePrice
+                )
+              : '--'
           }}
         </div>
       </template>
