@@ -13,11 +13,15 @@ export const discounts = [
     value: 0.7
   },
   {
+    label: '7.5折',
+    value: 0.75
+  },
+  {
     label: '8折',
     value: 0.8
   },
   {
-    label: '85折',
+    label: '8.5折',
     value: 0.85
   },
   {
@@ -25,7 +29,7 @@ export const discounts = [
     value: 0.9
   },
   {
-    label: '95折',
+    label: '9.5折',
     value: 0.95
   }
 ]

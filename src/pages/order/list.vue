@@ -5,7 +5,7 @@
     :request="common.orderList"
     ref="tableRef"
     :tableProps="{
-      scroll: { x: 1800 }
+      scroll: { x: 1300 }
     }"
   >
     <template #bodyCell="{ data }">
@@ -54,6 +54,36 @@
       <template v-else-if="data.column.dataIndex === 'payPrice'">{{
         formatMoney(data?.record?.payPrice || data?.record?.receivePrice)
       }}</template>
+      <template v-else-if="data.column.dataIndex === 'price'">
+        <div class="flex">
+          <div class="w-[70px] text-right font-bold">订单金额：</div>
+          {{ formatMoney(data?.record?.originalPrice) }}
+        </div>
+        <div class="flex">
+          <div class="w-[70px] text-right font-bold">优惠金额：</div>
+          {{ formatMoney(data?.record?.discountPrice) }}
+        </div>
+        <div class="flex">
+          <div class="w-[70px] text-right font-bold">实付金额：</div>
+          {{
+            formatMoney(data?.record?.payPrice || data?.record?.receivePrice)
+          }}
+        </div>
+      </template>
+      <template v-else-if="data.column.dataIndex === 'member'">
+        <div class="flex">
+          <div class="w-[80px] text-right font-bold">会员姓名：</div>
+          {{ data?.record?.memberNo }}
+        </div>
+        <div class="flex">
+          <div class="w-[80px] text-right font-bold">会员卡号：</div>
+          {{ data?.record?.memberNo }}
+        </div>
+        <div class="flex">
+          <div class="w-[80px] text-right font-bold">手机号：</div>
+          {{ data?.record?.phone }}
+        </div>
+      </template>
       <template v-else>{{ data?.customer || data.text }}</template>
     </template>
   </TableRender>

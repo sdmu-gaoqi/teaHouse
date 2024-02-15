@@ -214,7 +214,7 @@ watch(
   () => router.currentRoute.value,
   (newValue: any) => {
     routerData.value = newValue
-    matched.value = newValue.matched
+    matched.value = newValue.matched?.filter((item: any) => item?.name)
   },
   { immediate: true }
 )

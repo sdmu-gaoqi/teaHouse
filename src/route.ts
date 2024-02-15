@@ -348,11 +348,11 @@ const asyncRouter: any[] = [
       },
       {
         path: 'project',
-        name: '项目管理',
+        name: '价目表信息',
         children: [
           {
             path: 'list',
-            name: '项目列表',
+            name: '价目表列表',
             component: () => import('./pages/setting/project/list.vue'),
             meta: {
               access: ['projectList'],

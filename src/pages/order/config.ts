@@ -59,26 +59,11 @@ export const schema: TableProps['schema'] = {
         },
         {
           title: '项目名称',
-          dataIndex: 'serviceProjectName',
-          width: 400
+          dataIndex: 'serviceProjectName'
         },
         {
-          title: '订单金额/元',
-          dataIndex: 'originalPrice',
-          format: 'money',
-          width: 140
-        },
-        {
-          title: '优惠金额/元',
-          dataIndex: 'discountPrice',
-          format: 'money',
-          width: 140
-        },
-        {
-          title: '实付金额/元',
-          dataIndex: 'payPrice',
-          format: 'money',
-          width: 140
+          title: '金额/元',
+          dataIndex: 'price'
         },
         {
           title: '订单状态',
@@ -115,26 +100,11 @@ export const schema: TableProps['schema'] = {
         },
         {
           title: '项目名称',
-          dataIndex: 'serviceProjectName',
-          width: 350
+          dataIndex: 'serviceProjectName'
         },
         {
-          title: '订单金额/元',
-          dataIndex: 'originalPrice',
-          format: 'money',
-          width: 140
-        },
-        {
-          title: '优惠金额/元',
-          dataIndex: 'discountPrice',
-          format: 'money',
-          width: 140
-        },
-        {
-          title: '实付金额/元',
-          dataIndex: 'payPrice',
-          format: 'money',
-          width: 140
+          title: '金额/元',
+          dataIndex: 'price'
         },
         {
           title: '订单状态',
@@ -146,13 +116,9 @@ export const schema: TableProps['schema'] = {
           width: 140
         },
         {
-          title: '会员姓名',
-          dataIndex: 'memberName'
-        },
-        {
-          title: '手机号',
-          dataIndex: 'phone',
-          width: 140
+          title: '会员信息',
+          dataIndex: 'member',
+          width: 200
         },
         {
           title: '创建日期',
@@ -177,30 +143,15 @@ export const schema: TableProps['schema'] = {
           fixed: true,
           title: '订单编号',
           dataIndex: 'orderNo',
-          width: 300
+          width: 250
         },
         {
           title: '项目名称',
-          dataIndex: 'serviceProjectName',
-          width: 350
+          dataIndex: 'serviceProjectName'
         },
         {
-          title: '订单金额/元',
-          dataIndex: 'originalPrice',
-          format: 'money',
-          width: 140
-        },
-        {
-          title: '优惠金额/元',
-          dataIndex: 'discountPrice',
-          format: 'money',
-          width: 140
-        },
-        {
-          title: '实付金额/元',
-          dataIndex: 'payPrice',
-          format: 'money',
-          width: 140
+          title: '金额/元',
+          dataIndex: 'price'
         },
         {
           title: '订单状态',

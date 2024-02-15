@@ -121,10 +121,17 @@ const schema: Schema = {
     },
     meituan: {
       defaultValue: '0',
+      labelClass: 'text-orange-500 text-[14px]',
       title: '美团金额',
       type: 'string',
       span: 12,
       widget: 'input',
+      props: {
+        style: {
+          color: '#f97316',
+          fontWeight: 'bold'
+        }
+      },
       'ui:hidden': 'formState.value.settleType != 2'
     },
     payPrice: {
@@ -301,7 +308,7 @@ export default defineComponent({
       onSuccess: (res: any) => {
         const v = {
           orderNo: res?.data?.orderNo,
-          receivePrice: formatMoney(res?.data?.receivePrice),
+          receivePrice: formatMoney(res?.data?.originalPrice),
           replenishPrice: formatMoney(res?.data?.replenishPrice || 0),
           discountPrice: formatMoney(res?.data?.discountPrice || 0),
           payPrice: formatMoney(res?.data?.payPrice),
