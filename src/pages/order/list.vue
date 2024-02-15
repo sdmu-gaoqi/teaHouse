@@ -88,7 +88,7 @@
           {{ data?.record?.memberNo }}
         </div>
         <div class="flex">
-          <div class="w-[80px] text-right font-bold">手机号：</div>
+          <div class="w-[80px] text-right font-bold">手机号码：</div>
           {{ data?.record?.phone }}
         </div>
       </template>
