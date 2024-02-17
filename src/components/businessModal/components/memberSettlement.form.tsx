@@ -783,11 +783,7 @@ export default defineComponent({
                                     (i: any) =>
                                       i.projectId === data?.record?.projectId
                                   )
-                                  if (
-                                    selectd &&
-                                    selectd?.seckillId !==
-                                      data?.record?.seckillId
-                                  ) {
+                                  if (selectd) {
                                     newItems = newItems?.filter(
                                       (item: any) =>
                                         item.projectId !==
