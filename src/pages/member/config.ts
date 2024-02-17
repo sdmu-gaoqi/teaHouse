@@ -270,11 +270,11 @@ export const editSchema: Schema = {
           {
             label: 'A: 会员折扣卡',
             value: MemberType.折扣卡
-          },
-          {
-            label: 'B: 会员次卡',
-            value: MemberType.次卡
           }
+          // {
+          //   label: 'B: 会员次卡',
+          //   value: MemberType.次卡
+          // }
         ]
       },
       'ui:hidden': 'formState.value.memberId'
