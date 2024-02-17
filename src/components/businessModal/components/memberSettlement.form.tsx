@@ -440,6 +440,27 @@ export default defineComponent({
             .join(',')
           getMsIds(ids)
         })
+        .catch((err) => {
+          if (err?.code === 1025) {
+            formRef.value.changeState({
+              settleType: '0',
+              discountPrice: '0'
+            })
+            message.error('会员卡余额为0,无法会员下单')
+          }
+          if (err?.code === 2000102) {
+            message.error('此项目已不在秒杀时间范围内,请重新选择!')
+          } else if (err?.code === 2000101) {
+            message.error('促销活动不存在')
+          } else if (err?.code === 2000001) {
+            message.error('订单号已存在')
+          } else if (err?.code === 2000003) {
+            message.error('订单不存在')
+          } else if (err?.code === 2000004) {
+            message.error('订单已提交')
+          }
+          return Promise.reject()
+        })
     }
 
     const changeNum = debounce(
@@ -807,17 +828,22 @@ export default defineComponent({
                                     (i: any) => i?.id !== data?.record?.id
                                   )
                                 }
-                                yhItems.value = newItems
-                                changeYhList(newItems).catch((err) => {
-                                  if (err?.code === 1025) {
-                                    formRef.value.changeState({
-                                      settleType: '0',
-                                      discountPrice: '0'
-                                    })
-                                    message.error('会员卡余额为0,无法会员下单')
-                                  }
-                                  yhItems.value = oldValue
-                                })
+                                changeYhList(newItems)
+                                  .then(() => {
+                                    yhItems.value = newItems
+                                  })
+                                  .catch((err) => {
+                                    if (err?.code === 1025) {
+                                      formRef.value.changeState({
+                                        settleType: '0',
+                                        discountPrice: '0'
+                                      })
+                                      message.error(
+                                        '会员卡余额为0,无法会员下单'
+                                      )
+                                    }
+                                    yhItems.value = oldValue
+                                  })
                               }}
                             />
                           </div>
