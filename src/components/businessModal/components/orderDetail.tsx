@@ -169,7 +169,11 @@ const OrderDetail = defineComponent({
           formRef.value.changeState({
             orderNo: res?.data?.orderNo,
             originalPrice: formatMoney(res?.data?.originalPrice),
-            receivePrice: formatMoney(res?.data?.receivePrice),
+            receivePrice: formatMoney(
+              res.data.settleType == '2'
+                ? res?.data?.payPrice
+                : res?.data?.receivePrice
+            ),
             replenishPrice: formatMoney(res?.data?.replenishPrice),
             remark: res?.data?.remark,
             discountPrice: formatMoney(res.data.discountPrice),

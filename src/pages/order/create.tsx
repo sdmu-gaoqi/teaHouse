@@ -114,7 +114,7 @@ const CreateOrder = defineComponent({
                     JSON.parse(item)
                   )
                   return (
-                    <div class="flex text-[12px] items-center px-[10px]">
+                    <div class="flex items-center px-[10px] text-[14px] font-bold">
                       {orderSettlement && (
                         <Checkbox
                           class="mr-[6px]"
@@ -178,7 +178,7 @@ const CreateOrder = defineComponent({
                       </div>
                       {orderOption && (
                         <a
-                          class="text-[12px] select-none ml-auto block shrink-0"
+                          class="text-[12px] select-none ml-auto block shrink-0 font-bold"
                           style={{ padding: 0 }}
                           onClick={() => {
                             const orderId = appItem?.orderId
