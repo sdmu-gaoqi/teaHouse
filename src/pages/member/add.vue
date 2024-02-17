@@ -169,11 +169,7 @@ const onFinish = async (value: Record<string, any>) => {
       await sleep(300)
       router.back()
     }
-  } catch (err: any) {
-    if (err?.code === 1014) {
-      message.error('此会员卡号已存在! 请重新输入会员卡号')
-    }
-  }
+  } catch (err: any) {}
 }
 const onCancel = debounce(() => {
   router.back()
