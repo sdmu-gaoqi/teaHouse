@@ -153,20 +153,26 @@ const onFinish = async (value: Record<string, any>) => {
         : +new Date('3000-10-01 10:00:00'),
     wechatId: ''
   }
-  if (!isEdit) {
-    await member.add(sendValue).then(async (res) => {
+  try {
+    if (!isEdit) {
+      await member.add(sendValue).then(async (res) => {
+        message.success('保存成功')
+        await sleep(300)
+        router.back()
+      })
+    } else {
+      await member.update({
+        ...sendValue,
+        memberId: value.memberId
+      })
       message.success('保存成功')
       await sleep(300)
       router.back()
-    })
-  } else {
-    await member.update({
-      ...sendValue,
-      memberId: value.memberId
-    })
-    message.success('保存成功')
-    await sleep(300)
-    router.back()
+    }
+  } catch (err: any) {
+    if (err?.code === 1014) {
+      message.error('此会员卡号已存在! 请重新输入会员卡号')
+    }
   }
 }
 const onCancel = debounce(() => {
