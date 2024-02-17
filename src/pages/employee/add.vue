@@ -57,7 +57,8 @@ onMounted(async () => {
       const storeNames = detail?.data?.storeName?.split(',')
       loading.value = false
       detailData.value = detail.data
-      // cloneSchema.properties.isLogin.defaultValue = detail?.data?.isLogin == 1
+      cloneSchema.properties.isTechnician.defaultValue =
+        detail?.data?.isTechnician == 1
       cloneSchema.properties.userName.defaultValue = detail?.data.userName
       cloneSchema.properties.phonenumber.defaultValue = detail?.data.phonenumber
       cloneSchema.properties.sex.defaultValue = detail?.data.sex
