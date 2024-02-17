@@ -47,10 +47,6 @@ export const schema: TableProps['schema'] = {
           dataIndex: 'status'
         },
         {
-          title: '用户数',
-          dataIndex: 'dataScope'
-        },
-        {
           title: '创建日期',
           dataIndex: 'createTime'
         },

@@ -7,24 +7,24 @@ export const loginLogSchema: TableProps['schema'] = {
     export: false,
     reset: true,
     fields: [
-      {
-        type: 'search',
-        label: '工号',
-        key: 'no',
-        placeholder: '工号'
-      },
+      // {
+      //   type: 'search',
+      //   label: '工号',
+      //   key: 'no',
+      //   placeholder: '工号'
+      // },
       {
         type: 'search',
         label: '姓名',
         key: 'userName',
         placeholder: '姓名'
       },
-      {
-        type: 'search',
-        label: '手机号码',
-        key: 'phone',
-        placeholder: '手机号码'
-      },
+      // {
+      //   type: 'search',
+      //   label: '手机号码',
+      //   key: 'phone',
+      //   placeholder: '手机号码'
+      // },
       {
         type: 'search',
         label: '登录IP地址',
@@ -44,21 +44,8 @@ export const loginLogSchema: TableProps['schema'] = {
       key: 'one',
       columns: [
         {
-          fixed: true,
-          title: '员工工号',
-          dataIndex: 'orderId'
-        },
-        {
           title: '姓名',
           dataIndex: 'userName'
-        },
-        {
-          title: '手机号码',
-          dataIndex: 'currency'
-        },
-        {
-          title: '角色',
-          dataIndex: 'detail'
         },
         {
           title: '系统登录日期',
@@ -120,11 +107,6 @@ export const operateLogSchema = {
         {
           title: '操作人员',
           dataIndex: 'operName',
-          width: 100
-        },
-        {
-          title: '工号',
-          dataIndex: '',
           width: 100
         },
         {
