@@ -5,16 +5,6 @@ const Version = defineComponent({
   setup() {
     const list = ref([
       {
-        version: 'V1.0.0',
-        date: '2023.11.26',
-        content: `
-1. 会员管理
-2. 订单管理
-3. 价目表设置
-4. 房间管理`
-      },
-
-      {
         version: 'V1.2.0',
         date: '2024.02.17',
         content: `
@@ -31,6 +21,15 @@ const Version = defineComponent({
   (3)非会员订单结算时，支持营销活动结算；
   (4)支持美团订单结算；
   (5)优化订单列表显示；`
+      },
+      {
+        version: 'V1.0.0',
+        date: '2023.11.26',
+        content: `
+1. 会员管理
+2. 订单管理
+3. 价目表设置
+4. 房间管理`
       }
     ])
     return () => (
