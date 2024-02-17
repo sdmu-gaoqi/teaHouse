@@ -6,13 +6,21 @@ import { defineConfig } from 'vite'
 import mkcert from 'vite-plugin-mkcert'
 import postCssPxToRem from 'wa-postcss-pxtorem'
 import tailwindCss from 'tailwindcss'
+import viteCompression from 'vite-plugin-compression'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue(), vueJsx(), mkcert()],
+  plugins: [
+    vue(),
+    vueJsx(),
+    mkcert(),
+    viteCompression({
+      threshold: 1024000 // 对大于 1mb 的文件进行压缩
+    })
+  ],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
