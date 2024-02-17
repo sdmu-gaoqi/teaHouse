@@ -132,10 +132,27 @@ const run = () => {
 }
 
 const onFinish = async (value: any) => {
-  await common.submitOrder(value)
-  message.success('订单结算成功')
-  open.value = false
-  run()
+  try {
+    await common.submitOrder(value)
+    message.success('订单结算成功')
+    open.value = false
+    run()
+  } catch (err: any) {
+    if (err?.code === 1025) {
+      message.error('会员卡余额为0,无法会员下单')
+    }
+    if (err?.code === 2000102) {
+      message.error('此项目已不在秒杀时间范围内,请重新选择!')
+    } else if (err?.code === 2000101) {
+      message.error('促销活动不存在')
+    } else if (err?.code === 2000001) {
+      message.error('订单号已存在')
+    } else if (err?.code === 2000003) {
+      message.error('订单不存在')
+    } else if (err?.code === 2000004) {
+      message.error('订单已提交')
+    }
+  }
 }
 
 const activeKey = ref('')
