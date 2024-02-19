@@ -491,6 +491,9 @@ const initUserInfo = async () => {
   }
   const res = await user.getUserInfo()
   const urlSearch = new URLSearchParams(location.search)
+  if (!res?.user?.storeHeadquartersCode) {
+    return
+  }
   urlSearch.set('storeHeadquartersCode', res?.user?.storeHeadquartersCode)
   urlSearch.set('storeCode', res?.user?.currentStoreCode)
   location.search = urlSearch.toString()

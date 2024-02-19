@@ -1,8 +1,16 @@
+import { getVersionLogs } from '@/servers/set'
 import { List } from 'ant-design-vue'
-import { defineComponent, ref, render } from 'vue'
+import { defineComponent, onMounted, ref } from 'vue'
+import './list.scss'
 
 const Version = defineComponent({
   setup() {
+    const content = ref()
+    onMounted(() => {
+      getVersionLogs().then((res) => {
+        content.value = res?.data?.content
+      })
+    })
     const list = ref([
       {
         version: 'V1.2.0',
@@ -59,17 +67,9 @@ const Version = defineComponent({
       }
     ])
     return () => (
-      <div class="bg-[#fff] px-[50px] py-[20px]">
+      <div class="bg-[#fff] px-[50px] py-[20px] version-page">
         <List dataSource={list.value}>
-          {list.value.map((item) => (
-            <List.Item>
-              <pre style={{ margin: 0 }}>
-                <div class="text-[20px] font-bold">{item.version}</div>
-                <div class="text-[16px]">发布日期:{item.date}</div>
-                <pre style={{ margin: 0 }}>{item.content}</pre>
-              </pre>
-            </List.Item>
-          ))}
+          <div innerHTML={content.value}></div>
         </List>
       </div>
     )
