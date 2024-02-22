@@ -93,7 +93,8 @@ export default defineComponent({
       <TableRender
         schema={schema}
         tableProps={{
-          scroll: { x: 900 }
+          scroll: { x: 900 },
+          size: 'small'
         }}
         request={(data: any) =>
           member.payLogs({

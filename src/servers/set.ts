@@ -1,6 +1,7 @@
 import { Request } from 'wa-utils'
 
-const isProd = location?.origin?.includes('mengxiangjia.rixinyy.com')
+// const isProd = location?.origin?.includes('mengxiangjia.rixinyy.com')
+const isProd = false
 
 const request = new Request({
   baseUrl: isProd

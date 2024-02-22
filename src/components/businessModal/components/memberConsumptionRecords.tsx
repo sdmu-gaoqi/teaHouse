@@ -65,7 +65,7 @@ export default defineComponent({
             },
             {
               title: '剩余金额',
-              dataIndex: 'depositBalance',
+              dataIndex: 'availableBalance',
               format: 'money'
             },
             {
@@ -89,6 +89,9 @@ export default defineComponent({
     }
     return () => (
       <TableRender
+        tableProps={{
+          size: 'small'
+        }}
         schema={schema}
         request={(data: any) =>
           member.payLogs({
