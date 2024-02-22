@@ -94,11 +94,23 @@ export default defineComponent({
         }}
         schema={schema}
         request={(data: any) =>
-          member.payLogs({
-            ...data,
-            memberId: props.formState.memberId,
-            directionType: 1
-          })
+          member
+            .payLogs({
+              ...data,
+              memberId: props.formState.memberId,
+              directionType: 1
+            })
+            .then((res: any) => {
+              return {
+                ...res,
+                rows: res?.rows?.map((item: any) => ({
+                  ...item,
+                  availableBalance: item?.availableBalance
+                    ? item?.availableBalance
+                    : '-'
+                }))
+              }
+            })
         }
       />
     )
