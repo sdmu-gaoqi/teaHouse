@@ -339,9 +339,7 @@ const CreateOrderModal = defineComponent({
         await sleep(300)
         props.onOk()
         orderServiceItemList.value = []
-      } catch (err) {
-        props.onCancel()
-      }
+      } catch (err) {}
     }, 300)
 
     const title = computed(() => {
