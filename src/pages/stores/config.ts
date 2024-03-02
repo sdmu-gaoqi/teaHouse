@@ -1,7 +1,7 @@
 import { TableProps } from 'store-operations-ui'
 
 export const schema: TableProps['schema'] = {
-  title: '角色列表',
+  title: '门店列表',
   form: {
     search: true,
     export: false,
