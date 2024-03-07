@@ -64,12 +64,12 @@ export const schema: TableProps['schema'] = {
         {
           title: '创建日期',
           dataIndex: 'createTime'
+        },
+        {
+          title: '操作',
+          dataIndex: 'options',
+          fixed: 'right'
         }
-        // {
-        //   title: '操作',
-        //   dataIndex: 'options',
-        //   fixed: 'right'
-        // }
       ]
     }
   ],
