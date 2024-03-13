@@ -16,6 +16,7 @@ import roleSetPerm from './components/roleSetPerm'
 import TurnoverDetail from './components/turnoverDetail'
 import selectProject from './components/selectProject'
 import StoreModal from './components/storeDetail'
+import updatesDetail from './components/updatesDetail'
 
 interface BusinessModalProps {
   open: boolean
@@ -56,7 +57,8 @@ export default defineComponent({
       [BusinessModalType.营业额详情]: '营业额详情',
       [BusinessModalType.贡献营业额详情]: '技师业绩详情',
       [BusinessModalType.选择项目]: '选择项目',
-      [BusinessModalType.门店详情]: '门店详情'
+      [BusinessModalType.门店详情]: '门店详情',
+      [BusinessModalType.动态详情]: '动态详情'
     }
     const elMap = {
       [BusinessModalType.会员充值]: memeberPayForm,
@@ -73,7 +75,8 @@ export default defineComponent({
       [BusinessModalType.营业额详情]: TurnoverDetail,
       [BusinessModalType.贡献营业额详情]: TurnoverDetail,
       [BusinessModalType.选择项目]: selectProject,
-      [BusinessModalType.门店详情]: StoreModal
+      [BusinessModalType.门店详情]: StoreModal,
+      [BusinessModalType.动态详情]: updatesDetail
     }
     const widthMap = {
       [BusinessModalType.会员充值]: 900,
@@ -90,7 +93,8 @@ export default defineComponent({
       [BusinessModalType.营业额详情]: 1200,
       [BusinessModalType.贡献营业额详情]: 1200,
       [BusinessModalType.选择项目]: 1000,
-      [BusinessModalType.门店详情]: 900
+      [BusinessModalType.门店详情]: 900,
+      [BusinessModalType.动态详情]: 900
     }
     const footer = computed(
       () =>
@@ -109,7 +113,8 @@ export default defineComponent({
           BusinessModalType.营业额详情,
           BusinessModalType.贡献营业额详情,
           BusinessModalType.选择项目,
-          BusinessModalType.门店详情
+          BusinessModalType.门店详情,
+          BusinessModalType.动态详情
         ].includes(props.type)
     )
     const isFormRender = computed(() =>

@@ -93,8 +93,7 @@ const StoreModal = defineComponent({
         },
         image: {
           title: '门店图片',
-          type: 'string',
-          widget: 'uploadMultiple',
+          type: 'uploadMultiple',
           span: 24,
           props: formProps
         }

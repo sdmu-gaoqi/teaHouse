@@ -13,7 +13,8 @@ export enum BusinessModalType {
   营业额详情 = 'turnoverDetail',
   贡献营业额详情 = 'outstandingDetail',
   选择项目 = 'selectProject',
-  门店详情 = 'storeDetail'
+  门店详情 = 'storeDetail',
+  动态详情 = 'updatesDetail'
 }
 
 export type BusinessModalTypes =
@@ -32,3 +33,4 @@ export type BusinessModalTypes =
   | BusinessModalType.贡献营业额详情
   | BusinessModalType.选择项目
   | BusinessModalType.门店详情
+  | BusinessModalType.动态详情

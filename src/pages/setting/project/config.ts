@@ -157,6 +157,17 @@ export const editSchema = {
         ]
       }
     },
+    image: {
+      title: '封面图片',
+      type: 'uploadMultiple',
+      span: 24,
+      props: {
+        uploadProps: {
+          max: 1,
+          accept: 'image/*'
+        }
+      }
+    },
     remark: {
       title: '备注',
       type: 'string',

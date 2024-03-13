@@ -232,6 +232,42 @@ const asyncRouter: any[] = [
     ]
   },
   {
+    path: '/updates',
+    name: '门店动态',
+    redirect: () => {
+      return { path: 'list' }
+    },
+    children: [
+      {
+        path: 'list',
+        name: '门店动态列表',
+        component: () => import('./pages/storeUpdates/list.vue'),
+        meta: {
+          access: ['cs:storeUpdates:view'],
+          key: 'updates-list'
+        }
+      },
+      {
+        path: 'add',
+        name: '新建门店动态',
+        component: () => import('./pages/storeUpdates/edit.vue'),
+        meta: {
+          access: ['cs:storeUpdates:edit'],
+          key: 'updates-add'
+        }
+      },
+      {
+        path: ':type/:id',
+        name: '编辑门店动态',
+        component: () => import('./pages/storeUpdates/edit.vue'),
+        meta: {
+          access: ['cs:storeUpdates:edit'],
+          key: 'updates-add'
+        }
+      }
+    ]
+  },
+  {
     path: '/marketing',
     name: '营销管理',
     redirect: () => {
@@ -473,11 +509,11 @@ const route = createRouter({
       path: '/404',
       name: '404',
       component: () => import('./pages/404/index.vue')
-    },
-    {
-      path: '/:pathMatch(.*)',
-      redirect: '/404'
     }
+    // {
+    //   path: '/:pathMatch(.*)',
+    //   redirect: '/404'
+    // }
   ],
   history: createWebHashHistory()
 })
