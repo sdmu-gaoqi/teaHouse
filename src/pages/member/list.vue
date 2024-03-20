@@ -87,14 +87,24 @@
           {{ data.record.status === 'ENABLED' ? '正常' : '已退卡' }}
         </div>
       </template>
-      <template v-else-if="data?.column?.dataIndex === 'discountRate'">
-        {{
-          !!data?.record?.discountRate
-            ? Number(data?.record?.discountRate) * 10 + '折'
-            : (data?.record?.totalRewardTimes || 0) +
-              '/' +
-              (data?.record?.availableRewardTimes || 0)
-        }}
+      <template
+        v-else-if="
+          data?.column?.dataIndex === 'discountRate' &&
+          +data.record.memberType === 1
+        "
+      >
+        {{ Number(data?.record?.discountRate) * 10 + '折' }}
+      </template>
+      <template
+        v-else-if="
+          data?.column?.dataIndex === 'discountRate' &&
+          +data.record.memberType === 2
+        "
+      >
+        <div>
+          <div>次卡总额: {{ data?.record?.totalRewardTimes || 0 }}</div>
+          <div>次卡余额: {{ data?.record?.availableRewardTimes || 0 }}</div>
+        </div>
       </template>
       <template v-else-if="data.customer">{{ data.customer }}</template>
       <template v-else>{{ data.text }}</template>

@@ -65,7 +65,7 @@
     "vue-hooks-plus": "^1.8.6",
     "vue-router": "^4.2.4",
     "vuex": "^4.1.0",
-    "wa-utils": "^0.1.6",
+    "wa-utils": "^4.0.0",
     "yarn": "^1.22.19"
   },
   "devDependencies": {

@@ -7,6 +7,7 @@ import { FormRenderProps, TableProps, TableRender } from 'store-operations-ui'
 import { defineComponent, onMounted, ref, toRaw, watch } from 'vue'
 import common from '@/servers/common'
 import ProjectType from '@/components/ProjectType/projectType'
+import { modalProps } from 'ant-design-vue/es/modal/Modal'
 
 export default defineComponent({
   props: {
@@ -70,6 +71,7 @@ export default defineComponent({
         }
       }
       const rowSelection = {
+        type: props?.formState?.type || 'checkbox',
         checkStrictly: false,
         onChange: (
           selectedRowKeys: (string | number)[],

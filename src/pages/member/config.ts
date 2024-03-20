@@ -161,7 +161,8 @@ export const editSchema: Schema = {
     payMethod: [{ required: true, message: '请选择支付方式' }],
     discountRate: [{ required: true, message: '请输入折扣' }],
     memberType: [{ required: true, message: '请选择会员模式' }],
-    rewardTimes: [{ required: true, message: '请输入优惠次数' }]
+    rewardTimes: [{ required: true, message: '请输入优惠次数' }],
+    project: [{ required: true, message: '请选择服务项目' }]
   },
   properties: {
     'op-group-1': {
@@ -270,11 +271,11 @@ export const editSchema: Schema = {
           {
             label: 'A: 会员折扣卡',
             value: MemberType.折扣卡
+          },
+          {
+            label: 'B: 会员次卡',
+            value: MemberType.次卡
           }
-          // {
-          //   label: 'B: 会员次卡',
-          //   value: MemberType.次卡
-          // }
         ]
       },
       'ui:hidden': 'formState.value.memberId'
@@ -302,6 +303,15 @@ export const editSchema: Schema = {
       },
       'ui:hidden': 'formState.value.memberId'
     },
+    project: {
+      title: '服务项目',
+      span: 13,
+      slots: {
+        customRender: 'selectProject'
+      },
+      'ui:hidden':
+        "formState.value.memberType != '2' || formState.value.memberId"
+    },
     giveBalance: {
       title: '赠送金额',
       type: 'number',
@@ -314,7 +324,7 @@ export const editSchema: Schema = {
         "formState.value.memberType == '2' || formState.value.memberId"
     },
     rewardTimes: {
-      title: '优惠次数',
+      title: '会员卡次数',
       type: 'number',
       span: 13,
       widget: 'input',

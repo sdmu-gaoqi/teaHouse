@@ -18,9 +18,52 @@
             })
           }
         "
-      ></FormRender>
+      >
+        <template #selectProject>
+          <div>
+            <Input
+              placeholder="请选择"
+              :readonly="true"
+              :value="formState?.selectList?.[0]?.projectName"
+            >
+              <template #suffix
+                ><div class="cursor-pointer" @click="() => (open = true)">
+                  <PlusOutlined />点击选择项目
+                </div></template
+              >
+            </Input>
+          </div>
+        </template>
+      </FormRender>
     </template>
   </FormCard>
+  <BusinessModal
+    :type="BusinessModalType.选择项目"
+    :open="open"
+    :onCancel="() => (open = false)"
+    :formState="formState"
+    :modalProps="{
+      okText: '确定',
+      cancelText: '返回',
+      onOk: () => {
+        formRef.formRef.clearValidate(['project'])
+        open = false
+        formRef.changeState({
+          project: formState.selectList
+        })
+      },
+      onCancel: () => {
+        open = false
+        formState.selectList = formState.lastSelect
+      }
+    }"
+    :changeState="
+      (v) => {
+        formState.lastSelect = formState.selectList
+        formState.selectList = v
+      }
+    "
+  ></BusinessModal>
 </template>
 
 <script lang="ts" setup>
@@ -31,14 +74,23 @@ import { debounce, sleep } from 'wa-utils'
 import { Member } from 'store-request'
 import { onMounted, reactive, ref } from 'vue'
 import { MemberType } from '@/types'
-import { message } from 'ant-design-vue'
+import { message, Input } from 'ant-design-vue'
 import { formatMoney } from '@/utils'
 import dayjs from 'dayjs'
+import { PlusOutlined } from '@ant-design/icons-vue'
+import BusinessModal from '@/components/businessModal/businessModal'
+import { BusinessModalType } from '@/components/businessModal/businessModal.type'
 
 const formRef = ref()
 
 const member = new Member()
 const detailData = ref<any>({})
+const open = ref(false)
+const formState = ref<any>({
+  selectList: undefined,
+  type: 'radio',
+  lastSelect: undefined
+})
 
 const {
   params: { id }
@@ -131,10 +183,11 @@ const onFinish = async (value: Record<string, any>) => {
     memberNo: value?.memberNo,
     ...(value?.memberType == MemberType.次卡 && {
       memberTimesInfo: {
-        giveTimes: value?.giveTimes,
+        giveAmount: value?.giveTimes,
         payMethod: value?.payMethod,
-        rechargeBalance: value?.rechargeBalance,
-        rewardTimes: value?.rewardTimes
+        buyPrice: value?.rechargeBalance,
+        buyAmount: value?.rewardTimes,
+        projectId: value?.project?.[0]?.id
       }
     }),
     ...(id &&

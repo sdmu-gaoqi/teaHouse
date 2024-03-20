@@ -61,6 +61,18 @@ const schema: Schema = {
       },
       widget: 'radio'
     },
+    memberType: {
+      title: '会员类型',
+      defaultValue: MemberType.折扣卡,
+      widget: 'radio',
+      props: {
+        options: [
+          { label: '折扣卡', value: MemberType.折扣卡 },
+          { label: '次卡', value: MemberType.次卡 }
+        ]
+      },
+      'ui:hidden': 'formState.value.settleType != 1'
+    },
     memberId: {
       title: '查找会员',
       type: 'string',
@@ -76,6 +88,9 @@ const schema: Schema = {
             ...item,
             memberName1: `${item?.memberName} (会员卡号:${item?.memberNo}-手机号${item?.phone})`
           }))
+        },
+        params: {
+          memberType: 1
         }
       },
       widget: 'searchSelect',
@@ -149,6 +164,23 @@ const schema: Schema = {
       'ui:hidden':
         '(formState.value.settleType == 1 && !formState.value?.memberId?.memberId) || formState.value.settleType == 2'
     },
+    timesDeductPrice: {
+      title: '次卡抵扣金额',
+      labelClass: 'text-orange-500 text-[14px]',
+      type: 'string',
+      span: 24,
+      widget: 'input',
+      props: {
+        readonly: true,
+        bordered: false,
+        style: {
+          color: '#f97316',
+          fontWeight: 'bold'
+        }
+      },
+      'ui:hidden':
+        'formState.value.memberType != 2 || !formState.value.memberId'
+    },
     discountPrice: {
       defaultValue: '0',
       title: '优惠',
@@ -181,71 +213,71 @@ const schema: Schema = {
     占位11: {
       span: 12
     },
-    store3: {
-      title: '支付方式',
-      type: 'string',
-      widget: 'input',
-      defaultValue: '按次卡',
-      colClass: 'cika',
-      props: {
-        readonly: true,
-        bordered: false
-      },
-      'ui:hidden':
-        'formState.value.settleType != 1  || formState.value.memberId?.memberType != 2'
-    },
-    store4: {
-      title: '支付方式',
-      type: 'string',
-      widget: 'input',
-      defaultValue: '美团核销',
-      props: {
-        readonly: true,
-        bordered: false
-      },
-      'ui:hidden': 'formState.value.settleType != 2'
-    },
-    z1: {
-      widget: 'input',
-      type: 'string',
-      defaultValue: '扣除',
-      span: 2,
-      colClass: 'z1',
-      props: {
-        readonly: true,
-        bordered: false
-      },
-      'ui:hidden':
-        'formState.value.settleType != 1  || formState.value.memberId?.memberType != 2'
-    },
-    useTimes: {
-      widget: 'input',
-      type: 'number',
-      span: 3,
-      colClass: 'useTimes',
-      props: {
-        suffix: '次',
-        min: 0,
-        precision: 0
-      },
-      label: '扣除',
-      'ui:hidden':
-        'formState.value.settleType != 1  || formState.value.memberId?.memberType != 2'
-    },
-    z2: {
-      widget: 'input',
-      type: 'string',
-      colStyle: {},
-      span: 6,
-      colClass: 'z2',
-      defaultValue: '还剩余 0 次',
-      props: {
-        readonly: true,
-        bordered: false
-      },
-      'ui:hidden':
-        'formState.value.settleType != 1  || formState.value.memberId?.memberType != 2'
-    },
+    // store3: {
+    //   title: '支付方式',
+    //   type: 'string',
+    //   widget: 'input',
+    //   defaultValue: '按次卡',
+    //   colClass: 'cika',
+    //   props: {
+    //     readonly: true,
+    //     bordered: false
+    //   },
+    //   'ui:hidden':
+    //     'formState.value.settleType != 1  || formState.value.memberId?.memberType != 2'
+    // },
+    // store4: {
+    //   title: '支付方式',
+    //   type: 'string',
+    //   widget: 'input',
+    //   defaultValue: '美团核销',
+    //   props: {
+    //     readonly: true,
+    //     bordered: false
+    //   },
+    //   'ui:hidden': 'formState.value.settleType != 2'
+    // },
+    // z1: {
+    //   widget: 'input',
+    //   type: 'string',
+    //   defaultValue: '扣除',
+    //   span: 2,
+    //   colClass: 'z1',
+    //   props: {
+    //     readonly: true,
+    //     bordered: false
+    //   },
+    //   'ui:hidden':
+    //     'formState.value.settleType != 1  || formState.value.memberId?.memberType != 2'
+    // },
+    // useTimes: {
+    //   widget: 'input',
+    //   type: 'number',
+    //   span: 3,
+    //   colClass: 'useTimes',
+    //   props: {
+    //     suffix: '次',
+    //     min: 0,
+    //     precision: 0
+    //   },
+    //   label: '扣除',
+    //   'ui:hidden':
+    //     'formState.value.settleType != 1  || formState.value.memberId?.memberType != 2'
+    // },
+    // z2: {
+    //   widget: 'input',
+    //   type: 'string',
+    //   colStyle: {},
+    //   span: 6,
+    //   colClass: 'z2',
+    //   defaultValue: '还剩余 0 次',
+    //   props: {
+    //     readonly: true,
+    //     bordered: false
+    //   },
+    //   'ui:hidden':
+    //     'formState.value.settleType != 1  || formState.value.memberId?.memberType != 2'
+    // },
     replenishPrice: {
       title: '补充金额',
       widget: 'input',
@@ -312,7 +344,8 @@ export default defineComponent({
           replenishPrice: formatMoney(res?.data?.replenishPrice || 0),
           discountPrice: formatMoney(res?.data?.discountPrice || 0),
           payPrice: formatMoney(res?.data?.payPrice),
-          meituan: formatMoney(res.data?.payPrice)
+          meituan: formatMoney(res.data?.payPrice),
+          timesDeductPrice: formatMoney(res.data?.timesDeductPrice)
         }
         formRef.value.changeState(v)
         formRef.value.formRef.clearValidate()
@@ -532,7 +565,8 @@ export default defineComponent({
               promotionList: toRaw(
                 defaultValue?.value?.metaData?.promotionInfoList
               ),
-              payPrice: v?.payPrice
+              payPrice: v?.payPrice,
+              timesDeductPrice: defaultValue?.value?.metaData?.timesDeductPrice
             }
             if (v?.settleType === '1' && !v?.memberId?.memberId) {
               return message.error('请选择会员')
@@ -638,6 +672,21 @@ export default defineComponent({
                 receivePrice
               })
             }
+            if (key === 'memberType') {
+              const v = value?.target?.value
+              formRef.value.changeState({
+                memberId: undefined,
+                'memberId-search': undefined
+              })
+              formRef.value.selectSearch(
+                '',
+                schema?.properties?.memberId,
+                'memberId',
+                {
+                  memberType: v
+                }
+              )
+            }
           }}
           ref={formRef}
           v-slots={{
@@ -671,6 +720,19 @@ export default defineComponent({
                         }
                       },
                       {
+                        title: '是否使用次卡',
+                        dataIndex: 'times',
+                        slots: {
+                          customRender: 'times'
+                        }
+                        // colSpan: 0
+                      },
+                      {
+                        title: '本次次卡次数',
+                        dataIndex: 'timesAmount'
+                        // colSpan: 0
+                      },
+                      {
                         title: '是否自推',
                         dataIndex: 'isZt',
                         slots: {
@@ -696,6 +758,9 @@ export default defineComponent({
                       },
                       payPrice: (data: any) => {
                         return formatMoney(data?.text)
+                      },
+                      times: (data: any) => {
+                        return data.text == 1 ? '是' : '否'
                       }
                     }}
                   />

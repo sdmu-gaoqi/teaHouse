@@ -112,7 +112,6 @@ export default defineComponent({
           BusinessModalType.权限配置,
           BusinessModalType.营业额详情,
           BusinessModalType.贡献营业额详情,
-          BusinessModalType.选择项目,
           BusinessModalType.门店详情,
           BusinessModalType.动态详情
         ].includes(props.type)
