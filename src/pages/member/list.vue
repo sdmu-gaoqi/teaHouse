@@ -35,7 +35,12 @@
                 : 'text-purple-400'
             }`"
           >
-            {{ memberMap?.[data?.record?.memberType] || '' }}
+            <a-tag
+              color="#2db7f5"
+              v-if="data?.record?.memberType === MemberType.折扣卡"
+              >折扣卡</a-tag
+            >
+            <a-tag color="#87d068" v-else>次卡</a-tag>
           </div>
         </div>
         <div class="flex">
@@ -43,7 +48,10 @@
           <div
             :class="`${data?.record?.status === 'ENABLED' && 'text-red-500'}`"
           >
-            {{ data?.record?.status === 'ENABLED' ? '已退卡' : '正常' }}
+            <a-tag color="#f50" v-if="data?.record?.status === 'ENABLED'"
+              >已退卡</a-tag
+            >
+            <a-tag color="#108ee9" v-else>正常</a-tag>
           </div>
         </div>
       </div>
