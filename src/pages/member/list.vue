@@ -23,11 +23,13 @@
     <template #bodyCell="{ data }">
       <div v-if="data?.column?.dataIndex === 'memberType'">
         <div class="flex font-bold">
-          <div class="w-[90px] text-right pr-[10px]">会员卡号:</div>
-          {{ data?.record?.memberNo }}
+          <div class="w-[90px] text-right pr-[10px] shrink-0">会员卡号:</div>
+          <div class="ell" :title="data?.record?.memberNo">
+            {{ data?.record?.memberNo }}
+          </div>
         </div>
         <div class="flex">
-          <div class="w-[90px] text-right pr-[10px]">会员类型:</div>
+          <div class="w-[90px] text-right pr-[10px] shrink-0">会员类型:</div>
           <div
             :class="`${
               data?.record?.memberType === MemberType.次卡
@@ -44,7 +46,7 @@
           </div>
         </div>
         <div class="flex">
-          <div class="w-[90px] text-right pr-[10px]">会员状态:</div>
+          <div class="w-[90px] text-right pr-[10px] shrink-0">会员状态:</div>
           <div
             :class="`${data?.record?.status === 'ENABLED' && 'text-red-500'}`"
           >
@@ -57,11 +59,11 @@
       </div>
       <div v-else-if="data?.column?.dataIndex === 'memberNo'">
         <div class="flex font-bold">
-          <div class="w-[90px] text-right pr-[10px]">姓 名:</div>
+          <div class="w-[90px] text-right pr-[10px] shrink-0">姓 名:</div>
           {{ data?.record?.memberName }}
         </div>
         <div class="flex">
-          <div class="w-[90px] text-right pr-[10px]">手机号:</div>
+          <div class="w-[90px] text-right pr-[10px] shrink-0">手机号:</div>
           {{ data?.record?.phone }}
         </div>
       </div>

@@ -64,7 +64,7 @@ export const schema: TableProps['schema'] = {
           title: '会员卡信息',
           dataIndex: 'memberType',
           options: memberTypes,
-          width: 240,
+          width: 220,
           fixed: true
         },
         {
