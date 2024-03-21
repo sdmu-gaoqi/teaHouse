@@ -61,42 +61,34 @@ export const schema: TableProps['schema'] = {
       key: 'one',
       columns: [
         {
-          fixed: true,
-          title: '会员卡号',
+          title: '会员卡信息',
+          dataIndex: 'memberType',
+          options: memberTypes,
+          width: 240,
+          fixed: true
+        },
+        {
+          title: '会员信息',
           dataIndex: 'memberNo',
           ellipsis: true,
-          width: 200
-        },
-        {
-          title: '姓名',
-          dataIndex: 'memberName'
-        },
-        {
-          title: '手机号',
-          dataIndex: 'phone'
-        },
-        {
-          title: '会员类型',
-          dataIndex: 'memberType',
-          options: memberTypes
+          width: 220,
+          fixed: true
         },
         {
           title: '优惠方式',
           dataIndex: 'discountRate'
         },
         {
-          title: '会员状态',
-          dataIndex: 'status'
-        },
-        {
           title: '累计消费金额',
           dataIndex: 'totalSpendBalance',
-          format: 'money'
+          format: 'money',
+          width: 160
         },
         {
           title: '会员卡余额',
           dataIndex: 'availableBalance',
-          format: 'money'
+          format: 'money',
+          width: 160
         },
         {
           title: '开卡日期',

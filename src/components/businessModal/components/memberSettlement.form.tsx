@@ -115,6 +115,16 @@ const schema: Schema = {
         customRender: 'projectTable'
       }
     },
+    'op-group-1': {
+      title: '活动优惠',
+      'ui:hidden': 'formState.value.settleType != 0'
+    },
+    msTable: {
+      slots: {
+        customRender: 'msTable'
+      },
+      'ui:hidden': 'formState.value.settleType != 0'
+    },
     receivePrice: {
       title: '应收金额',
       labelClass: 'text-orange-500 text-[14px]',
@@ -131,16 +141,6 @@ const schema: Schema = {
       },
       'ui:hidden':
         '(formState.value.settleType == 1 && !formState.value?.memberId?.memberId)'
-    },
-    'op-group-1': {
-      title: '活动优惠',
-      'ui:hidden': 'formState.value.settleType != 0'
-    },
-    msTable: {
-      slots: {
-        customRender: 'msTable'
-      },
-      'ui:hidden': 'formState.value.settleType != 0'
     },
     meituan: {
       defaultValue: '0',

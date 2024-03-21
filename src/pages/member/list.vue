@@ -8,6 +8,7 @@
         return v
       }
     "
+    :table-props="{ scroll: { x: 1690 } }"
     ref="tableRef"
   >
     <template #formButton
@@ -20,8 +21,44 @@
       ></template
     >
     <template #bodyCell="{ data }">
+      <div v-if="data?.column?.dataIndex === 'memberType'">
+        <div class="flex font-bold">
+          <div class="w-[90px] text-right pr-[10px]">会员卡号:</div>
+          {{ data?.record?.memberNo }}
+        </div>
+        <div class="flex">
+          <div class="w-[90px] text-right pr-[10px]">会员类型:</div>
+          <div
+            :class="`${
+              data?.record?.memberType === MemberType.次卡
+                ? 'text-blue-400'
+                : 'text-purple-400'
+            }`"
+          >
+            {{ memberMap?.[data?.record?.memberType] || '' }}
+          </div>
+        </div>
+        <div class="flex">
+          <div class="w-[90px] text-right pr-[10px]">会员状态:</div>
+          <div
+            :class="`${data?.record?.status === 'ENABLED' && 'text-red-500'}`"
+          >
+            {{ data?.record?.status === 'ENABLED' ? '已退卡' : '正常' }}
+          </div>
+        </div>
+      </div>
+      <div v-else-if="data?.column?.dataIndex === 'memberNo'">
+        <div class="flex font-bold">
+          <div class="w-[90px] text-right pr-[10px]">姓 名:</div>
+          {{ data?.record?.memberName }}
+        </div>
+        <div class="flex">
+          <div class="w-[90px] text-right pr-[10px]">手机号:</div>
+          {{ data?.record?.phone }}
+        </div>
+      </div>
       <div
-        v-if="data?.column?.dataIndex === 'options'"
+        v-else-if="data?.column?.dataIndex === 'options'"
         class="flex items-center"
       >
         <a
@@ -130,7 +167,7 @@ import {
   BusinessModalTypes
 } from '@/components/businessModal/businessModal.type'
 import { Member } from 'store-request'
-import { MemberType } from '@/types'
+import { MemberType, memberMap } from '@/types'
 import { message } from 'ant-design-vue'
 import { nanoid } from 'nanoid'
 import { useAccess } from '@/hooks'

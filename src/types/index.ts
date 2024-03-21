@@ -32,6 +32,10 @@ export const memberTypes = [
   }
 ]
 
+export const memberMap = Object.fromEntries(
+  memberTypes.map((i) => [i.value, i.label])
+)
+
 export enum RoyaltyType {
   点钟 = 0,
   排钟 = 1
