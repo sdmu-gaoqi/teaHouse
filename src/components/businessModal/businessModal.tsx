@@ -80,8 +80,8 @@ export default defineComponent({
     }
     const widthMap = {
       [BusinessModalType.会员充值]: 900,
-      [BusinessModalType.会员充值记录]: 1000,
-      [BusinessModalType.会员消费记录]: 1000,
+      [BusinessModalType.会员充值记录]: 1200,
+      [BusinessModalType.会员消费记录]: 1200,
       [BusinessModalType.会员退卡]: 900,
       [BusinessModalType.会员结算]: 900,
       [BusinessModalType.编辑房间]: 900,

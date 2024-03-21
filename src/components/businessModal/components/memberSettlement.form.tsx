@@ -100,7 +100,15 @@ const schema: Schema = {
       slots: {
         customRender: 'memberTable'
       },
-      'ui:hidden': 'formState.value.settleType != 1'
+      'ui:hidden':
+        'formState.value.settleType != 1 || formState.value.memberType != 1'
+    },
+    ckMemberTable: {
+      slots: {
+        customRender: 'ckMemberTable'
+      },
+      'ui:hidden':
+        'formState.value.settleType != 1 || formState.value.memberType != 2'
     },
     projectTable: {
       slots: {
@@ -179,7 +187,7 @@ const schema: Schema = {
         }
       },
       'ui:hidden':
-        'formState.value.memberType != 2 || !formState.value.memberId'
+        'formState.value.memberType != 1 || !formState.value.memberId || formState.value.memberType != 2'
     },
     discountPrice: {
       defaultValue: '0',
@@ -626,13 +634,13 @@ export default defineComponent({
                       value.option?.memberType === MemberType.折扣卡
                         ? '折扣卡'
                         : '次卡',
-                    discountRate:
-                      value.option?.memberType === MemberType.折扣卡
-                        ? `${value?.option?.discountRate * 10}折`
-                        : `${value?.option?.totalRewardTimes}次`,
+                    discountRate: `${value?.option?.discountRate * 10}折`,
                     availableBalance: formatMoney(
                       value?.option?.availableBalance
-                    )
+                    ),
+                    project: value?.option?.project,
+                    totalRewardTimes: value?.option?.totalRewardTimes,
+                    availableRewardTimes: value?.option?.availableRewardTimes
                   }
                 ]
                 const orderId = props.formState?.orderId
@@ -686,6 +694,12 @@ export default defineComponent({
                   memberType: v
                 }
               )
+              memberList.value = []
+              if (schema?.properties?.memberId?.search) {
+                schema.properties.memberId.search.params = {
+                  memberType: v
+                }
+              }
             }
           }}
           ref={formRef}
@@ -796,6 +810,50 @@ export default defineComponent({
                       {
                         title: '会员卡余额',
                         dataIndex: 'availableBalance'
+                      }
+                    ]}
+                    dataSource={memberList.value}
+                    pagination={false}
+                    locale={{
+                      emptyText: '请选择会员'
+                    }}
+                  />
+                </>
+              )
+            },
+            ckMemberTable: () => {
+              return (
+                <>
+                  <Table
+                    size="small"
+                    columns={[
+                      {
+                        title: '会员卡号',
+                        dataIndex: 'memberNo'
+                      },
+                      {
+                        title: '姓名',
+                        dataIndex: 'memberName'
+                      },
+                      {
+                        title: '手机号',
+                        dataIndex: 'phone'
+                      },
+                      {
+                        title: '会员类型',
+                        dataIndex: 'memberTypeName'
+                      },
+                      {
+                        title: '服务项目',
+                        dataIndex: 'project'
+                      },
+                      {
+                        title: '会员卡次数',
+                        dataIndex: 'totalRewardTimes'
+                      },
+                      {
+                        title: '会员卡剩余次数',
+                        dataIndex: 'availableRewardTimes'
                       }
                     ]}
                     dataSource={memberList.value}

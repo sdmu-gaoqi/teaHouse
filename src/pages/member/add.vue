@@ -24,7 +24,9 @@
             <Input
               placeholder="请选择"
               :readonly="true"
+              @click="() => (open = true)"
               :value="formState?.selectList?.[0]?.projectName"
+              class="projectBox"
             >
               <template #suffix
                 ><div class="cursor-pointer" @click="() => (open = true)">
@@ -51,6 +53,7 @@
         formRef.changeState({
           project: formState.selectList
         })
+        formState.lastSelect = formState.selectList
       },
       onCancel: () => {
         open = false
@@ -236,3 +239,11 @@ const onCancel = debounce(() => {
   router.back()
 })
 </script>
+
+<style scoped lang="scss">
+.ant-form-item-has-error {
+  .projectBox {
+    border-color: #ff4d4f;
+  }
+}
+</style>

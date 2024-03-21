@@ -119,7 +119,7 @@ export const schema: TableProps['schema'] = {
           title: '操作',
           dataIndex: 'options',
           options: ['detail'],
-          width: 300,
+          width: 260,
           resizable: true
         }
       ]

@@ -1,4 +1,4 @@
-import { memberTypes, payTypes } from '@/types'
+import { MemberType, memberTypes, payTypes } from '@/types'
 import { TableProps, TableRender } from 'store-operations-ui'
 import { Member } from 'store-request'
 import { defineComponent } from 'vue'
@@ -87,12 +87,31 @@ export default defineComponent({
         ]
       }
     }
+
+    const handleSlots = {
+      bodyCell: ({ data }: any) => {
+        console.log(data, 'data')
+        if (data?.customer) {
+          return data?.customer
+        }
+        if (
+          data?.column.dataIndex === 'payMethod' &&
+          data.record?.memberType === MemberType.次卡
+        ) {
+          return `次卡抵扣：${data?.record?.timesAmount}次`
+        }
+        return data?.text
+      }
+    }
+
     return () => (
       <TableRender
         tableProps={{
-          size: 'small'
+          size: 'small',
+          scroll: { x: 1300 }
         }}
         schema={schema}
+        v-slots={handleSlots}
         request={(data: any) =>
           member
             .payLogs({

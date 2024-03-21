@@ -102,8 +102,8 @@
         "
       >
         <div>
-          <div>次卡总额: {{ data?.record?.totalRewardTimes || 0 }}</div>
-          <div>次卡余额: {{ data?.record?.availableRewardTimes || 0 }}</div>
+          <div>次卡总额: {{ data?.record?.totalRewardTimes || 0 }}次</div>
+          <div>次卡余额: {{ data?.record?.availableRewardTimes || 0 }}次</div>
         </div>
       </template>
       <template v-else-if="data.customer">{{ data.customer }}</template>
@@ -181,10 +181,11 @@ const onFinish = async (v: any, type: string) => {
     }),
     ...(v?.memberType == MemberType.次卡 && {
       timesDepositInfo: {
-        giveTimes: v?.giveTimes,
-        rechargeBalance: v?.rechargeBalance,
-        rewardTimes: v?.rewardTimes,
-        payMethod: v?.payMethod
+        buyAmount: v?.rewardTimes,
+        buyPrice: v?.rechargeBalance,
+        giveAmount: v?.giveTimes,
+        payMethod: v?.payMethod,
+        projectId: (formState?.value as any)?.project
       }
     })
   }
