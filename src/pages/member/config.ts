@@ -71,24 +71,25 @@ export const schema: TableProps['schema'] = {
           title: '会员信息',
           dataIndex: 'memberNo',
           ellipsis: true,
-          width: 220,
+          width: 260,
           fixed: true
         },
         {
           title: '优惠方式',
-          dataIndex: 'discountRate'
+          dataIndex: 'discountRate',
+          width: 140
         },
         {
           title: '累计消费金额',
           dataIndex: 'totalSpendBalance',
           format: 'money',
-          width: 160
+          width: 120
         },
         {
           title: '会员卡余额',
           dataIndex: 'availableBalance',
           format: 'money',
-          width: 160
+          width: 120
         },
         {
           title: '开卡日期',

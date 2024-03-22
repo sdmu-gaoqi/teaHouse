@@ -59,12 +59,18 @@
       </div>
       <div v-else-if="data?.column?.dataIndex === 'memberNo'">
         <div class="flex font-bold">
-          <div class="w-[90px] text-right pr-[10px] shrink-0">姓 名:</div>
+          <div class="w-[60px] text-right pr-[10px] shrink-0">姓 名:</div>
           {{ data?.record?.memberName }}
         </div>
         <div class="flex">
-          <div class="w-[90px] text-right pr-[10px] shrink-0">手机号:</div>
+          <div class="w-[60px] text-right pr-[10px] shrink-0">手机号:</div>
           {{ data?.record?.phone }}
+        </div>
+        <div v-if="data?.record?.memberType === MemberType.次卡" class="flex">
+          <div class="w-[60px] text-right pr-[10px] shrink-0">次卡项目:</div>
+          <div class="ell" :title="data?.record?.timesProjectName || ''">
+            {{ data?.record?.timesProjectName || '' }}
+          </div>
         </div>
       </div>
       <div
@@ -149,7 +155,7 @@
         "
       >
         <div>
-          <div>次卡总额: {{ data?.record?.totalRewardTimes || 0 }}次</div>
+          <div>次卡项目: {{ data?.record?.totalRewardTimes || 0 }}次</div>
           <div>次卡余额: {{ data?.record?.availableRewardTimes || 0 }}次</div>
         </div>
       </template>
@@ -232,7 +238,7 @@ const onFinish = async (v: any, type: string) => {
         buyPrice: v?.rechargeBalance,
         giveAmount: v?.giveTimes,
         payMethod: v?.payMethod,
-        projectId: (formState?.value as any)?.project
+        projectId: v?.project?.[0]?.id
       }
     })
   }

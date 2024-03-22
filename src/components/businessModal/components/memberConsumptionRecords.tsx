@@ -90,7 +90,6 @@ export default defineComponent({
 
     const handleSlots = {
       bodyCell: ({ data }: any) => {
-        console.log(data, 'data')
         if (data?.customer) {
           return data?.customer
         }

@@ -13,7 +13,15 @@ import {
   TableRender
 } from 'store-operations-ui'
 import { Member } from 'store-request'
-import { defineComponent, onMounted, ref, toRaw, unref, watch } from 'vue'
+import {
+  defineComponent,
+  onMounted,
+  onUnmounted,
+  ref,
+  toRaw,
+  unref,
+  watch
+} from 'vue'
 import { useRequest } from 'vue-hooks-plus'
 import { cloneDeep, debounce, isEmpty, sleep } from 'wa-utils'
 import '../styles/memberSettlement.form.scss'
@@ -80,15 +88,25 @@ const schema: Schema = {
       search: {
         key: 'searchPhone',
         label: 'memberName1',
-        value: 'memberId',
-        request: member.list,
+        value: 'id',
+        request: (data: any) =>
+          member.list(data).then((res: any) => {
+            res.rows = res.rows?.map((item: any, index: number) => ({
+              ...item,
+              memberName1: `${item?.memberName} (会员卡号:${item?.memberNo}-手机号${item?.phone})`,
+              id: `${item.memberId}_${index + 1}`
+            }))
+            return res
+          }),
         dataKey: 'rows',
-        format: (v: any) => {
-          return v?.map((item: any) => ({
-            ...item,
-            memberName1: `${item?.memberName} (会员卡号:${item?.memberNo}-手机号${item?.phone})`
-          }))
-        },
+        // format: (v: any) => {
+        //   const o = v?.map((item: any, index: number) => ({
+        //     ...item,
+        //     memberName1: `${item?.memberName} (会员卡号:${item?.memberNo}-手机号${item?.phone})`,
+        //     id: `${item.memberId}_${index + 1}`
+        //   }))
+        //   return o
+        // },
         params: {
           memberType: 1
         }
@@ -425,6 +443,14 @@ export default defineComponent({
       }
     })
 
+    onUnmounted(() => {
+      if (schema?.properties?.memberId?.search?.params) {
+        schema.properties.memberId.search.params = {
+          memberType: 1
+        }
+      }
+    })
+
     // 根据优惠设置项目信息
     const memoProject = (yhList: any[], projectList: any[]) => {
       const items = projectList?.map((item: any) => {
@@ -638,7 +664,7 @@ export default defineComponent({
                     availableBalance: formatMoney(
                       value?.option?.availableBalance
                     ),
-                    project: value?.option?.project,
+                    project: value?.option?.timesProjectName,
                     totalRewardTimes: value?.option?.totalRewardTimes,
                     availableRewardTimes: value?.option?.availableRewardTimes
                   }

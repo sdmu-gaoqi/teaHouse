@@ -1,8 +1,12 @@
 import { discounts } from '@/constant'
 import { MemberType, payTypes } from '@/types'
 import { formatMoney } from '@/utils'
+import { Input } from 'ant-design-vue'
 import { FormRender, FormRenderProps, Schema } from 'store-operations-ui'
-import { defineComponent, onMounted, ref } from 'vue'
+import { defineComponent, onMounted, ref, toRaw } from 'vue'
+import BusinessModal from '../businessModal'
+import { BusinessModalType } from '../businessModal.type'
+import { PlusOutlined } from '@ant-design/icons-vue'
 
 const schema: Schema = {
   type: 'object',
@@ -11,7 +15,8 @@ const schema: Schema = {
     rechargeBalance: [{ required: true, message: '请输入充值金额' }],
     discountRate: [{ required: true, message: '请输入折扣' }],
     memberType: [{ required: true, message: '请选择会员类型' }],
-    rewardTimes: [{ required: true, message: '请输入优惠次数' }]
+    rewardTimes: [{ required: true, message: '请输入优惠次数' }],
+    project: [{ required: true, message: '请选择服务项目' }]
   },
   properties: {
     'op-group-0': {
@@ -65,6 +70,14 @@ const schema: Schema = {
         readonly: true,
         bordered: false
       }
+    },
+    project: {
+      title: '服务项目',
+      span: 13,
+      slots: {
+        customRender: 'selectProject'
+      },
+      'ui:hidden': "formState.value.memberType != '2'"
     },
     rechargeBalance: {
       title: '充值金额',
@@ -174,6 +187,12 @@ export default defineComponent({
     props: FormRenderProps & { formState: Record<string, any>; onFinish?: any }
   ) => {
     const formRef = ref()
+    const open = ref(false)
+    const formState = ref<any>({
+      selectList: undefined,
+      type: 'radio',
+      lastSelect: undefined
+    })
     onMounted(() => {
       if (formRef.value.changeState) {
         const beforeDepositBalance = formatMoney(
@@ -189,21 +208,72 @@ export default defineComponent({
     })
     return () => {
       return (
-        <FormRender
-          schema={schema}
-          onFinish={props.onFinish}
-          onCancel={props.onCancel}
-          ref={formRef}
-          onFieldsChanged={(v) => {
-            formRef.value.changeState({
-              money4: formatMoney(
-                (+v.beforeDepositBalance || 0) +
-                  (+v.rechargeBalance || 0) +
-                  (+v.giveBalance || 0)
-              )
-            })
-          }}
-        />
+        <>
+          <FormRender
+            schema={schema}
+            onFinish={props.onFinish}
+            onCancel={props.onCancel}
+            ref={formRef}
+            v-slots={{
+              selectProject: () => {
+                return (
+                  <Input
+                    readonly
+                    placeholder="请选择"
+                    value={formState?.value?.selectList?.[0]?.projectName}
+                    // @ts-ignore
+                    onClick={() => (open.value = true)}
+                    class="projectBox"
+                    suffix={
+                      <div
+                        class="cursor-pointer"
+                        onClick={() => (open.value = true)}
+                      >
+                        <PlusOutlined />
+                        点击选择项目
+                      </div>
+                    }
+                  />
+                )
+              }
+            }}
+            onFieldsChanged={(v) => {
+              formRef.value.changeState({
+                money4: formatMoney(
+                  (+v.beforeDepositBalance || 0) +
+                    (+v.rechargeBalance || 0) +
+                    (+v.giveBalance || 0)
+                )
+              })
+            }}
+          />
+          <BusinessModal
+            type={BusinessModalType.选择项目}
+            open={open.value}
+            modalProps={{
+              okText: '确定',
+              cancelText: '返回',
+              onOk: () => {
+                formRef.value.formRef.clearValidate(['project'])
+                open.value = false
+                formRef.value.changeState({
+                  project: formState.value.selectList
+                })
+                formState.value.lastSelect = formState.value.selectList
+              },
+              onCancel: () => {
+                open.value = false
+                console.log(toRaw(formState))
+                formState.value.selectList = formState.value.lastSelect
+              }
+            }}
+            changeState={(v: any) => {
+              formState.value.lastSelect = formState.value.selectList
+              formState.value.selectList = v
+            }}
+            formState={formState.value}
+          />
+        </>
       )
     }
   }
