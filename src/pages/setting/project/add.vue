@@ -56,7 +56,8 @@ const onFinish = async (value: Record<string, any>) => {
   } else {
     await common.addProject({
       ...value,
-      categoryId: treeRef.value.selectedKeys?.[0] || ''
+      categoryId: treeRef.value.selectedKeys?.[0] || '',
+      coverFileId: value?.image?.[0]?.response?.data?.fileId
     })
   }
   message.success('保存成功')

@@ -1,4 +1,8 @@
+import { message } from 'ant-design-vue'
 import { TableProps } from 'store-operations-ui'
+import { Storage } from 'wa-utils'
+
+const storage = new Storage('local')
 
 export const schema: TableProps['schema'] = {
   title: '服务项目列表',
@@ -164,7 +168,18 @@ export const editSchema = {
       props: {
         uploadProps: {
           max: 1,
-          accept: 'image/*'
+          accept: 'image/*',
+          action: 'http://111.229.138.125:8080/file/uploadPic',
+          headers: {
+            Authorization: `Bearer ${storage.baseGet('Admin-Token')}`
+          },
+          beforeUpload: (data: any) => {
+            if (data?.size / 1024 / 1024 > 10) {
+              message.error('图片不能超出10M')
+              return Promise.reject('图片不能超出10M')
+            }
+            return true
+          }
         }
       }
     },
