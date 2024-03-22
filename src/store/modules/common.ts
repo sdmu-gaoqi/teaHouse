@@ -127,20 +127,20 @@ const defaultMenu = [
       }
     ]
   },
-  {
-    title: '门店动态',
-    key: 'updates',
-    icon: 动态,
-    access: ['cs:storeUpdates:view'],
-    children: [
-      {
-        title: '门店动态列表',
-        key: 'updates-list',
-        path: '/updates/list',
-        access: ['cs:storeUpdates:view']
-      }
-    ]
-  },
+  // {
+  //   title: '门店动态',
+  //   key: 'updates',
+  //   icon: 动态,
+  //   access: ['cs:storeUpdates:view'],
+  //   children: [
+  //     {
+  //       title: '门店动态列表',
+  //       key: 'updates-list',
+  //       path: '/updates/list',
+  //       access: ['cs:storeUpdates:view']
+  //     }
+  //   ]
+  // },
   {
     title: '统计报表',
     key: 'chart',
