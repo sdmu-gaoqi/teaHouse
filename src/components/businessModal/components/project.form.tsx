@@ -6,6 +6,7 @@ import { useStore } from 'vuex'
 import ProjectType from '@/components/ProjectType/projectType'
 import common from '@/servers/common'
 import selectProject from './selectProject'
+import { ossOrigin } from '@/constant'
 
 export default defineComponent({
   props: {
@@ -40,7 +41,20 @@ export default defineComponent({
           dzRoyalty: detail.data.dzRoyalty,
           dzRoyaltyOl: detail.data.dzRoyaltyOl,
           ztRoyalty: detail.data.ztRoyalty,
-          ztRoyaltyOl: detail.data.ztRoyaltyOl
+          ztRoyaltyOl: detail.data.ztRoyaltyOl,
+          ...(detail.data?.coverFileUrl && {
+            image: [
+              {
+                response: {
+                  data: {
+                    fileId:
+                      detail.data?.coverFileUrl?.split('/file/download/')[1]
+                  }
+                },
+                url: `${ossOrigin}${detail.data?.coverFileUrl}`
+              }
+            ]
+          })
         })
       }
     })

@@ -110,7 +110,10 @@ const goAdd = () => {
 const onFinish = async (value: any) => {
   await common.updateProject({
     ...value,
-    serviceProjectId: detail.value?.id
+    serviceProjectId: detail.value?.id,
+    ...(value?.image?.[0]?.response?.data?.fileId && {
+      coverFileId: value?.image?.[0]?.response?.data?.fileId
+    })
   })
   message.success('编辑成功')
   open.value = false

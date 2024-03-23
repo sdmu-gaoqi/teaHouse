@@ -161,28 +161,28 @@ export const editSchema = {
         ]
       }
     },
-    // image: {
-    //   title: '封面图片',
-    //   type: 'uploadMultiple',
-    //   span: 24,
-    //   props: {
-    //     uploadProps: {
-    //       max: 1,
-    //       accept: 'image/*',
-    //       action: 'http://111.229.138.125:8080/file/uploadPic',
-    //       headers: {
-    //         Authorization: `Bearer ${storage.baseGet('Admin-Token')}`
-    //       },
-    //       beforeUpload: (data: any) => {
-    //         if (data?.size / 1024 / 1024 > 10) {
-    //           message.error('图片不能超出10M')
-    //           return Promise.reject('图片不能超出10M')
-    //         }
-    //         return true
-    //       }
-    //     }
-    //   }
-    // },
+    image: {
+      title: '封面图片',
+      type: 'uploadMultiple',
+      span: 24,
+      props: {
+        uploadProps: {
+          max: 1,
+          accept: 'image/*',
+          action: 'http://111.229.138.125:8080/file/uploadPic',
+          headers: {
+            Authorization: `Bearer ${storage.baseGet('Admin-Token')}`
+          },
+          beforeUpload: (data: any) => {
+            if (data?.size / 1024 / 1024 > 10) {
+              message.error('图片不能超出10M')
+              return Promise.reject('图片不能超出10M')
+            }
+            return true
+          }
+        }
+      }
+    },
     remark: {
       title: '备注',
       type: 'string',

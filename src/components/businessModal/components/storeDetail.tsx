@@ -1,11 +1,20 @@
+import { ossOrigin } from '@/constant'
+import { message } from 'ant-design-vue'
+import dayjs from 'dayjs'
 import { FormRender } from 'store-operations-ui'
 import { SchemaBase } from 'store-operations-ui/dist/formRender/type'
-import { defineComponent, toRaw } from 'vue'
+import { Store } from 'store-request'
+import { defineComponent, onMounted, ref } from 'vue'
+import { Storage } from 'wa-utils'
 
 const StoreModal = defineComponent({
   props: ['formState', 'modalProps'],
   setup(props, context) {
     const type = props?.formState?.modalType || ('edit' as 'view' | 'edit')
+    const store = new Store()
+    const storage = new Storage('local')
+    const formRef = ref()
+    const code = props?.formState?.code
     const formProps =
       type === 'view'
         ? {
@@ -73,29 +82,60 @@ const StoreModal = defineComponent({
           title: '营业时间',
           type: 'string',
           ...(type === 'edit' && {
-            widget: 'dateRange',
+            widget: 'timeRange',
             type: 'range'
           }),
+          ...(type === 'view' && {
+            widget: 'input'
+          }),
+          picker: 'time',
+          format: 'time',
           props: {
             style: {
               width: '100%'
-            }
+            },
+            showSecond: false,
+            showTime: true,
+            ...(type === 'view' && {
+              readonly: true,
+              bordered: false
+            })
           }
         },
         remark: {
           title: '门店介绍',
           type: 'string',
-          ...(type === 'edit' && {
-            widget: 'textArea'
-          }),
+          widget: 'textArea',
           span: 24,
-          props: formProps
+          props: {
+            ...formProps,
+            ...(type === 'view' && {
+              readonly: true,
+              bordered: false
+            })
+          }
         },
         image: {
           title: '门店图片',
           type: 'uploadMultiple',
           span: 24,
-          props: formProps
+          props: {
+            ...formProps,
+            uploadProps: {
+              accept: 'image/*',
+              action: 'http://111.229.138.125:8080/file/uploadPic',
+              headers: {
+                Authorization: `Bearer ${storage.baseGet('Admin-Token')}`
+              },
+              beforeUpload: (data: any) => {
+                if (data?.size / 1024 / 1024 > 10) {
+                  message.error('图片不能超出10M')
+                  return Promise.reject('图片不能超出10M')
+                }
+                return true
+              }
+            }
+          }
         }
       },
       displayType: 'row',
@@ -108,8 +148,32 @@ const StoreModal = defineComponent({
         }
       })
     }
+    onMounted(async () => {
+      if (code) {
+        const res = (await store.detail(code)) as any
+        const businessHours = res?.data?.businessHours
+          ? res?.data?.businessHours
+              ?.split('-')
+              ?.map((item: string) => `2020-01-01 ${item}:00`)
+          : undefined
+        if (formRef.value) {
+          formRef.value.changeState({
+            name: res?.data?.name,
+            address: res?.data?.address,
+            phone: res?.data?.phone,
+            tel: res?.data?.tel,
+            remark: res?.data?.remark,
+            image: res?.data?.banner?.map((item: string) => ({
+              url: `${ossOrigin}${item}`
+            })),
+            businessHours:
+              type === 'view' ? res?.data?.businessHours : businessHours
+          })
+        }
+      }
+    })
     return () => {
-      return <FormRender schema={schema} />
+      return <FormRender schema={schema} ref={formRef} />
     }
   }
 })
