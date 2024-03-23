@@ -37,4 +37,4 @@ export const discounts = [
 export const isLocal = location.origin.includes('localhost')
 export const ossOrigin = isLocal
   ? 'http://111.229.138.125:8080'
-  : `${locationData.origin}:8080`
+  : `${location.origin}:8080`
