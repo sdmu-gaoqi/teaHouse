@@ -61,7 +61,7 @@
       }
     }"
     :changeState="
-      (v) => {
+      (v: any) => {
         formState.lastSelect = formState.selectList
         formState.selectList = v
       }

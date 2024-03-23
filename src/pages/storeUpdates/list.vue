@@ -74,7 +74,5 @@ const onFinish = () => {}
 
 const store = new Store()
 
-const onDelete = (id: number) => {
-  Mo
-}
+const onDelete = (id: number) => {}
 </script>
