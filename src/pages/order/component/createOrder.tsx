@@ -176,7 +176,9 @@ const CreateOrderModal = defineComponent({
     ]
     const handleSlot = {
       m1: ({ index, record }: any) => {
-        return formatMoney(record?.price || record?.originalPrice)
+        return formatMoney(
+          record?.price || record?.originalPrice / record?.serviceNum
+        )
       },
       m2: ({ index, record }: any) => {
         return record?.duration || record?.unitDuration

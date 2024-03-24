@@ -48,9 +48,9 @@
         <div class="flex">
           <div class="w-[90px] text-right pr-[10px] shrink-0">会员状态:</div>
           <div
-            :class="`${data?.record?.status === 'ENABLED' && 'text-red-500'}`"
+            :class="`${data?.record?.status === 'REFUNDED' && 'text-red-500'}`"
           >
-            <a-tag color="#f50" v-if="data?.record?.status === 'ENABLED'"
+            <a-tag color="#f50" v-if="data?.record?.status === 'REFUNDED'"
               >已退卡</a-tag
             >
             <a-tag color="#108ee9" v-else>正常</a-tag>
@@ -155,7 +155,7 @@
         "
       >
         <div>
-          <div>次卡项目: {{ data?.record?.totalRewardTimes || 0 }}次</div>
+          <!-- <div>次卡项目: {{ data?.record?.totalRewardTimes || 0 }}次</div> -->
           <div>次卡余额: {{ data?.record?.availableRewardTimes || 0 }}次</div>
         </div>
       </template>
@@ -226,7 +226,7 @@ const onFinish = async (v: any, type: string) => {
     ...(v?.memberType == MemberType.折扣卡 && {
       discountDepositInfo: {
         rechargeBalance: v?.rechargeBalance,
-        giveBalance: v?.giveBalance,
+        giveBalance: +v?.giveBalance > 0 ? v?.giveBalance : null,
         discountRate: v?.discountRate,
         beforeDepositBalance: v?.beforeDepositBalance,
         payMethod: v?.payMethod

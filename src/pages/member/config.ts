@@ -266,7 +266,7 @@ export const editSchema: Schema = {
             value: MemberType.折扣卡
           },
           {
-            label: 'B: 会员次卡',
+            label: 'B: 次卡',
             value: MemberType.次卡
           }
         ]
