@@ -120,6 +120,7 @@ const schema: Schema = {
       title: '赠送次数',
       type: 'number',
       widget: 'input',
+      defaultValue: '0',
       props: {
         type: 'number',
         precision: 0

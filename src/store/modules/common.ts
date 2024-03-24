@@ -186,18 +186,18 @@ const defaultMenu = [
         key: 'project-list',
         access: ['projectList']
       },
-      {
-        title: '支付方式设置',
-        path: '/pay-type',
-        key: 'pay-type',
-        access: ['payTypeManage']
-      },
-      {
-        title: '营业额标准设置',
-        path: '/turnover',
-        key: 'turnover',
-        access: ['turnoverManage']
-      },
+      // {
+      //   title: '支付方式设置',
+      //   path: '/pay-type',
+      //   key: 'pay-type',
+      //   access: ['payTypeManage']
+      // },
+      // {
+      //   title: '营业额标准设置',
+      //   path: '/turnover',
+      //   key: 'turnover',
+      //   access: ['turnoverManage']
+      // },
       {
         title: '权限列表',
         key: 'perm-list',

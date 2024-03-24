@@ -100,6 +100,7 @@
         <a
           type="link"
           class="table-btn"
+          v-if="data?.record?.memberType !== MemberType.次卡"
           @click="
             () => {
               businessModalType = BusinessModalType.会员充值记录

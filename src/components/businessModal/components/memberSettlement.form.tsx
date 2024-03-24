@@ -93,7 +93,11 @@ const schema: Schema = {
           member.list(data).then((res: any) => {
             res.rows = res.rows?.map((item: any, index: number) => ({
               ...item,
-              memberName1: `${item?.memberName} (会员卡号:${item?.memberNo}-手机号${item?.phone})`,
+              memberName1: `${item?.memberName} (会员卡号:${item?.memberNo}-手机号${item?.phone})${
+                item.timesProjectName
+                  ? ` 次卡项目：${item?.timesProjectName}`
+                  : ''
+              }`,
               id: `${item.memberId}_${index + 1}`
             }))
             return res
@@ -205,7 +209,7 @@ const schema: Schema = {
         }
       },
       'ui:hidden':
-        'formState.value.memberType != 1 || !formState.value.memberId || formState.value.memberType != 2'
+        '!formState.value.memberId || formState.value.memberType != 2'
     },
     discountPrice: {
       defaultValue: '0',
