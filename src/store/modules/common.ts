@@ -185,7 +185,7 @@ const defaultMenu = [
         path: '/project/list',
         key: 'project-list',
         access: ['projectList']
-      },
+      }
       // {
       //   title: '支付方式设置',
       //   path: '/pay-type',
@@ -198,12 +198,12 @@ const defaultMenu = [
       //   key: 'turnover',
       //   access: ['turnoverManage']
       // },
-      {
-        title: '权限列表',
-        key: 'perm-list',
-        path: '/perm/list',
-        access: ['permSet']
-      }
+      // {
+      //   title: '权限列表',
+      //   key: 'perm-list',
+      //   path: '/perm/list',
+      //   access: ['permSet']
+      // }
     ],
     path: '/operation',
     icon: 设置

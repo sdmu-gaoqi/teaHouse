@@ -5,7 +5,9 @@ import { FormRender } from 'store-operations-ui'
 import { SchemaBase } from 'store-operations-ui/dist/formRender/type'
 import { Store } from 'store-request'
 import { defineComponent, onMounted, ref } from 'vue'
-import { Storage } from 'wa-utils'
+import { Storage, isEmpty, isNumber } from 'wa-utils'
+import { getParameterByName } from 'wa-utils'
+import { isTelNumber } from 'wa-utils/dist/regex/regex'
 
 const StoreModal = defineComponent({
   props: ['formState', 'modalProps'],
@@ -31,9 +33,35 @@ const StoreModal = defineComponent({
           : {
               name: [{ required: true, message: '请输入门店名称' }],
               address: [{ required: true, message: '请输入门店地址' }],
-              phone: [{ required: true, message: '请输入预约手机号' }],
+              phone: [
+                { required: true, message: '请输入预约手机号' },
+                {
+                  validator: (_: any, value: string) => {
+                    if (isEmpty(value)) {
+                      return Promise.resolve('')
+                    } else if (!isTelNumber(value)) {
+                      return Promise.reject('请输入正确的手机号')
+                    }
+                    return Promise.resolve('')
+                  }
+                }
+              ],
               businessHours: [{ required: true, message: '请选择营业时间' }],
-              image: [{ required: true, message: '请上传门店图片' }]
+              image: [{ required: true, message: '请上传门店图片' }],
+              tel: [
+                {
+                  validator: (_: any, value: string) => {
+                    if (isEmpty(value)) {
+                      return Promise.resolve('')
+                    } else if (!/^[\d\-]+$/.test(value)) {
+                      return Promise.reject(
+                        '请输入正确的座机号(只能输入数字或-)'
+                      )
+                    }
+                    return Promise.resolve('')
+                  }
+                }
+              ]
             },
       properties: {
         headquartersCode: {
@@ -167,7 +195,8 @@ const StoreModal = defineComponent({
               url: `${ossOrigin}${item}`
             })),
             businessHours:
-              type === 'view' ? res?.data?.businessHours : businessHours
+              type === 'view' ? res?.data?.businessHours : businessHours,
+            headquartersCode: getParameterByName('storeHeadquartersCode')
           })
         }
       }

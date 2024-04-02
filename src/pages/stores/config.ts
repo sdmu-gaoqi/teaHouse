@@ -7,12 +7,12 @@ export const schema: TableProps['schema'] = {
     export: false,
     reset: true,
     fields: [
-      {
-        type: 'search',
-        label: '品牌',
-        placeholder: '品牌',
-        key: 'headquartersCode'
-      },
+      // {
+      //   type: 'search',
+      //   label: '品牌',
+      //   placeholder: '品牌',
+      //   key: 'headquartersCode'
+      // },
       {
         type: 'search',
         label: '门店编号',

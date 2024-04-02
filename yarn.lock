@@ -7098,10 +7098,10 @@ wa-postcss-pxtorem@^0.0.1:
   resolved "https://registry.npmmirror.com/wa-postcss-pxtorem/-/wa-postcss-pxtorem-0.0.1.tgz#160638b1020e8b05512db0fdb16d2be4d186aa97"
   integrity sha512-5rJSP49FwwF2rS5TXyHIpxiZ4ZWZIyyNfYombxOPXIWFR1TuLBM3/x+zTto1Kzk0nNZCKEYgjS8bpcEn8If8WQ==
 
-wa-utils@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.npmmirror.com/wa-utils/-/wa-utils-4.0.0.tgz#d4cdc4906eb69a1c5026f61f00fafac91a9020ed"
-  integrity sha512-Qk6aW5k3l5k316TL9I0GxCN+3kGgtfBo9ZsFdrpu2TZqKVZqEE5wPhid/v6TIZ7fph1pr6C7sz4VYPc+QPR33g==
+wa-utils@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.npmmirror.com/wa-utils/-/wa-utils-5.0.1.tgz#b93a46e11dd5a2198c2223f099137d8be10a6ccf"
+  integrity sha512-IfwJZpTml8kjnTnvfY++JM/IZtFpHOz8xoHNQrBkMUO044G374oIAmm2s17MWAeCalqqhSxIoxPtZ0OUsmm7vg==
   dependencies:
     "@types/crypto-js" "^4.2.1"
     "@types/js-cookie" "^3.0.3"

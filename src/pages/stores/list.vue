@@ -19,7 +19,7 @@
           type="link"
           class="table-btn last"
           @click="() => edit(data.record, 'view')"
-          >查看</a
+          >详情</a
         >
       </div>
       <template v-else>{{ data.text }}</template>
