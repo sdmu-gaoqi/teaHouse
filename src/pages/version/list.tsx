@@ -13,7 +13,7 @@ const Version = defineComponent({
     })
     const list = ref([
       {
-        version: 'V1.2.0',
+        version: 'V1.3.0',
         date: '2024.02.17',
         content: `
 1.系统管理-价目表信息：
