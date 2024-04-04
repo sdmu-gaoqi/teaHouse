@@ -30,6 +30,12 @@ export const schema: TableProps['schema'] = {
           width: 100
         },
         {
+          fixed: true,
+          title: '项目分类',
+          dataIndex: 'categoryName',
+          width: 100
+        },
+        {
           title: '服务项目',
           dataIndex: 'serviceName',
           width: 250
