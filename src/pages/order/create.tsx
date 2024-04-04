@@ -194,7 +194,8 @@ const CreateOrder = defineComponent({
                                   operateUserId: i?.operateUserId || '',
                                   royaltyType: i?.royaltyType ?? '',
                                   serviceNum: i?.serviceNum || '',
-                                  operate: 'update'
+                                  operate: 'update',
+                                  oldPrice: i?.originalPrice / i?.serviceNum
                                 }
                               })
                             modalOpen.value = true

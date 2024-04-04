@@ -404,6 +404,15 @@ export default defineComponent({
           })
           message.error('会员卡余额为0,无法会员下单')
         }
+        if (err?.code === 1000005) {
+          formRef.value.changeState({
+            memberId: undefined,
+            'memberId-search': undefined,
+            memberTable: [],
+            ckMemberTable: []
+          })
+          memberList.value = []
+        }
         if (err?.code === 2000102) {
           message.error('此项目已不在秒杀时间范围内,请重新选择!')
         } else if (err?.code === 2000101) {

@@ -1,7 +1,7 @@
 <template>
   <TableRender
     :schema="schema"
-    :request="store.loginList"
+    :request="() => {}"
     :tableProps="{ scroll: { x: 1600 } }"
   >
     <template #formButton
