@@ -179,21 +179,6 @@ const schema: Schema = {
       },
       'ui:hidden': 'formState.value.settleType != 2'
     },
-    payPrice: {
-      title: '实收金额',
-      labelClass: 'text-orange-500 text-[14px]',
-      type: 'string',
-      span: 12,
-      widget: 'input',
-      props: {
-        style: {
-          color: '#f97316',
-          fontWeight: 'bold'
-        }
-      },
-      'ui:hidden':
-        '(formState.value.settleType == 1 && !formState.value?.memberId?.memberId) || formState.value.settleType == 2'
-    },
     timesDeductPrice: {
       title: '次卡抵扣金额',
       labelClass: 'text-orange-500 text-[14px]',
@@ -224,6 +209,21 @@ const schema: Schema = {
         //   color: 'red',
         //   fontWeight: 'bold'
         // }
+      },
+      'ui:hidden':
+        '(formState.value.settleType == 1 && !formState.value?.memberId?.memberId) || formState.value.settleType == 2'
+    },
+    payPrice: {
+      title: '实收金额',
+      labelClass: 'text-orange-500 text-[14px]',
+      type: 'string',
+      span: 12,
+      widget: 'input',
+      props: {
+        style: {
+          color: '#f97316',
+          fontWeight: 'bold'
+        }
       },
       'ui:hidden':
         '(formState.value.settleType == 1 && !formState.value?.memberId?.memberId) || formState.value.settleType == 2'

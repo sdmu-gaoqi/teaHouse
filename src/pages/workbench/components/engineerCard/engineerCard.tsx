@@ -23,7 +23,7 @@ const EngineerCard = defineComponent({
         <div class="px-[5px] py-[5px]">{props.nickName}</div>
         <div class="pr-[5px] text-gray-400 text-[12px] mt-[8px] relative scale-90">
           <div class="text-primary scale-[90%] block absolute top-0 right-[2px] scale-60">
-            上钟10次
+            上钟--次
           </div>
         </div>
       </div>

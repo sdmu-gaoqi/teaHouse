@@ -29,7 +29,7 @@ const schema: Schema = {
         disabled: true,
         options: [
           {
-            label: 'A.会员折扣卡',
+            label: 'A.折扣卡',
             value: MemberType.折扣卡
           },
           {

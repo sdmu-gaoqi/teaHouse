@@ -228,18 +228,9 @@ const asyncRouter: any[] = [
           access: ['storeList'],
           key: 'stores-list'
         }
-      }
-    ]
-  },
-  {
-    path: '/updates',
-    name: '门店动态',
-    redirect: () => {
-      return { path: 'list' }
-    },
-    children: [
+      },
       {
-        path: 'list',
+        path: 'updates/list',
         name: '门店动态列表',
         component: () => import('./pages/storeUpdates/list.vue'),
         meta: {
@@ -248,7 +239,7 @@ const asyncRouter: any[] = [
         }
       },
       {
-        path: 'add',
+        path: 'updates/add',
         name: '新建门店动态',
         component: () => import('./pages/storeUpdates/edit.vue'),
         meta: {
@@ -257,7 +248,7 @@ const asyncRouter: any[] = [
         }
       },
       {
-        path: ':type/:id',
+        path: 'updates/:type/:id',
         name: '编辑门店动态',
         component: () => import('./pages/storeUpdates/edit.vue'),
         meta: {

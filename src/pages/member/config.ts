@@ -262,7 +262,7 @@ export const editSchema: Schema = {
       props: {
         options: [
           {
-            label: 'A: 会员折扣卡',
+            label: 'A: 折扣卡',
             value: MemberType.折扣卡
           },
           {
@@ -333,6 +333,7 @@ export const editSchema: Schema = {
       type: 'number',
       span: 13,
       widget: 'input',
+      defaultValue: '0',
       props: {
         type: 'number',
         precision: 0

@@ -18,9 +18,9 @@ export default defineComponent({
       return (
         <div id={id} class={`${styles.card}`} style={{ background: props.bg }}>
           <div class={styles.title}>{props.title}</div>
-          <div class={styles.money}>126,560</div>
-          <div class={styles.sub}>对比昨日 18%</div>
-          <div class={styles.sub}>总营业额 ¥12,423,00</div>
+          <div class={styles.money}>--</div>
+          <div class={styles.sub}>对比昨日 --%</div>
+          <div class={styles.sub}>总营业额 ¥--</div>
           <img src={props.icon} class={styles.icon} />
         </div>
       )

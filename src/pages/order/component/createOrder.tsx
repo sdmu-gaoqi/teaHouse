@@ -176,8 +176,13 @@ const CreateOrderModal = defineComponent({
     ]
     const handleSlot = {
       m1: ({ index, record }: any) => {
+        const project = projectList.value?.rows?.find(
+          (i) => +i?.id === +record?.serviceProjectId
+        )
         return formatMoney(
-          record?.price || record?.originalPrice / record?.serviceNum
+          record?.price ||
+            project?.price ||
+            record?.originalPrice / record?.serviceNum
         )
       },
       m2: ({ index, record }: any) => {

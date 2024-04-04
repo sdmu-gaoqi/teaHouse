@@ -14,16 +14,11 @@
         v-if="data?.column?.dataIndex === 'options'"
         class="flex justify-center items-center"
       >
-        <a
-          type="link"
-          class="table-btn text-green-200"
-          @click="() => router.push(`/updates/edit/${data.record.id}`)"
-          >发布</a
-        >
+        <a type="link" class="table-btn text-green-200">发布</a>
         <a
           type="link"
           class="table-btn"
-          @click="() => router.push(`/updates/edit/${data.record.id}`)"
+          @click="() => router.push(`/stores/updates/edit/${data.record.id}`)"
           >编辑</a
         >
         <a type="link" class="table-btn" @click="() => (open = true)">详情</a>

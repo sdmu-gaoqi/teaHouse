@@ -27,7 +27,7 @@ export default defineComponent({
         formatter(params: any) {
           // 这里的optionData就是外面的常量的值，我是拼了一个数组传进来的
           //  然后这里根据模块名的值，也就是params的值，动态的拼成自己想要的显示样子
-          return `${params}    36%    ￥8888.88`
+          return `${params}    --%    ￥--`
         }
       },
       grid: {
@@ -92,8 +92,8 @@ export default defineComponent({
               }}
             >
               <div class={styles.title}>会员</div>
-              <div class={styles.count}>1,080</div>
-              <div class={styles.desc}>消费金额:80,000.00</div>
+              <div class={styles.count}>--</div>
+              <div class={styles.desc}>消费金额:--</div>
             </div>
             <div
               class={styles.card}
