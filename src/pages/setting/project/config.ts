@@ -1,3 +1,4 @@
+import { ossOrigin } from '@/constant'
 import { message } from 'ant-design-vue'
 import { TableProps } from 'store-operations-ui'
 import { Storage } from 'wa-utils'
@@ -174,8 +175,8 @@ export const editSchema = {
       props: {
         uploadProps: {
           max: 1,
-          accept: 'image/*',
-          action: 'http://111.229.138.125:8080/file/uploadPic',
+          accept: 'image/jpg,image/png,image/jpeg',
+          action: `${ossOrigin}/file/uploadPic`,
           headers: {
             Authorization: `Bearer ${storage.baseGet('Admin-Token')}`
           },
@@ -186,6 +187,15 @@ export const editSchema = {
             }
             return true
           }
+        },
+        change: (file: any) => {
+          const isErr =
+            file?.file?.response?.code != 200 && file?.file?.status === 'done'
+          if (isErr) {
+            message.error(file?.file?.response?.msg)
+            file.fileList?.pop()
+          }
+          return file
         }
       }
     },
