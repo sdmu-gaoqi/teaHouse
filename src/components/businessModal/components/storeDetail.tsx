@@ -139,7 +139,8 @@ const StoreModal = defineComponent({
             ...formProps,
             ...(type === 'view' && {
               readonly: true,
-              bordered: false
+              bordered: false,
+              placeholder: ' '
             })
           }
         },
