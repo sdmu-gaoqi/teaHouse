@@ -172,7 +172,7 @@ const OrderDetail = defineComponent({
             receivePrice: formatMoney(
               res.data.settleType == '2'
                 ? res?.data?.payPrice
-                : res?.data?.receivePrice
+                : res?.data?.payPrice
             ),
             replenishPrice: formatMoney(res?.data?.replenishPrice),
             remark: res?.data?.remark,

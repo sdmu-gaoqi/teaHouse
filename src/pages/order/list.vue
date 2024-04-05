@@ -72,7 +72,7 @@
           {{
             data.record?.status === 'SUBMIT'
               ? formatMoney(
-                  data?.record?.payPrice || data?.record?.receivePrice
+                  data?.record?.payPrice ?? 0 ?? data?.record?.receivePrice
                 )
               : '--'
           }}

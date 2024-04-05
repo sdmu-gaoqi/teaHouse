@@ -103,10 +103,8 @@ export default defineComponent({
               }}
             >
               <div class={`${styles.title} !text-[#AA7D3A]`}>非会员</div>
-              <div class={`${styles.count} !text-[#AA7D3A]`}>1,0800</div>
-              <div class={`${styles.desc} !text-[#AA7D3A]`}>
-                消费金额:80,000.00
-              </div>
+              <div class={`${styles.count} !text-[#AA7D3A]`}>--</div>
+              <div class={`${styles.desc} !text-[#AA7D3A]`}>消费金额:--</div>
             </div>
           </div>
           <div class="w-[100%] h-[420px] pl-[45px]">
