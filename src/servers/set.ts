@@ -4,7 +4,7 @@ const isProd = location?.origin?.includes('mengxiangjia.rixinyy.com')
 
 const request = new Request({
   baseUrl: isProd
-    ? 'http://mengxiangjia.rixinyy.com/'
+    ? 'http://mengxiangjia.rixinyy.com:12001/'
     : 'http://111.229.138.125:12001/'
 })
 
