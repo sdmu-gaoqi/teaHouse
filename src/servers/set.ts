@@ -5,7 +5,7 @@ const isProd = false
 
 const request = new Request({
   baseUrl: isProd
-    ? 'http://124.223.96.225:12001/'
+    ? 'http://mengxiangjia.rixinyy.com/'
     : 'http://111.229.138.125:12001/'
 })
 
