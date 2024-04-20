@@ -211,7 +211,7 @@ const onFinish = async (v: any, type: string) => {
   if (type === 'returnCard') {
     await member.returnCatd(v)
     message.success('退款成功')
-    tableRef.value.run(tableRef.value.params)
+    tableRef.value.run(tableRef.value.params?.[0])
     payOpen.value = false
     return
   }
@@ -245,7 +245,7 @@ const onFinish = async (v: any, type: string) => {
   }
   await member.memberPay(sendValue)
   message.success('充值成功')
-  tableRef.value.run(tableRef.value.params)
+  tableRef.value.run(tableRef.value.params?.[0])
   payOpen.value = false
 }
 </script>

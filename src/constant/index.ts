@@ -1,6 +1,10 @@
 export const adminPerm = '*:*:*'
 export const discounts = [
   {
+    label: '5折',
+    value: 0.5
+  },
+  {
     label: '6折',
     value: 0.6
   },

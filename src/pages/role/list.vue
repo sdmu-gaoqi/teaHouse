@@ -129,6 +129,6 @@ const goAdd = () => {
 const deleteRole = async (id: string | number) => {
   await role.deleteRole(id)
   message.success('删除成功')
-  tableRef.value.run(tableRef.value.params)
+  tableRef.value.run(tableRef.value.params?.[0])
 }
 </script>

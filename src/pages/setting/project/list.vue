@@ -117,6 +117,6 @@ const onFinish = async (value: any) => {
   })
   message.success('编辑成功')
   open.value = false
-  tableRef.value.run(tableRef.value.params)
+  tableRef.value.run(tableRef.value.params?.[0])
 }
 </script>

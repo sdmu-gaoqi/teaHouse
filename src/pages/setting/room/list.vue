@@ -95,6 +95,6 @@ const onFinish = async (v: any) => {
   message.success('更新成功')
   open.value = false
   await sleep(300)
-  tableRef.value.run(tableRef.value.params)
+  tableRef.value.run(tableRef.value.params?.[0])
 }
 </script>
