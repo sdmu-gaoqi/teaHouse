@@ -244,7 +244,7 @@ const asyncRouter: any[] = [
         component: () => import('./pages/storeUpdates/edit.vue'),
         meta: {
           access: ['cs:storeUpdates:edit'],
-          key: 'updates-add'
+          key: 'updates-list'
         }
       },
       {
@@ -271,7 +271,7 @@ const asyncRouter: any[] = [
         component: () => import('./pages/marketing/list.tsx'),
         meta: {
           access: ['cs:marketing:view'],
-          key: 'stores-list'
+          key: 'marketing-list'
         }
       },
       {
@@ -280,7 +280,7 @@ const asyncRouter: any[] = [
         component: () => import('./pages/marketing/detail.tsx'),
         meta: {
           access: ['cs:marketing:edit'],
-          key: 'stores-list'
+          key: 'marketing-list'
         }
       },
       {
@@ -289,7 +289,7 @@ const asyncRouter: any[] = [
         component: () => import('./pages/marketing/detail.tsx'),
         meta: {
           access: ['cs:marketing:edit'],
-          key: 'stores-list'
+          key: 'marketing-list'
         }
       },
       {
