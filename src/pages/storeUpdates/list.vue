@@ -3,7 +3,7 @@
     :schema="schema"
     ref="tableRef"
     :request="
-      (e) =>
+      (e: any) =>
         store.storedYnamics({
           ...(e || {}),
           pageNum: e?.pageNum ?? 1,
