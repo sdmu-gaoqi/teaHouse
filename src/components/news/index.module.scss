@@ -1,0 +1,17 @@
+.news {
+  img {
+    max-width: 100%;
+  }
+
+  table {
+    border: 1px solid #bbb;
+    th {
+      border-bottom: 1px solid #bbb;
+    }
+    th,
+    td {
+      border-right: 1px solid #bbb;
+      text-align: center;
+    }
+  }
+}

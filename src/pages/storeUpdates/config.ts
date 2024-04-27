@@ -8,21 +8,14 @@ export const schema: TableProps['schema'] = {
     reset: true,
     fields: [
       {
-        type: 'search',
-        label: '品牌',
-        placeholder: '品牌',
-        key: 'headquartersCode'
+        type: 'select',
+        label: '状态',
+        key: 'status'
       },
       {
         type: 'search',
-        label: '门店编号',
-        placeholder: '门店编号',
-        key: 'code'
-      },
-      {
-        type: 'search',
-        label: '门店名称',
-        key: 'name'
+        label: '动态标题',
+        key: 'title'
       }
     ]
   },
@@ -34,28 +27,29 @@ export const schema: TableProps['schema'] = {
         {
           fixed: true,
           title: '动态标题',
-          dataIndex: 'code',
-          width: 100
+          dataIndex: 'title'
         },
         {
           title: '发布状态',
-          dataIndex: 'headquartersCode'
+          dataIndex: 'status'
         },
         {
           title: '发布日期',
-          dataIndex: 'name'
+          dataIndex: 'releaseTime',
+          format: 'date'
         },
         {
           title: '发布人',
-          dataIndex: 'address'
+          dataIndex: 'releaseByName'
         },
         {
           title: '创建日期',
-          dataIndex: 'tel'
+          dataIndex: 'createTime',
+          format: 'date'
         },
         {
           title: '创建人',
-          dataIndex: 'phone'
+          dataIndex: 'createByName'
         },
         {
           title: '操作',
@@ -65,7 +59,22 @@ export const schema: TableProps['schema'] = {
       ]
     }
   ],
-  options: {}
+  options: {
+    status: [
+      {
+        label: '待发布',
+        value: 'DRAFT'
+      },
+      {
+        label: '已发布',
+        value: 'ACTIVITY'
+      },
+      {
+        label: '已下架',
+        value: 'INACTIVITY'
+      }
+    ]
+  }
 }
 
 export const editSchema = {

@@ -5,6 +5,8 @@
     className="formCard"
     :onSubmit="onSubmit"
     :onCancel="() => router.go(-1)"
+    :submitLoading="submitLoading"
+    :loading="loading"
   >
     <template #content>
       <Form ref="formRef" :model="formState" layout="vertical">
@@ -14,43 +16,79 @@
           :rules="[{ required: true, message: '请输入标题' }]"
           ><Input v-model:value="formState.title"
         /></a-form-item>
-        <a-form-item label="封面图片" name="image"
+        <a-form-item
+          label="封面图片"
+          name="image"
+          required="true"
+          :rules="[{ required: true, message: '请上传封面' }]"
           ><a-upload
             v-model:value="formState.image"
             list-type="picture-card"
-            name="image"
+            name="file"
             :show-upload-list="false"
-            :customRequest="
-              async (e, ...o) => {
-                const file = e.file
-                const key = file?.uid || ''
-                await cos.uploadFile({
-                  Bucket,
-                  Region,
-                  Body: file,
-                  Key: `${key}${file?.name || ''}`
-                })
-                formState.image = `https://rxyy-1318831585.cos.ap-shanghai.myqcloud.com/${key}${
-                  file?.name || ''
-                }`
+            :action="`${ossOrigin}/file/uploadPic`"
+            :headers="{
+              Authorization: `Bearer ${storage.baseGet('Admin-Token')}`
+            }"
+            accept="image/jpg,image/png,image/jpeg"
+            :before-upload="
+              (data) => {
+                if (data?.size / 1024 / 1024 > 10) {
+                  message.error('图片不能超出10M')
+                  return Promise.reject('图片不能超出10M')
+                }
+                return Promise.resolve()
               }
             "
-            ><img
+            @change="
+              (file) => {
+                uoloadLoading = file?.file?.status === 'uploading'
+                const isErr =
+                  file?.file?.response?.code != 200 &&
+                  file?.file?.status === 'done'
+                if (isErr) {
+                  message.error(file?.file?.response?.msg)
+                  file.fileList?.pop()
+                }
+                if (file?.file?.response?.data?.filePath) {
+                  formState.image = file?.file?.response?.data?.filePath
+                }
+                uoloadLoading = false
+                return file
+              }
+            "
+          >
+            <img
               v-if="formState.image"
-              :src="formState.image"
+              :src="`${ossOrigin}${formState.image}`"
               alt="avatar"
               style="width: 100%"
             />
-            <div v-else>上传图片</div></a-upload
-          >
+            <div v-if="uoloadLoading">
+              <img :src="LoadingSvg" class="w-[50%]" />
+              <div>上传中</div>
+            </div>
+            <div v-if="!uoloadLoading && !formState.image">上传图片</div>
+          </a-upload>
         </a-form-item>
         <a-form-item
           label="内容"
           name="valueHtml"
-          :rules="[{ required: true, message: '请输入内容' }]"
+          class="mb-0 contentField"
+          :rules="[
+            { required: true, message: '请输入内容' },
+            {
+              validator: (_, val) => {
+                if (val === '<p><br></p>' || !val?.trim()) {
+                  return Promise.reject('请输入内容')
+                }
+                return Promise.resolve()
+              }
+            }
+          ]"
           ><Input
             v-model:value="formState.valueHtml"
-            style="display: none" /></a-form-item
+            style="display: none; height: 0" /></a-form-item
         ><Toolbar
           style="border-bottom: 1px solid #ccc"
           :editor="editorRef"
@@ -73,11 +111,15 @@ import '@wangeditor/editor/dist/css/style.css' // 引入 css
 
 import { onBeforeUnmount, ref, shallowRef, toRaw, onMounted } from 'vue'
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
-import { Input, Form } from 'ant-design-vue'
+import { Input, Form, message } from 'ant-design-vue'
 import { FormCard } from 'store-operations-ui'
 import useCors from '@/hooks/useCors'
 import { nanoid } from 'nanoid'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+import { ossOrigin } from '@/constant'
+import { Storage } from 'wa-utils'
+import LoadingSvg from '@/assets/loading.svg'
+import { Store, request } from 'store-request'
 
 export default {
   components: { Editor, Toolbar, Input, Form, FormCard },
@@ -88,8 +130,31 @@ export default {
     // 编辑器实例，必须用 shallowRef
     const editorRef = shallowRef()
     const { cos, Bucket, Region } = useCors()
+    const store = new Store()
+    const params = useRoute()?.params
+    const isEdit = params?.type === 'edit'
+    const id = params?.id
+    const loading = ref(false)
 
     const router = useRouter()
+    const storage = new Storage('local')
+
+    onMounted(async () => {
+      if (id) {
+        loading.value = true
+        try {
+          const detail = await store.storedYnamiDetail({ id })
+          console.log(detail, 'detail')
+          formState.value = {
+            title: detail?.data?.title,
+            image: detail?.data?.coverFileUrl,
+            valueHtml: detail?.data?.content
+          }
+        } catch (err) {
+          loading.value = false
+        }
+      }
+    })
 
     const formState = ref({
       title: '',
@@ -97,6 +162,8 @@ export default {
       valueHtml: ''
     })
     const formRef = ref()
+    const uoloadLoading = ref(false)
+    const submitLoading = ref(false)
     // 内容 HTML
 
     // https://www.cnblogs.com/-roc/p/16400965.html
@@ -105,7 +172,8 @@ export default {
         'insertVideo',
         'uploadVideo',
         'editVideoSize',
-        'group-video'
+        'group-video',
+        'fullScreen'
       ]
     }
     const uploadConfig = {
@@ -116,16 +184,19 @@ export default {
       // 自定义图片上传
       async customUpload(file, insertFn) {
         const key = nanoid() || ''
-        await cos.uploadFile({
-          Bucket,
-          Region,
-          Body: file,
-          Key: `${key}${file?.name || ''}`
+        console.log(file, 'file')
+        const formData = new FormData()
+        formData.append('file', file)
+        const res = await request.request({
+          url: '/file/uploadPic',
+          method: 'post',
+          data: formData,
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
         })
-        const fileUrl = `https://rxyy-1318831585.cos.ap-shanghai.myqcloud.com/${key}${
-          file?.name || ''
-        }`
-        insertFn(fileUrl)
+        const fileUrl = res?.data?.filePath
+        insertFn(`${ossOrigin}${fileUrl}`)
       }
     }
     const editorConfig = {
@@ -134,10 +205,6 @@ export default {
         uploadImage: uploadConfig
       }
     }
-
-    onMounted(() => {
-      console.log('start')
-    })
 
     // 组件销毁时，也及时销毁编辑器
     onBeforeUnmount(() => {
@@ -151,9 +218,29 @@ export default {
     }
 
     const onSubmit = () => {
-      console.log(toRaw(formRef.value.validateFields), 'formRef')
-      formRef.value.validateFields().then((res) => {
-        console.log(res, 'rrrrrr')
+      formRef.value.validateFields().then(async (res) => {
+        submitLoading.value = true
+        try {
+          if (!isEdit) {
+            await store.storedYnamicAdd({
+              content: res?.valueHtml,
+              coverFileId: res?.image?.replace('/file/download/', ''),
+              title: res?.title
+            })
+          } else {
+            await store.storedYnamiUpdate({
+              content: res?.valueHtml,
+              coverFileId: res?.image?.replace('/file/download/', ''),
+              title: res?.title,
+              id
+            })
+          }
+          submitLoading.value = false
+          message.success('保存成功')
+          router.push('/stores/updates/list')
+        } catch (err) {
+          submitLoading.value = false
+        }
       })
     }
 
@@ -169,7 +256,13 @@ export default {
       cos,
       Bucket,
       Region,
-      router
+      router,
+      storage,
+      ossOrigin,
+      uoloadLoading,
+      LoadingSvg,
+      Promise: Promise,
+      submitLoading
     }
   }
 }
@@ -180,6 +273,11 @@ export default {
   .ant-card-body {
     .ant-form {
       padding: 20px 50px;
+    }
+  }
+  .contentField {
+    .ant-form-item-control-input {
+      display: none;
     }
   }
 }
