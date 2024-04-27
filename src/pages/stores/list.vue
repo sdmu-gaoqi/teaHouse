@@ -3,6 +3,7 @@
     :schema="schema"
     :request="store.loginList"
     :tableProps="{ scroll: { x: 1600 } }"
+    ref="tableRef"
   >
     <template #bodyCell="{ data }">
       <div
@@ -51,6 +52,7 @@ import { ossOrigin } from '@/constant'
 const open = ref(false)
 const formState = ref<any>({})
 const type = ref<'view' | 'edit'>('view')
+const tableRef = ref()
 
 const edit = (data: any, t: 'view' | 'edit') => {
   open.value = true
@@ -77,6 +79,7 @@ const onFinish = async (v: any) => {
     tel: v?.tel
   }
   await store.update(value)
+  tableRef.value.run(tableRef.value.params?.[0])
   message.success('更新成功')
   formState.value = {}
   open.value = false
