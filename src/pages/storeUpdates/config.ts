@@ -11,12 +11,12 @@ export const schema: TableProps['schema'] = {
         type: 'select',
         label: '状态',
         key: 'status'
-      },
-      {
-        type: 'search',
-        label: '动态标题',
-        key: 'title'
       }
+      // {
+      //   type: 'search',
+      //   label: '动态标题',
+      //   key: 'title'
+      // }
     ]
   },
   tabs: [
@@ -36,7 +36,7 @@ export const schema: TableProps['schema'] = {
         {
           title: '发布日期',
           dataIndex: 'releaseTime',
-          format: 'date'
+          format: 'time'
         },
         {
           title: '发布人',
@@ -45,7 +45,7 @@ export const schema: TableProps['schema'] = {
         {
           title: '创建日期',
           dataIndex: 'createTime',
-          format: 'date'
+          format: 'time'
         },
         {
           title: '创建人',
