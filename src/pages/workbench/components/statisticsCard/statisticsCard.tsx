@@ -9,66 +9,63 @@ export default defineComponent({
     const type = ref('')
     const chartRef = ref<HTMLElement>()
     const option = {
-      tooltip: {
-        trigger: 'item'
-      },
       itemStyle: {
         borderColor: '#fff',
         borderWidth: 2
       },
+      dataZoom: [
+        {
+          type: 'slider',
+          show: true,
+          xAxisIndex: [0],
+          end: 100 //初始化滚动条
+        }
+      ],
       label: {
         show: false,
         position: 'center'
       },
-      legend: {
-        orient: 'vertical',
-        right: 'right',
-        bottom: 20,
-        formatter(params: any) {
-          // 这里的optionData就是外面的常量的值，我是拼了一个数组传进来的
-          //  然后这里根据模块名的值，也就是params的值，动态的拼成自己想要的显示样子
-          return `${params}    --%    ￥--`
-        }
-      },
+      legend: {},
       grid: {
         left: '0px',
-        bottom: '0px',
+        right: '0px',
+        bottom: '50px',
         containLabel: true
+      },
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          type: 'shadow'
+        }
+      },
+      xAxis: {
+        type: 'category',
+        data: [
+          '项目一',
+          '项目二',
+          '项目三',
+          '项目四',
+          '项目五',
+          '项目六',
+          '项目七',
+          '项目八',
+          '项目九',
+          '项目十'
+        ]
+      },
+      yAxis: {
+        type: 'value'
       },
       series: [
         {
-          name: 'Access From',
-          type: 'pie',
-          radius: ['40%', '70%'],
-          avoidLabelOverlap: false,
-          left: '20%',
-          center: ['24%', '50%'], // 饼图的中心（圆心）坐标，数组的第一项是横坐标，第二项是纵坐标。[ default: ['50%', '50%'] ]
-          label: {
-            show: false,
-            position: 'center'
-          },
-          emphasis: {
-            label: {
-              show: true,
-              fontSize: 16,
-              fontWeight: 'bold',
-              formatter(params: any) {
-                // 这里的optionData就是外面的常量的值，我是拼了一个数组传进来的
-                //  然后这里根据模块名的值，也就是params的值，动态的拼成自己想要的显示样子
-                return `${params.name} \n \n ￥8888.88`
-              }
-            }
-          },
-          labelLine: {
-            show: false
-          },
-          data: [
-            { value: 1000, name: '项目1' },
-            { value: 2000, name: '项目2' },
-            { value: 3000, name: '项目3' },
-            { value: 4000, name: '项目4' },
-            { value: 5000, name: '项目5' }
-          ]
+          data: [120, 200, 150, 80, 70, 110, 130, 140, 200, 360],
+          type: 'bar',
+          name: '项目占比'
+        },
+        {
+          data: [120, 200, 150, 80, 70, 110, 130, 140, 200, 360],
+          type: 'bar',
+          name: '消费情况'
         }
       ]
     }
@@ -82,33 +79,8 @@ export default defineComponent({
     return () => {
       return (
         <div class="flex">
-          <div class={`w-[240px] text-[#080808] text-[16px] ${styles.body}`}>
-            <div class={styles.chartTitle}>客人数量</div>
-            <div
-              class={styles.card}
-              style={{
-                background:
-                  'linear-gradient(135deg, #F0ECFF 0%, #B5A4F9 100%, #7F64F3 100%)'
-              }}
-            >
-              <div class={styles.title}>会员</div>
-              <div class={styles.count}>--</div>
-              <div class={styles.desc}>消费金额:--</div>
-            </div>
-            <div
-              class={styles.card}
-              style={{
-                background:
-                  'linear-gradient(136deg, #FEF8EF 0%, #E7D6BE 100%, #E2CFB5 100%)'
-              }}
-            >
-              <div class={`${styles.title} !text-[#AA7D3A]`}>非会员</div>
-              <div class={`${styles.count} !text-[#AA7D3A]`}>--</div>
-              <div class={`${styles.desc} !text-[#AA7D3A]`}>消费金额:--</div>
-            </div>
-          </div>
-          <div class="w-[100%] h-[420px] pl-[45px]">
-            <div class={styles.chartTitle}>各类项目情况</div>
+          <div class={`w-[100%] text-[#080808] text-[16px] ${styles.body}`}>
+            <div class={styles.chartTitle}>各类项目消费情况</div>
             <Segmented
               options={[
                 { label: '全部', value: '' },
@@ -119,7 +91,7 @@ export default defineComponent({
               onChange={(v) => (type.value = v as string)}
               class="mb-[20px]"
             />
-            <div class="w-[100%] h-[320px]" ref={chartRef} />
+            <div class="w-[100%] h-[509px]" ref={chartRef} />
           </div>
         </div>
       )

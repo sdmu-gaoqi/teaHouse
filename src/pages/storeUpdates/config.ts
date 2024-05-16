@@ -11,12 +11,12 @@ export const schema: TableProps['schema'] = {
         type: 'select',
         label: '状态',
         key: 'status'
+      },
+      {
+        type: 'search',
+        label: '动态标题',
+        key: 'title'
       }
-      // {
-      //   type: 'search',
-      //   label: '动态标题',
-      //   key: 'title'
-      // }
     ]
   },
   tabs: [

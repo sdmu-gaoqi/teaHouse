@@ -93,7 +93,12 @@ const Workbench = defineComponent({
         <div class="overflow-y-hidden">
           <div class={styles.body}>
             <div class={styles.left}>
-              <Card title="日营业额" contentClass={styles.baseGroup} showDate>
+              <Card
+                title="日营业额"
+                contentClass={styles.baseGroup}
+                showDate
+                now
+              >
                 {turnoverMap.map((item) => (
                   <BaseCard
                     id={item.key}
@@ -105,12 +110,43 @@ const Workbench = defineComponent({
                   />
                 ))}
               </Card>
-              <Card title="数据统计" showDate class={styles.chartCard}>
+              <Card title="数据统计" showDate class={styles.chartCard} now>
                 <StatisticsCard />
               </Card>
             </div>
             <div class={styles.right}>
-              <div class="flex justify-between items-center flex-wrap">
+              <div class={`text-[#080808] text-[16px] ${styles.cardBody}`}>
+                <div class={styles.chartTitle}>客人数量</div>
+                <div class="flex justify-between">
+                  <div
+                    class={styles.card}
+                    style={{
+                      background:
+                        'linear-gradient(135deg, #F0ECFF 0%, #B5A4F9 100%, #7F64F3 100%)'
+                    }}
+                  >
+                    <div class={styles.title}>会员</div>
+                    <div class={`${styles.count} text-center`}>--</div>
+                    <div class={`${styles.desc} text-center`}>消费金额:--</div>
+                  </div>
+                  <div
+                    class={styles.card}
+                    style={{
+                      background:
+                        'linear-gradient(136deg, #FEF8EF 0%, #E7D6BE 100%, #E2CFB5 100%)'
+                    }}
+                  >
+                    <div class={`${styles.title} !text-[#AA7D3A]`}>非会员</div>
+                    <div class={`${styles.count} !text-[#AA7D3A] text-center`}>
+                      --
+                    </div>
+                    <div class={`${styles.desc} !text-[#AA7D3A] text-center`}>
+                      消费金额:--
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="flex justify-between items-center flex-wrap px-[20px]">
                 {menuMap.map((item) => (
                   <div
                     class={`cursor-pointer hover:shadow-lg ${styles.menuItem}`}
@@ -133,13 +169,26 @@ const Workbench = defineComponent({
                       }
                     }}
                   >
-                    <img src={item.icon} class="w-[50px]" />
+                    <img src={item.icon} class="w-[30px]" />
                     <div class="text-[#414141]">{item.title}</div>
                   </div>
                 ))}
               </div>
+              <Card title="顾客预约">
+                <div class={`${styles.news} flex`}>
+                  <div>2024.04.10 12:00~13:00</div>
+                  <div class="px-[5px]">XXX</div>
+                  <div>电话预约</div>
+                  <div class="px-[5px]">预约XX技师做中医推拿</div>
+                  <span class="text-primary cursor-pointer">到达</span>
+                  <span class="text-yellow-500 cursor-pointer mx-[4px]">
+                    延迟
+                  </span>
+                  <span class="text-red-500 cursor-pointer">取消</span>
+                </div>
+              </Card>
               <Card
-                title="技师栏目"
+                title="技师栏"
                 contentClass={styles.engineerGroup}
                 class={styles.enCard}
               >

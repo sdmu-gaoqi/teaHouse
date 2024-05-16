@@ -23,16 +23,16 @@
 
     .menuItem {
       width: calc(50% - 8px);
-      height: 105px;
+      height: 60px;
       margin-bottom: 16px;
       padding: 23px 30px;
       display: flex;
       justify-content: center;
       align-items: center;
-      border-radius: 15px;
+      border-radius: 2px;
       img {
         padding-right: 23px;
-        width: 80px;
+        width: 50px;
       }
     }
   }
@@ -42,11 +42,44 @@
     align-items: flex-start;
     flex-wrap: wrap;
     padding-left: 0;
-    height: 450px;
+    height: 360px;
     overflow: hidden auto;
   }
 }
 
 .enCard {
   overflow: hidden auto;
+}
+
+.cardBody {
+  background: #fff;
+  padding: 14px 20px;
+  margin-bottom: 22px;
+  border-radius: 8px;
+
+  .chartTitle {
+    padding-bottom: 10px;
+    font-size: 18px;
+    color: #080808;
+    font-weight: bold;
+  }
+
+  .card {
+    border-radius: 4px;
+    width: calc(50% - 10px);
+    padding: 6px 10px;
+
+    &:first-child {
+      color: #7f64f3;
+    }
+  }
+}
+
+.news {
+  height: 100px;
+  overflow: auto;
+  * {
+    display: block;
+    flex-shrink: 0;
+  }
 }

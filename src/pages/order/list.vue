@@ -80,6 +80,10 @@
       </template>
       <template v-else-if="data.column.dataIndex === 'member'">
         <div class="flex">
+          <div class="w-[80px] text-right font-bold">会员类型：</div>
+          {{ MemberType[data?.record?.memberType] }}
+        </div>
+        <div class="flex">
           <div class="w-[80px] text-right font-bold">会员姓名：</div>
           {{ data?.record?.memberName }}
         </div>
@@ -114,6 +118,7 @@ import common from '@/servers/common'
 import { message } from 'ant-design-vue'
 import { useAccess } from '@/hooks'
 import { formatMoney } from '@/utils'
+import { MemberType } from '@/types'
 const { orderSettlement } = useAccess()
 
 const access = useAccess()

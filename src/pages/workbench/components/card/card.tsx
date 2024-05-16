@@ -1,13 +1,16 @@
 import { defineComponent, ref } from 'vue'
 import styles from './style.module.scss'
 import { Button, DatePicker } from 'ant-design-vue'
+import dayjs from 'dayjs'
+import { ReloadOutlined } from '@ant-design/icons-vue'
 
 export const CardProps = {
   title: String,
   tabs: Array,
   showDate: Boolean,
   class: String,
-  contentClass: String
+  contentClass: String,
+  now: Boolean
 } as const
 
 const dateMenus = [
@@ -21,7 +24,7 @@ const dateMenus = [
 const Card = defineComponent({
   props: CardProps,
   setup: (props, { slots }) => {
-    const { showDate } = props
+    const { showDate, now } = props
     const activeKey = ref('date')
 
     const changeTab = (key: string) => {
@@ -31,7 +34,15 @@ const Card = defineComponent({
     return () => (
       <div class={`${props.class} ${styles.card} mb-[10px]`}>
         <div class={styles.header}>
-          {props.title}
+          <div class={styles.title}>
+            {props.title}
+            {now && (
+              <span class="text-red-500 text-[12px] ml-[10px] font-normal">
+                数据更新到：{dayjs(new Date()).format('YYYY/MM/DD HH:mm:ss')}
+                <ReloadOutlined class="cursor-pointer ml-[10px] text-primary" />
+              </span>
+            )}
+          </div>
           <div hidden={!showDate}>
             {dateMenus.map((item) => (
               <span
