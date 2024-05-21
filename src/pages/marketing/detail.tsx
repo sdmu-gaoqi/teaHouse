@@ -298,27 +298,33 @@ const MarketingDetail = defineComponent({
         }
       }
       form.value.validateFields().then(async (res: any) => {
-        console.log(id, 'id')
-        if (id) {
-          value.id = id
-        }
-        value.name = res.name
-        value.discountTime =
-          dayjs(res.discountTime[0]).format('YYYY-MM-DD 00:00:00') +
-          '~' +
-          dayjs(res.discountTime[1]).format('YYYY-MM-DD 23:59:59')
-        value.projectList = toRaw(listValue.value)
-        if (id) {
-          value.status = marketingData?.status
-          value.isUpdates = marketingData.isUpdates
-          await common.updateMs(value)
-        } else {
-          value.status = 0
-          value.isUpdates = 0
-          await common.addMs(value)
-        }
-        message.success('保存成功')
-        router.go(-1)
+        Modal.confirm({
+          content: '确认提交此活动信息吗',
+          cancelText: '取消',
+          okText: '确定',
+          onOk: async () => {
+            if (id) {
+              value.id = id
+            }
+            value.name = res.name
+            value.discountTime =
+              dayjs(res.discountTime[0]).format('YYYY-MM-DD 00:00:00') +
+              '~' +
+              dayjs(res.discountTime[1]).format('YYYY-MM-DD 23:59:59')
+            value.projectList = toRaw(listValue.value)
+            if (id) {
+              value.status = marketingData?.status
+              value.isUpdates = marketingData.isUpdates
+              await common.updateMs(value)
+            } else {
+              value.status = 0
+              value.isUpdates = 0
+              await common.addMs(value)
+            }
+            message.success('保存成功')
+            router.go(-1)
+          }
+        })
       })
     }
 

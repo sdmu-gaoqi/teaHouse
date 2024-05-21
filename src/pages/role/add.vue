@@ -5,6 +5,7 @@
         :on-finish="onFinish"
         :on-cancel="onCancel"
         :schema="defaultSchema"
+        finishBefore="确认添加此角色吗"
       ></FormRender>
     </template>
   </FormCard>

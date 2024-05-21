@@ -213,7 +213,13 @@ const StoreModal = defineComponent({
       }
     })
     return () => {
-      return <FormRender schema={schema} ref={formRef} />
+      return (
+        <FormRender
+          schema={schema}
+          ref={formRef}
+          finishBefore="确定修改门店信息吗"
+        />
+      )
     }
   }
 })

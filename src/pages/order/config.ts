@@ -40,8 +40,9 @@ export const schema: TableProps['schema'] = {
       },
       {
         type: 'select',
-        label: '结算状态',
-        key: 'status'
+        label: '订单类别',
+        key: 'memberType',
+        activeKey: '1'
       }
     ]
   },
@@ -103,6 +104,15 @@ export const schema: TableProps['schema'] = {
           width: 220
         },
         {
+          title: '订单类别',
+          dataIndex: 'memberType',
+          width: 220,
+          options: [
+            { value: 1, label: '折扣卡' },
+            { value: 2, label: '次卡' }
+          ]
+        },
+        {
           title: '项目名称',
           dataIndex: 'serviceProjectName'
         },
@@ -145,7 +155,7 @@ export const schema: TableProps['schema'] = {
       ]
     },
     {
-      title: '美团订单',
+      title: '第三方平台订单',
       key: '2',
       columns: [
         {
@@ -169,6 +179,10 @@ export const schema: TableProps['schema'] = {
             { value: 'SUBMIT', label: '已结算' },
             { value: 'CREATED', label: '未结算' }
           ]
+        },
+        {
+          title: '支付方式',
+          dataIndex: 'threePay'
         },
         {
           title: '创建日期',
@@ -198,6 +212,10 @@ export const schema: TableProps['schema'] = {
     status: [
       { value: 'SUBMIT', label: '已结算' },
       { value: 'CREATED', label: '未结算' }
+    ],
+    memberType: [
+      { label: '折扣会员', value: 1 },
+      { label: '次卡会员', value: 2 }
     ]
   }
 }

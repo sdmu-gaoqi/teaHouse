@@ -3,7 +3,7 @@ import { formatMoney } from '@/utils'
 import { FormRender, FormRenderProps, Schema } from 'store-operations-ui'
 import { defineComponent, onMounted, ref } from 'vue'
 import common from '@/servers/common'
-import { Button, Tree, TreeSelect, message } from 'ant-design-vue'
+import { Button, Modal, Tree, TreeSelect, message } from 'ant-design-vue'
 import role from '@/servers/role'
 
 export default defineComponent({
@@ -33,15 +33,22 @@ export default defineComponent({
     })
 
     const onSave = async () => {
-      role.updateRole({
-        ...roleInfo.value,
-        roleId: props.formState.roleId,
-        menuIds: checkedKeys.value
+      Modal.confirm({
+        content: '确定保存此角色权限配置吗',
+        cancelText: '取消',
+        okText: '确定',
+        onOk: async () => {
+          role.updateRole({
+            ...roleInfo.value,
+            roleId: props.formState.roleId,
+            menuIds: checkedKeys.value
+          })
+          message.success('权限配置成功')
+          if (props.onFinish) {
+            props.onFinish()
+          }
+        }
       })
-      message.success('权限配置成功')
-      if (props.onFinish) {
-        props.onFinish()
-      }
     }
 
     return () => {

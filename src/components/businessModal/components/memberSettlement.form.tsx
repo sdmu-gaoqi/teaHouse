@@ -583,6 +583,7 @@ export default defineComponent({
       return (
         <FormRender
           schema={schema}
+          finishBefore={<div>是否确认结算</div>}
           onFinish={(v) => {
             const memberOrderSubmitInfo = {
               discountType: 0,

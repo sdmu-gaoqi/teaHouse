@@ -8,6 +8,7 @@
         className="pro-form"
         rowClassName="pro-form-row"
         bodyClassName="project-body"
+        finishBefore="确认提交此项目信息吗"
       >
         <template #left>
           <ProjectType

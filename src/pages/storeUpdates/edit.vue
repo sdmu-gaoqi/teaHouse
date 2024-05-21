@@ -111,7 +111,7 @@ import '@wangeditor/editor/dist/css/style.css' // 引入 css
 
 import { onBeforeUnmount, ref, shallowRef, toRaw, onMounted } from 'vue'
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
-import { Input, Form, message } from 'ant-design-vue'
+import { Input, Form, message, Modal } from 'ant-design-vue'
 import { FormCard } from 'store-operations-ui'
 import useCors from '@/hooks/useCors'
 import { nanoid } from 'nanoid'
@@ -219,28 +219,35 @@ export default {
 
     const onSubmit = () => {
       formRef.value.validateFields().then(async (res) => {
-        submitLoading.value = true
-        try {
-          if (!isEdit) {
-            await store.storedYnamicAdd({
-              content: res?.valueHtml,
-              coverFileId: res?.image?.replace('/file/download/', ''),
-              title: res?.title
-            })
-          } else {
-            await store.storedYnamiUpdate({
-              content: res?.valueHtml,
-              coverFileId: res?.image?.replace('/file/download/', ''),
-              title: res?.title,
-              id
-            })
+        Modal.confirm({
+          content: '确定提交此门店动态信息吗',
+          cancelText: '取消',
+          okText: '确定',
+          onOk: async () => {
+            submitLoading.value = true
+            try {
+              if (!isEdit) {
+                await store.storedYnamicAdd({
+                  content: res?.valueHtml,
+                  coverFileId: res?.image?.replace('/file/download/', ''),
+                  title: res?.title
+                })
+              } else {
+                await store.storedYnamiUpdate({
+                  content: res?.valueHtml,
+                  coverFileId: res?.image?.replace('/file/download/', ''),
+                  title: res?.title,
+                  id
+                })
+              }
+              submitLoading.value = false
+              message.success('保存成功')
+              router.push('/stores/updates/list')
+            } catch (err) {
+              submitLoading.value = false
+            }
           }
-          submitLoading.value = false
-          message.success('保存成功')
-          router.push('/stores/updates/list')
-        } catch (err) {
-          submitLoading.value = false
-        }
+        })
       })
     }
 

@@ -46,6 +46,9 @@
           </div>
         </div></template
       >
+      <template v-else-if="data.column.dataIndex === 'threePay'">
+        美团
+      </template>
       <template v-else-if="data.column.dataIndex === 'status'">
         <div :class="data.record?.status === 'SUBMIT' ? '' : 'text-red-500'">
           {{ data?.customer || data.text }}
@@ -79,10 +82,6 @@
         </div>
       </template>
       <template v-else-if="data.column.dataIndex === 'member'">
-        <div class="flex">
-          <div class="w-[80px] text-right font-bold">会员类型：</div>
-          {{ MemberType[data?.record?.memberType] }}
-        </div>
         <div class="flex">
           <div class="w-[80px] text-right font-bold">会员姓名：</div>
           {{ data?.record?.memberName }}

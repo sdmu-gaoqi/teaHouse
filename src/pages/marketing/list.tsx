@@ -115,7 +115,7 @@ const Marketing = defineComponent({
             class="ml-[10px]"
             onClick={() => router.push('/marketing/add')}
           >
-            新建秒杀
+            新增秒杀活动
           </Button>
         )
       },

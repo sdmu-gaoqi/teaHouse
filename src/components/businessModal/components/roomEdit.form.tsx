@@ -52,13 +52,13 @@ export const schema = {
       type: 'string',
       widget: 'textArea',
       span: 24
+    },
+    remark: {
+      title: '备注',
+      type: 'string',
+      widget: 'textArea',
+      span: 24
     }
-    // remark: {
-    //   title: '备注',
-    //   type: 'string',
-    //   widget: 'textArea',
-    //   span: 24
-    // }
   },
   displayType: 'row',
   column: 2,
@@ -94,6 +94,7 @@ export default defineComponent({
           schema={schema}
           onFinish={props.onFinish}
           onCancel={props.onCancel}
+          finishBefore="确认提交房间信息吗"
           ref={formRef}
           onFieldsChanged={(v) => {
             formRef.value.changeState({

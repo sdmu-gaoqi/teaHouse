@@ -33,7 +33,7 @@
     :onFinish="onFinish"
     :onCancel="() => (open = false)"
     :modalProps="{
-      title: formState?.id ? '编辑门店' : '门店详情'
+      title: formState?.modalType === 'edit' ? '编辑门店' : '详细信息'
     }"
   />
 </template>

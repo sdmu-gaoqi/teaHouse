@@ -36,6 +36,7 @@ export default defineComponent({
             props.formState?.availableBalance -
             props.formState?.totalSpendBalance,
           payMethod: 1,
+          remark: detail?.data?.remark,
           pzRoyalty: detail.data.pzRoyalty,
           pzRoyaltyOl: detail.data.pzRoyaltyOl,
           dzRoyalty: detail.data.dzRoyalty,
@@ -77,6 +78,7 @@ export default defineComponent({
       return (
         <FormRender
           schema={editSchema}
+          finishBefore="确认提交此项目信息吗"
           onFinish={(v: any) =>
             props.onFinish({
               ...(v || {}),

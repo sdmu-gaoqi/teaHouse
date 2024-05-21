@@ -7,6 +7,7 @@
         :schema="editSchema"
         :loading="loading"
         ref="formRef"
+        finishBefore="确认提交此会员信息吗"
         :onFieldsChanged="
           (v) => {
             let newValue =

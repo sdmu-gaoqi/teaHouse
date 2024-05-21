@@ -5,6 +5,7 @@
         :on-finish="onFinish"
         :on-cancel="onCancel"
         :schema="editSchema"
+        finishBefore="确认提交房间信息吗"
       ></FormRender>
     </template>
   </FormCard>
