@@ -64,7 +64,7 @@ const StoreModal = defineComponent({
               ]
             },
       properties: {
-        headquartersCode: {
+        headquartersName: {
           title: '品牌名称',
           type: 'string',
           props: {
@@ -207,7 +207,8 @@ const StoreModal = defineComponent({
             })),
             businessHours:
               type === 'view' ? res?.data?.businessHours : businessHours,
-            headquartersCode: getParameterByName('storeHeadquartersCode')
+            headquartersCode: getParameterByName('storeHeadquartersCode'),
+            headquartersName: props.formState?.headquartersName
           })
         }
       }

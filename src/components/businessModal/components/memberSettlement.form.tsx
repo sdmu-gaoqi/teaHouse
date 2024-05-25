@@ -4,7 +4,7 @@
 import common from '@/servers/common'
 import { MemberType, payTypes } from '@/types'
 import { formatMoney } from '@/utils'
-import { Input, Radio, Switch, Table, message } from 'ant-design-vue'
+import { Input, Modal, Radio, Switch, Table, message } from 'ant-design-vue'
 import {
   FormCard,
   FormRender,
@@ -62,7 +62,7 @@ const schema: Schema = {
             value: '1'
           },
           {
-            label: '美团',
+            label: '第三方平台',
             value: '2'
           }
         ]
@@ -583,46 +583,68 @@ export default defineComponent({
       return (
         <FormRender
           schema={schema}
-          finishBefore={<div>是否确认结算</div>}
           onFinish={(v) => {
-            const memberOrderSubmitInfo = {
-              discountType: 0,
-              memberId: v?.memberId?.memberId,
-              phone: v?.memberId?.phone,
-              replenishPrice: v?.replenishPrice
-            }
-            const value = {
-              ...(v?.settleType == 1 && {
-                memberOrderSubmitInfo
-              }),
-              orderId: defaultValue?.value?.metaData?.orderId,
-              orderNo: v?.orderNo,
-              settleType: v?.settleType,
-              discountPrice: defaultValue?.value?.metaData?.discountPrice,
-              remark: v?.remark || '',
-              receivePrice: formatMoney(v?.receivePrice),
-              payMethod: v?.payMethod,
-              originalPrice: defaultValue?.value?.metaData?.originalPrice,
-              orderItemList: toRaw(
-                defaultValue?.value?.projectList?.map((item: any) => {
-                  return {
-                    ...item,
-                    zt: item?.zt ? 1 : 0
-                  }
-                })
+            Modal.confirm({
+              content: (
+                <div>
+                  <p>
+                    当前订单为
+                    {
+                      {
+                        0: '非会员',
+                        1: '会员',
+                        2: '第三方平台'
+                      }[v?.settleType as number]
+                    }
+                    订单
+                  </p>
+                  <p>实收金额为{v?.payPrice},确定结算此订单吗?</p>
+                </div>
               ),
-              promotionList: toRaw(
-                defaultValue?.value?.metaData?.promotionInfoList
-              ),
-              payPrice: v?.payPrice,
-              timesDeductPrice: defaultValue?.value?.metaData?.timesDeductPrice
-            }
-            if (v?.settleType === '1' && !v?.memberId?.memberId) {
-              return message.error('请选择会员')
-            }
-            if (props?.onFinish) {
-              props.onFinish(value)
-            }
+              cancelText: '取消',
+              okText: '确认',
+              onOk: () => {
+                const memberOrderSubmitInfo = {
+                  discountType: 0,
+                  memberId: v?.memberId?.memberId,
+                  phone: v?.memberId?.phone,
+                  replenishPrice: v?.replenishPrice
+                }
+                const value = {
+                  ...(v?.settleType == 1 && {
+                    memberOrderSubmitInfo
+                  }),
+                  orderId: defaultValue?.value?.metaData?.orderId,
+                  orderNo: v?.orderNo,
+                  settleType: v?.settleType,
+                  discountPrice: defaultValue?.value?.metaData?.discountPrice,
+                  remark: v?.remark || '',
+                  receivePrice: formatMoney(v?.receivePrice),
+                  payMethod: v?.payMethod,
+                  originalPrice: defaultValue?.value?.metaData?.originalPrice,
+                  orderItemList: toRaw(
+                    defaultValue?.value?.projectList?.map((item: any) => {
+                      return {
+                        ...item,
+                        zt: item?.zt ? 1 : 0
+                      }
+                    })
+                  ),
+                  promotionList: toRaw(
+                    defaultValue?.value?.metaData?.promotionInfoList
+                  ),
+                  payPrice: v?.payPrice,
+                  timesDeductPrice:
+                    defaultValue?.value?.metaData?.timesDeductPrice
+                }
+                if (v?.settleType === '1' && !v?.memberId?.memberId) {
+                  return message.error('请选择会员')
+                }
+                if (props?.onFinish) {
+                  props.onFinish(value)
+                }
+              }
+            })
           }}
           onCancel={props.onCancel}
           onFieldChange={async (key, value) => {

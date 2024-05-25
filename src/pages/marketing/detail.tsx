@@ -339,7 +339,7 @@ const MarketingDetail = defineComponent({
             title={isEdit ? '编辑秒杀活动' : '新建秒杀活动'}
             footer={{
               cancel: '取消',
-              submit: '保存'
+              submit: '提交'
             }}
             onCancel={() => {
               router.back()

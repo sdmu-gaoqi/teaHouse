@@ -104,7 +104,7 @@ const defaultMenu = [
     access: ['storeList'],
     children: [
       {
-        title: '门店列表',
+        title: '门店信息',
         path: '/stores/list',
         key: 'stores-list',
         access: ['storeList']

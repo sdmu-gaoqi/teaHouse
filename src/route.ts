@@ -240,7 +240,7 @@ const asyncRouter: any[] = [
       },
       {
         path: 'updates/add',
-        name: '新建门店动态',
+        name: '新增门店动态',
         component: () => import('./pages/storeUpdates/edit.vue'),
         meta: {
           access: ['cs:storeUpdates:edit'],

@@ -1,7 +1,7 @@
 <template>
   <FormCard
-    :title="'新建门店动态'"
-    :footer="{ cancel: true, submit: true }"
+    :title="'新增门店动态'"
+    :footer="{ cancel: true, submit: '提交' }"
     className="formCard"
     :onSubmit="onSubmit"
     :onCancel="() => router.go(-1)"

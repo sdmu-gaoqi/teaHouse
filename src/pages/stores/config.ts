@@ -39,7 +39,7 @@ export const schema: TableProps['schema'] = {
         },
         {
           title: '品牌名称',
-          dataIndex: 'headquartersCode'
+          dataIndex: 'headquartersName'
         },
         {
           title: '门店名称',

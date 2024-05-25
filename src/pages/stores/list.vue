@@ -56,7 +56,11 @@ const tableRef = ref()
 
 const edit = (data: any, t: 'view' | 'edit') => {
   open.value = true
-  formState.value = { ...data, modalType: t }
+  formState.value = {
+    ...data,
+    modalType: t,
+    headquartersName: data.headquartersName
+  }
   type.value = t
 }
 
