@@ -10,6 +10,7 @@
         finishBefore="确认提交此会员信息吗"
         :onFieldsChanged="
           (v) => {
+            memberNo = v?.memberNo
             let newValue =
               (detailData?.memberDiscountInfo?.availableBalance || 0) +
               (v.rechargeBalance || 0) +
@@ -74,9 +75,9 @@
 import { FormRender, FormCard } from 'store-operations-ui'
 import { editSchema } from './config'
 import { useRoute, useRouter } from 'vue-router'
-import { debounce, sleep } from 'wa-utils'
+import { debounce, isEmpty, sleep } from 'wa-utils'
 import { Member } from 'store-request'
-import { onMounted, reactive, ref } from 'vue'
+import { onMounted, watch, ref } from 'vue'
 import { MemberType } from '@/types'
 import { message, Input } from 'ant-design-vue'
 import { formatMoney } from '@/utils'
@@ -95,6 +96,8 @@ const formState = ref<any>({
   type: 'radio',
   lastSelect: undefined
 })
+const memberNo = ref<any>({})
+let initMemberNo = ''
 
 const {
   params: { id }
@@ -111,6 +114,7 @@ onMounted(() => {
         if (formRef.value.changeState) {
           detailData.value = res.data
           const data = res?.data || {}
+          initMemberNo = data?.memberNo
           formRef.value.changeState({
             latestSpendTime: data?.latestSpendTime,
             totalSpendBalance: data?.totalSpendBalance,
@@ -155,8 +159,30 @@ onMounted(() => {
       .finally(() => {
         loading.value = false
       })
+  } else {
+    member.memberCardNo().then((res: any) => {
+      formRef.value.changeState({
+        memberNo: res?.data || ''
+      })
+      initMemberNo = res?.data || ''
+    })
   }
 })
+
+watch(
+  () => memberNo.value,
+  debounce(async () => {
+    if (initMemberNo !== memberNo.value && !isEmpty(memberNo.value)) {
+      const res: any = await member.checkMemberCardNo({ code: memberNo.value })
+      if (!res?.data) {
+        formRef.value.changeState({
+          memberNo: ''
+        })
+        return message.warning(`会员卡号${memberNo.value}已存在`)
+      }
+    }
+  }, 2000)
+)
 
 const router = useRouter()
 
