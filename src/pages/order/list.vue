@@ -81,7 +81,7 @@
           }}
         </div>
         <div class="flex">
-          <div class="w-[70px] text-right font-bold">实付金额：</div>
+          <div class="w-[70px] text-right font-bold">实收金额：</div>
           {{
             data.record?.status === 'SUBMIT'
               ? formatMoney(
