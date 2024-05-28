@@ -117,7 +117,7 @@ export const schema: TableProps['schema'] = {
           dataIndex: 'serviceProjectName'
         },
         {
-          title: '金额/元',
+          title: '订单明细',
           dataIndex: 'price',
           width: 160
         },

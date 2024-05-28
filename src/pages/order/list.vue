@@ -62,6 +62,16 @@
           <div class="w-[70px] text-right font-bold">订单金额：</div>
           {{ formatMoney(data?.record?.originalPrice) }}
         </div>
+        <div class="flex" v-if="data.record.memberType === MemberType.次卡">
+          <div class="w-[70px] text-right font-bold">抵扣金额：</div>
+          {{
+            data?.record?.originalPrice - data?.record?.discountPrice > 0
+              ? formatMoney(
+                  data?.record?.originalPrice - data?.record?.discountPrice
+                )
+              : 0
+          }}
+        </div>
         <div class="flex">
           <div class="w-[70px] text-right font-bold">优惠金额：</div>
           {{
