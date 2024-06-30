@@ -251,7 +251,8 @@ const onFinish = async (v: any, type: string) => {
       message.success('充值成功')
       tableRef.value.run(tableRef.value.params?.[0])
       payOpen.value = false
-    }
+    },
+    cancelText: '取消'
   })
 }
 </script>
