@@ -6,12 +6,12 @@ const schema: Schema = {
   type: 'object',
   rules: {
     refundBalance: [
-      { required: true, message: '请输入退款金额' },
+      { required: true, message: '请输入退卡金额' },
       {
         validator: moneyRule({})
       }
     ],
-    remark: [{ required: true, message: '请输入退款说明' }]
+    remark: [{ required: true, message: '请输入退卡说明' }]
   },
   properties: {
     memberId: {
@@ -46,7 +46,7 @@ const schema: Schema = {
       }
     },
     refundBalance: {
-      title: '退款金额',
+      title: '退卡金额',
       type: 'string',
       widget: 'input',
       props: {
@@ -54,7 +54,7 @@ const schema: Schema = {
       }
     },
     remark: {
-      title: '退款说明',
+      title: '退卡说明',
       type: 'string',
       widget: 'textArea',
       props: {
@@ -66,7 +66,7 @@ const schema: Schema = {
   column: 1,
   maxWidth: '340px',
   footer: {
-    submit: '确定退款',
+    submit: '确定退卡',
     cancel: '取消'
   }
 }
@@ -95,6 +95,7 @@ export default defineComponent({
       return (
         <FormRender
           schema={schema}
+          finishBefore="退卡后，此会员卡余额将清零，会员卡不能继续使用，确定退卡吗?"
           onFinish={(value) => {
             if (props.onFinish) {
               props.onFinish(

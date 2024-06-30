@@ -161,3 +161,7 @@ html {
 .ant-layout-header {
   line-height: 1 !important;
 }
+
+.ant-modal-confirm .ant-modal-confirm-body {
+  flex-wrap: unset;
+}

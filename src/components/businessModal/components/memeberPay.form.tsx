@@ -29,11 +29,11 @@ const schema: Schema = {
         disabled: true,
         options: [
           {
-            label: 'A.折扣卡',
+            label: '折扣卡',
             value: MemberType.折扣卡
           },
           {
-            label: 'B.次卡',
+            label: '次卡',
             value: MemberType.次卡
           }
         ]
@@ -214,6 +214,7 @@ export default defineComponent({
             schema={schema}
             onFinish={props.onFinish}
             onCancel={props.onCancel}
+            className="memberPay"
             ref={formRef}
             v-slots={{
               selectProject: () => {

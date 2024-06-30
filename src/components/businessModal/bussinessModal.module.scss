@@ -19,5 +19,18 @@
         border-color: #ff4d4f;
       }
     }
+    .memberPay {
+      .ant-radio-wrapper {
+        display: none;
+      }
+      .ant-radio-wrapper.ant-radio-wrapper-checked.ant-radio-wrapper-disabled.ant-radio-wrapper-in-form-item {
+        color: unset !important;
+        cursor: text;
+        display: unset;
+        .ant-radio {
+          display: none;
+        }
+      }
+    }
   }
 }

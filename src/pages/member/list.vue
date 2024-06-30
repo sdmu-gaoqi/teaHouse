@@ -185,7 +185,7 @@ import {
 } from '@/components/businessModal/businessModal.type'
 import { Member } from 'store-request'
 import { MemberType, memberMap } from '@/types'
-import { message } from 'ant-design-vue'
+import { Modal, message } from 'ant-design-vue'
 import { nanoid } from 'nanoid'
 import { useAccess } from '@/hooks'
 
@@ -215,37 +215,43 @@ const onFinish = async (v: any, type: string) => {
     payOpen.value = false
     return
   }
-  const sendValue = {
-    memberId: v?.memberId,
-    memberName: v?.memberName,
-    memberNo: v?.memberNo,
-    requestNo: nanoid(),
-    memberType: v?.memberType,
-    payMethod: v?.payMethod,
-    remark: v?.remark,
-    phone: v?.phone,
-    ...(v?.memberType == MemberType.折扣卡 && {
-      discountDepositInfo: {
-        rechargeBalance: v?.rechargeBalance,
-        giveBalance: +v?.giveBalance > 0 ? v?.giveBalance : null,
-        discountRate: v?.discountRate,
-        beforeDepositBalance: v?.beforeDepositBalance,
-        payMethod: v?.payMethod
-      }
-    }),
-    ...(v?.memberType == MemberType.次卡 && {
-      timesDepositInfo: {
-        buyAmount: v?.rewardTimes,
-        buyPrice: v?.rechargeBalance,
-        giveAmount: v?.giveTimes,
+  Modal.confirm({
+    title: '提示',
+    content: `确定给此会员充值${v?.rechargeBalance}元吗`,
+    onOk: async () => {
+      const sendValue = {
+        memberId: v?.memberId,
+        memberName: v?.memberName,
+        memberNo: v?.memberNo,
+        requestNo: nanoid(),
+        memberType: v?.memberType,
         payMethod: v?.payMethod,
-        projectId: v?.project?.[0]?.id
+        remark: v?.remark,
+        phone: v?.phone,
+        ...(v?.memberType == MemberType.折扣卡 && {
+          discountDepositInfo: {
+            rechargeBalance: v?.rechargeBalance,
+            giveBalance: +v?.giveBalance > 0 ? v?.giveBalance : null,
+            discountRate: v?.discountRate,
+            beforeDepositBalance: v?.beforeDepositBalance,
+            payMethod: v?.payMethod
+          }
+        }),
+        ...(v?.memberType == MemberType.次卡 && {
+          timesDepositInfo: {
+            buyAmount: v?.rewardTimes,
+            buyPrice: v?.rechargeBalance,
+            giveAmount: v?.giveTimes,
+            payMethod: v?.payMethod,
+            projectId: v?.project?.[0]?.id
+          }
+        })
       }
-    })
-  }
-  await member.memberPay(sendValue)
-  message.success('充值成功')
-  tableRef.value.run(tableRef.value.params?.[0])
-  payOpen.value = false
+      await member.memberPay(sendValue)
+      message.success('充值成功')
+      tableRef.value.run(tableRef.value.params?.[0])
+      payOpen.value = false
+    }
+  })
 }
 </script>

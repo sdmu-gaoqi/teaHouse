@@ -20,6 +20,18 @@ export const schema: TableProps['schema'] = {
       },
       {
         type: 'search',
+        label: '项目名称',
+        key: 'serviceProjectName',
+        activeKey: '0'
+      },
+      {
+        type: 'select',
+        label: '支付方式',
+        key: 'threePay',
+        activeKey: '0'
+      },
+      {
+        type: 'search',
         label: '会员姓名',
         key: 'memberName',
         activeKey: '1'
@@ -63,7 +75,7 @@ export const schema: TableProps['schema'] = {
           dataIndex: 'serviceProjectName'
         },
         {
-          title: '金额/元',
+          title: '订单明细',
           dataIndex: 'price'
         },
         {
@@ -169,7 +181,7 @@ export const schema: TableProps['schema'] = {
           dataIndex: 'serviceProjectName'
         },
         {
-          title: '金额/元',
+          title: '订单明细',
           dataIndex: 'price'
         },
         {
@@ -216,6 +228,24 @@ export const schema: TableProps['schema'] = {
     memberType: [
       { label: '折扣会员', value: 1 },
       { label: '次卡会员', value: 2 }
+    ],
+    threePay: [
+      {
+        label: '支付宝',
+        value: '1'
+      },
+      {
+        label: '微信',
+        value: '2'
+      },
+      {
+        label: '收钱吧 ',
+        value: '3'
+      },
+      {
+        label: '现金 ',
+        value: '4'
+      }
     ]
   }
 }

@@ -7,7 +7,9 @@
         store.storedYnamics({
           ...(e || {}),
           pageNum: e?.pageNum ?? 1,
-          pageSize: e?.pageSize || 10
+          pageSize: e?.pageSize || 10,
+          orderByColumn: 'createTime',
+          isAsc: 'desc'
         })
     "
     :tableProps="{ scroll: { x: 1600 } }"
