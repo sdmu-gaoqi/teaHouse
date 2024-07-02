@@ -44,7 +44,9 @@ export default defineComponent({
             show: false,
             position: 'center'
           },
-          legend: {},
+          legend: {
+            selectedMode: false
+          },
           grid: {
             left: '0px',
             right: '0px',
@@ -69,6 +71,7 @@ export default defineComponent({
               data: ys,
               type: 'bar',
               name: '消费次数',
+              stack: 'Total',
               label: {
                 show: true,
                 position: 'top'
