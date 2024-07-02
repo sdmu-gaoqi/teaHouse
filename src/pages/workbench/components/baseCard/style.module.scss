@@ -2,15 +2,14 @@
   border-radius: 10px;
   position: relative;
   padding: 15px 11px;
-  min-width: 170px;
-  width: calc(25% - 20px);
+  width: calc(20% - 10px);
   height: 157px;
   user-select: none;
   -webkit-user-drag: none;
   @apply hover:shadow-lg;
 
   .title {
-    font-size: 17px;
+    font-size: 16px;
     font-family:
       PingFangSC,
       PingFang SC;
@@ -19,7 +18,7 @@
   }
   .money {
     margin: 15px 0;
-    font-size: 24px;
+    font-size: 16px;
     font-family:
       PingFangSC,
       PingFang SC;

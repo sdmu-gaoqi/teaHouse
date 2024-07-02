@@ -82,7 +82,7 @@ export const schema: TableProps['schema'] = {
           dataIndex: 'money'
         },
         {
-          title: '日营业额/元',
+          title: '当日营业额/元',
           dataIndex: 'money'
         },
         {

@@ -1,12 +1,15 @@
 import { defineComponent, onMounted, ref } from 'vue'
 import styles from './style.module.scss'
+import { formatMoney } from '@/utils'
 
 const BaseCardProps = {
   title: String,
   allMoney: String,
   id: String,
   bg: String,
-  icon: String
+  icon: String,
+  value: Number,
+  isCount: Boolean
 }
 
 export default defineComponent({
@@ -18,9 +21,13 @@ export default defineComponent({
       return (
         <div id={id} class={`${styles.card}`} style={{ background: props.bg }}>
           <div class={styles.title}>{props.title}</div>
-          <div class={styles.money}>--</div>
-          <div class={styles.sub}>对比昨日 --%</div>
-          <div class={styles.sub}>总营业额 ¥--</div>
+          <div class={styles.money}>
+            {props?.value
+              ? props?.isCount
+                ? props?.value
+                : formatMoney(props?.value)
+              : '--'}
+          </div>
           <img src={props.icon} class={styles.icon} />
         </div>
       )

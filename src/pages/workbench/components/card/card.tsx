@@ -10,7 +10,9 @@ export const CardProps = {
   showDate: Boolean,
   class: String,
   contentClass: String,
-  now: Boolean
+  now: Boolean,
+  time: Number,
+  request: Function
 } as const
 
 const dateMenus = [
@@ -38,30 +40,18 @@ const Card = defineComponent({
             {props.title}
             {now && (
               <span class="text-red-500 text-[12px] ml-[10px] font-normal">
-                数据更新到：{dayjs(new Date()).format('YYYY/MM/DD HH:mm:ss')}
-                <ReloadOutlined class="cursor-pointer ml-[10px] text-primary" />
+                数据更新到：
+                {dayjs(props.time || new Date()).format('YYYY/MM/DD HH:mm:ss')}
+                <ReloadOutlined
+                  class="cursor-pointer ml-[10px] text-primary"
+                  onClick={() => {
+                    if (props?.request) {
+                      props?.request()
+                    }
+                  }}
+                />
               </span>
             )}
-          </div>
-          <div hidden={!showDate}>
-            {dateMenus.map((item) => (
-              <span
-                class={`cursor-pointer mr-[10px] ${
-                  activeKey.value === item.value
-                    ? ' text-primary font-bold'
-                    : ''
-                }`}
-                onClick={() => changeTab(item.value)}
-                key={item.value}
-              >
-                {item.label}
-              </span>
-            ))}
-            <DatePicker.RangePicker
-              size="small"
-              placeholder={['开始日期', '结束日期']}
-              class="w-[220px]"
-            ></DatePicker.RangePicker>
           </div>
         </div>
         <div class={`${props.contentClass} p-[15px]`}>{slots.default?.()}</div>
