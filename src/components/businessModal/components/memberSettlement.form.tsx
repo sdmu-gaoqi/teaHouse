@@ -25,6 +25,7 @@ import {
 import { useRequest } from 'vue-hooks-plus'
 import { cloneDeep, debounce, isEmpty, sleep } from 'wa-utils'
 import '../styles/memberSettlement.form.scss'
+import { discounts } from '@/constant'
 
 const member = new Member()
 
@@ -697,7 +698,9 @@ export default defineComponent({
                       value.option?.memberType === MemberType.折扣卡
                         ? '折扣卡'
                         : '次卡',
-                    discountRate: `${value?.option?.discountRate * 10}折`,
+                    discountRate: discounts?.find(
+                      (i) => i.value === +value?.option?.discountRate
+                    )?.label,
                     availableBalance: formatMoney(
                       value?.option?.availableBalance
                     ),
