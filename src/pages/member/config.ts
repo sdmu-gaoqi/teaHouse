@@ -179,7 +179,7 @@ export const editSchema: Schema = {
     discountRate1: {
       title: '折扣',
       type: 'string',
-      widget: 'input',
+      widget: 'select',
       defaultValue: 0.9,
       props: {
         // type: 'number'
@@ -276,7 +276,7 @@ export const editSchema: Schema = {
     discountRate: {
       title: '折扣',
       type: 'string',
-      widget: 'input',
+      widget: 'select',
       span: 13,
       defaultValue: 0.9,
       props: {

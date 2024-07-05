@@ -1,42 +1,11 @@
 export const adminPerm = '*:*:*'
-export const discounts = [
-  {
-    label: '5折',
-    value: 0.5
-  },
-  {
-    label: '6折',
-    value: 0.6
-  },
-  {
-    label: '6.5折',
-    value: 0.65
-  },
-  {
-    label: '7折',
-    value: 0.7
-  },
-  {
-    label: '7.5折',
-    value: 0.75
-  },
-  {
-    label: '8折',
-    value: 0.8
-  },
-  {
-    label: '8.5折',
-    value: 0.85
-  },
-  {
-    label: '9折',
-    value: 0.9
-  },
-  {
-    label: '9.5折',
-    value: 0.95
+export const discounts = Array.from({ length: 50 }).map((item, index) => {
+  const v = 100 - (index + 1)
+  return {
+    label: `${String(+v / 10)}折`,
+    value: v / 100
   }
-]
+})
 
 export const isLocal = location.origin.includes('localhost')
 export const ossOrigin = isLocal

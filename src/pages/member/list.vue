@@ -147,7 +147,10 @@
           +data.record.memberType === 1
         "
       >
-        {{ Number(data?.record?.discountRate) * 10 + '折' }}
+        {{
+          discounts?.find((i) => i?.value === +data?.record?.discountRate)
+            ?.label
+        }}
       </template>
       <template
         v-else-if="
@@ -188,6 +191,7 @@ import { MemberType, memberMap } from '@/types'
 import { Modal, message } from 'ant-design-vue'
 import { nanoid } from 'nanoid'
 import { useAccess } from '@/hooks'
+import { discounts } from '@/constant'
 
 const { editMember, memberRecharge, returnMemberCard } = useAccess()
 

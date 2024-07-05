@@ -99,7 +99,7 @@ const schema: Schema = {
     discountRate: {
       title: '折扣',
       type: 'string',
-      widget: 'input',
+      widget: 'select',
       props: {
         // type: 'number'
         options: discounts
