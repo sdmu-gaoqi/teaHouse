@@ -146,7 +146,7 @@ const Workbench = defineComponent({
                 <Card
                   class={`text-[#080808] ${styles.cardBody}`}
                   title="当日顾客数量"
-                  contentClass="p-[0]"
+                  contentClass="pt-0 pb-0 pl-0 pr-0"
                   showDate
                   now
                   time={data?.value?.memberInfo?.time}
