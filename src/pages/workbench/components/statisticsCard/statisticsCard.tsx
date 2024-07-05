@@ -1,13 +1,15 @@
 import { defineComponent, onMounted, ref, watch } from 'vue'
 import * as echarts from 'echarts'
-import { Segmented } from 'ant-design-vue'
+import { Empty, Segmented } from 'ant-design-vue'
 import styles from './style.module.scss'
 import { ProjectStatistics } from '@/hooks/useWorkBench'
+import { isEmpty } from 'wa-utils'
+import EmptyImg from '@/assets/empty.svg'
 
 export default defineComponent({
   name: 'Echarts',
   props: ['data', 'request'],
-  setup(props: { data: ProjectStatistics; request: any }) {
+  setup(props: { data: ProjectStatistics; request: any }, { expose }) {
     const type = ref('')
     const chartRef = ref<HTMLElement>()
     const chart = ref<echarts.ECharts>()
@@ -75,6 +77,30 @@ export default defineComponent({
               label: {
                 show: true,
                 position: 'top'
+              },
+              itemStyle: {
+                color: new echarts.graphic.LinearGradient(
+                  //前四个参数用于配置渐变色的起止位置，这四个参数依次对应 右下左上 四个方位。也就是从右边开始顺时针方向。
+                  //通过修改前4个参数，可以实现不同的渐变方向
+                  /*第五个参数则是一个数组，用于配置颜色的渐变过程。
+                    每项为一个对象，包含offset和color两个参数
+                  */
+                  0,
+                  0,
+                  0,
+                  1,
+                  [
+                    {
+                      //代表渐变色从正上方开始
+                      offset: 0, //offset范围是0~1，用于表示位置，0是指0%处的颜色
+                      color: '#fff'
+                    }, //柱图渐变色
+                    {
+                      offset: 1, //指100%处的颜色
+                      color: '#6102fd'
+                    }
+                  ]
+                )
               }
             }
           ]
@@ -82,6 +108,14 @@ export default defineComponent({
         chart.value?.setOption(option)
       }
     )
+
+    const setType = (v: string) => {
+      type.value = v
+    }
+
+    expose({
+      setType
+    })
 
     return () => {
       return (
@@ -104,7 +138,21 @@ export default defineComponent({
               }}
               class="mb-[20px]"
             />
-            <div class="w-[100%] h-[509px]" ref={chartRef} />
+            <div class={`relative ${styles.chart}`}>
+              <div class="w-[100%] h-[429px] relative" ref={chartRef} />
+              {isEmpty(props?.data?.list) && (
+                <Empty
+                  imageStyle={{
+                    width: '300px',
+                    height: '300px',
+                    margin: '0 auto'
+                  }}
+                  class="absolute ml-[0] w-[100%] h-[100%] top-0 left-0 bottom-0 right-0 bg-[#fff]"
+                  image={EmptyImg}
+                  description="暂无记录~"
+                />
+              )}
+            </div>
           </div>
         </div>
       )

@@ -23,8 +23,8 @@
 
     .menuItem {
       width: calc(50% - 8px);
-      height: 60px;
-      margin-bottom: 16px;
+      height: 40px;
+      margin-bottom: 6px;
       padding: 23px 30px;
       display: flex;
       justify-content: center;
@@ -53,8 +53,8 @@
 
 .cardBody {
   background: #fff;
-  padding: 14px 20px;
-  margin-bottom: 22px;
+  padding: 0 20px 2px;
+  margin-bottom: 10px !important;
   border-radius: 8px;
 
   .chartTitle {
@@ -66,8 +66,20 @@
 
   .card {
     border-radius: 4px;
-    width: calc(50% - 10px);
-    padding: 6px 10px;
+    width: calc(33% - 2px);
+    margin: 6px 0;
+    overflow: hidden;
+    padding: 3px 10px;
+    cursor: default;
+    height: 80px;
+
+    .title {
+      font-weight: bold;
+    }
+    &:hover {
+      opacity: 0.9;
+      @apply hover:shadow-md;
+    }
 
     &:first-child {
       color: #7f64f3;

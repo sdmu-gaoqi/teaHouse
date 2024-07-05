@@ -34,7 +34,7 @@ const Card = defineComponent({
     }
 
     return () => (
-      <div class={`${props.class} ${styles.card} mb-[10px]`}>
+      <div class={`mb-[10px] ${props.class} ${styles.card}`}>
         <div class={styles.header}>
           <div class={styles.title}>
             {props.title}
@@ -54,7 +54,7 @@ const Card = defineComponent({
             )}
           </div>
         </div>
-        <div class={`${props.contentClass} p-[15px]`}>{slots.default?.()}</div>
+        <div class={`p-[15px] ${props.contentClass}`}>{slots.default?.()}</div>
       </div>
     )
   }

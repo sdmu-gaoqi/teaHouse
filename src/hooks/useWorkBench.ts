@@ -36,11 +36,49 @@ export type Turnover = {
   time: number
 }
 
+export type MemberInfo = {
+  cnt: 1
+  /**
+   * 非会员客数
+   * */
+  customNum0: 0
+  /**
+   * 会员客数
+   * */
+  customNum1: 1
+  /**
+   * 第三方客数
+   * */
+  customNum2: 0
+  /**
+   * 会员退卡金额
+   * */
+  totalExitPrice: 0
+  /**
+   * 非会员消费总金额
+   * */
+  totalPayPrice0: 0
+  /**
+   * 会员消费总金额
+   * */
+  totalPayPrice1: 600
+  /**
+   * 第三方消费总金额
+   * */
+  totalPayPrice2: 0
+  /**
+   * 会员充值总金额
+   * */
+  totalRechargePrice: 0
+  time: number
+}
+
 const useWorkBench = (props?: { manaul: boolean }) => {
   const loading = ref(true)
   const data = ref({
     projectStatistics: {} as ProjectStatistics,
-    turnover: {} as Turnover
+    turnover: {} as Turnover,
+    memberInfo: {} as MemberInfo
   })
 
   const getProjectStatistic = (params?: any) => {
@@ -80,6 +118,24 @@ const useWorkBench = (props?: { manaul: boolean }) => {
       })
   }
 
+  const getMember = () => {
+    loading.value = true
+    request
+      .request({
+        url: '/dashboard/getTodayMemberStatistic',
+        method: 'get'
+      })
+      .then((res: any) => {
+        data.value.memberInfo = {
+          ...(res?.data as MemberInfo),
+          time: +new Date()
+        } as MemberInfo
+      })
+      .finally(() => {
+        loading.value = false
+      })
+  }
+
   onMounted(async () => {
     if (props?.manaul) {
       return
@@ -98,9 +154,17 @@ const useWorkBench = (props?: { manaul: boolean }) => {
           url: '/dashboard/getTodayProfit',
           method: 'get'
         })
+        .catch((err) => Promise.resolve({})),
+      // 获取当日顾客数量
+      request
+        .request({
+          url: '/dashboard/getTodayMemberStatistic',
+          method: 'get'
+        })
         .catch((err) => Promise.resolve({}))
     ]
-    const [projectStatistics, turnover] = await Promise.all(requests)
+    const [projectStatistics, turnover, memberInfo] =
+      await Promise.all(requests)
     loading.value = false
     data.value = {
       projectStatistics: {
@@ -110,7 +174,11 @@ const useWorkBench = (props?: { manaul: boolean }) => {
       turnover: {
         ...((turnover as any)?.data as Turnover),
         time: +new Date()
-      } as Turnover
+      } as Turnover,
+      memberInfo: {
+        ...((memberInfo as any)?.data as MemberInfo),
+        time: +new Date()
+      } as MemberInfo
     }
   })
 
@@ -118,7 +186,8 @@ const useWorkBench = (props?: { manaul: boolean }) => {
     loading,
     data,
     getProjectStatistic,
-    getTurnover
+    getTurnover,
+    getMember
   }
 }
 

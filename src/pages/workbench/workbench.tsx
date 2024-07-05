@@ -1,4 +1,4 @@
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 import styles from './style.module.scss'
 import BaseCard from './components/baseCard/baseCard'
 import Card from './components/card/card'
@@ -16,7 +16,10 @@ import right2 from '@/assets/right2.png'
 import right3 from '@/assets/right3.png'
 import right4 from '@/assets/right4.png'
 import useWorkBench, { Turnover } from '@/hooks/useWorkBench'
-import { Spin } from 'ant-design-vue'
+import { Empty, Space, Spin } from 'ant-design-vue'
+import { formatMoney } from '@/utils'
+import { isEmpty } from 'wa-utils'
+import EmptyImg from '@/assets/empty.svg'
 
 const menuMap = [
   {
@@ -51,9 +54,11 @@ const menuMap = [
 const Workbench = defineComponent({
   // engineerList
   setup() {
-    const { loading, data, getProjectStatistic, getTurnover } = useWorkBench()
+    const { loading, data, getProjectStatistic, getTurnover, getMember } =
+      useWorkBench()
     const { data: engineerList } = useRequest(employee.engineerList)
     const router = useRouter()
+    const statisticsRef = ref()
     const turnoverMap: {
       bg: string
       icon: any
@@ -125,18 +130,31 @@ const Workbench = defineComponent({
                   class={styles.chartCard}
                   now
                   time={data?.value?.projectStatistics?.time}
-                  request={getProjectStatistic}
+                  request={() => {
+                    getProjectStatistic()
+                    statisticsRef?.value?.setType('')
+                  }}
                 >
                   <StatisticsCard
                     data={data?.value?.projectStatistics}
                     request={getProjectStatistic}
+                    ref={statisticsRef}
                   />
                 </Card>
               </div>
               <div class={styles.right}>
-                <div class={`text-[#080808] text-[16px] ${styles.cardBody}`}>
-                  <div class={styles.chartTitle}>当日顾客数量</div>
-                  <div class="flex justify-between">
+                <Card
+                  class={`text-[#080808] ${styles.cardBody}`}
+                  title="当日顾客数量"
+                  contentClass="p-[0]"
+                  showDate
+                  now
+                  time={data?.value?.memberInfo?.time}
+                  request={() => {
+                    getMember()
+                  }}
+                >
+                  <div class="flex items-center justify-between">
                     <div
                       class={styles.card}
                       style={{
@@ -145,14 +163,36 @@ const Workbench = defineComponent({
                       }}
                     >
                       <div class={styles.title}>会员</div>
-                      <div class={`${styles.desc} text-center`}>
-                        消费金额:--
+                      <div class="text-[12px]">
+                        充值金额:
+                        {formatMoney(
+                          data?.value?.memberInfo?.totalRechargePrice
+                        )}
                       </div>
-                      <div class={`${styles.desc} text-center`}>
-                        消费金额:--
+                      <div class="text-[12px]">
+                        消费金额:
+                        {formatMoney(data?.value?.memberInfo?.totalPayPrice1)}
                       </div>
-                      <div class={`${styles.desc} text-center`}>
-                        退卡金额:--
+                      <div class="text-[12px]">
+                        退卡金额:
+                        {formatMoney(data?.value?.memberInfo?.totalExitPrice)}
+                      </div>
+                    </div>
+                    <div
+                      class={styles.card}
+                      style={{
+                        background:
+                          'linear-gradient(136deg, #f6feef 0%, #bee7c6 100%, #c5e2b5 100%)'
+                      }}
+                    >
+                      <div
+                        class={`${styles.title} !text-[#629d43] text-[12px]`}
+                      >
+                        非会员
+                      </div>
+                      <div class={`${styles.desc} !text-[#629d43] text-left`}>
+                        消费金额:
+                        {formatMoney(data?.value?.memberInfo?.totalPayPrice0)}
                       </div>
                     </div>
                     <div
@@ -163,23 +203,29 @@ const Workbench = defineComponent({
                       }}
                     >
                       <div class={`${styles.title} !text-[#AA7D3A]`}>
-                        非会员
+                        第三方平台
                       </div>
-                      <div class={`${styles.desc} !text-[#AA7D3A] text-center`}>
-                        消费金额:--
+                      <div
+                        class={`${styles.desc} !text-[#AA7D3A] text-left text-[12px]`}
+                      >
+                        消费金额:
+                        {formatMoney(data?.value?.memberInfo?.totalPayPrice2)}
                       </div>
                     </div>
                   </div>
-                </div>
-                <div class="flex justify-between items-center flex-wrap px-[20px]">
-                  {menuMap.map((item) => (
+                </Card>
+                <div class="flex justify-between items-center flex-wrap px-[20px] pb-[14px]">
+                  {menuMap.map((item, index) => (
                     <div
                       class={`cursor-pointer hover:shadow-lg ${styles.menuItem}`}
                       style={{
                         color: '#fff',
                         background: item.bg,
                         padding: '10px',
-                        textAlign: 'center'
+                        textAlign: 'center',
+                        ...(index > 1 && {
+                          marginBottom: 0
+                        })
                       }}
                       onClick={() => {
                         if (!item.path) {
@@ -218,6 +264,13 @@ const Workbench = defineComponent({
                   contentClass={styles.engineerGroup}
                   class={styles.enCard}
                 >
+                  {isEmpty(engineerList) && (
+                    <Empty
+                      image={EmptyImg}
+                      description="暂无技师~"
+                      class="ml-[0] w-[100%] h-[100%] bg-[#fff]"
+                    />
+                  )}
                   {(engineerList as any).value?.rows?.map((item: any) => (
                     <EngineerCard
                       nickName={item.nickName}

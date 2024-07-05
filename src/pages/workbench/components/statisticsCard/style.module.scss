@@ -54,3 +54,11 @@
   line-height: 23px;
   margin-bottom: 14px;
 }
+
+.chart {
+  :global {
+    .ant-empty-description {
+      margin-top: -50px;
+    }
+  }
+}
