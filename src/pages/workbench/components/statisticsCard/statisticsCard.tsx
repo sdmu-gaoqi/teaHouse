@@ -23,11 +23,11 @@ export default defineComponent({
         const xs: string[] = []
         const ys: number[] = []
         const list = props?.data?.list?.sort(
-          (a, b) => b?.totalPayPrice - a?.totalPayPrice
+          (a, b) => b?.projectCnt - a?.projectCnt
         )
         list?.forEach((i) => {
           xs.push(i?.projectName)
-          ys.push(i?.totalPayPrice)
+          ys.push(i?.projectCnt)
         })
         const option = {
           itemStyle: {
@@ -37,7 +37,7 @@ export default defineComponent({
           dataZoom: [
             {
               type: 'slider',
-              show: true,
+              show: xs.length > 5,
               xAxisIndex: [0],
               end: 100 //初始化滚动条
             }
@@ -50,9 +50,9 @@ export default defineComponent({
             selectedMode: false
           },
           grid: {
-            left: '0px',
-            right: '0px',
-            bottom: '50px',
+            left: '0',
+            right: '0',
+            bottom: xs.length > 5 ? '50px' : '0',
             containLabel: true
           },
           tooltip: {
@@ -73,6 +73,7 @@ export default defineComponent({
               data: ys,
               type: 'bar',
               name: '消费次数',
+              barWidth: 50,
               stack: 'Total',
               label: {
                 show: true,
@@ -139,7 +140,7 @@ export default defineComponent({
               class="mb-[20px]"
             />
             <div class={`relative ${styles.chart}`}>
-              <div class="w-[100%] h-[429px] relative" ref={chartRef} />
+              <div class="w-[100%] h-[450px] relative" ref={chartRef} />
               {isEmpty(props?.data?.list) && (
                 <Empty
                   imageStyle={{

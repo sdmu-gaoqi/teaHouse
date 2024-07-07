@@ -177,6 +177,10 @@ const Workbench = defineComponent({
                         退卡金额:
                         {formatMoney(data?.value?.memberInfo?.totalExitPrice)}
                       </div>
+                      <div class="text-[12px]">
+                        顾客数量:
+                        {data?.value?.memberInfo?.customNum1}
+                      </div>
                     </div>
                     <div
                       class={styles.card}
@@ -194,6 +198,10 @@ const Workbench = defineComponent({
                         消费金额:
                         {formatMoney(data?.value?.memberInfo?.totalPayPrice0)}
                       </div>
+                      <div class={`${styles.desc} !text-[#629d43] text-left`}>
+                        顾客数量:
+                        {data?.value?.memberInfo?.customNum0}
+                      </div>
                     </div>
                     <div
                       class={styles.card}
@@ -210,6 +218,12 @@ const Workbench = defineComponent({
                       >
                         消费金额:
                         {formatMoney(data?.value?.memberInfo?.totalPayPrice2)}
+                      </div>
+                      <div
+                        class={`${styles.desc} !text-[#AA7D3A] text-left text-[12px]`}
+                      >
+                        顾客数量:
+                        {data?.value?.memberInfo?.customNum2}
                       </div>
                     </div>
                   </div>
