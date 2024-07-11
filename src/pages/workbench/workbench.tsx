@@ -16,10 +16,12 @@ import right2 from '@/assets/right2.png'
 import right3 from '@/assets/right3.png'
 import right4 from '@/assets/right4.png'
 import useWorkBench, { Turnover } from '@/hooks/useWorkBench'
-import { Empty, Space, Spin } from 'ant-design-vue'
+import { Empty, Space, Spin, Tooltip } from 'ant-design-vue'
 import { formatMoney } from '@/utils'
 import { isEmpty } from 'wa-utils'
 import EmptyImg from '@/assets/empty.svg'
+import dayjs from 'dayjs'
+import { QuestionCircleOutlined } from '@ant-design/icons-vue'
 
 const menuMap = [
   {
@@ -74,19 +76,19 @@ const Workbench = defineComponent({
       {
         bg: 'linear-gradient(137deg, #D9E2FF 0%, #F9F3FF 100%)',
         icon: work2,
-        title: '扫码支付',
+        title: '订单扫码支付',
         key: 'onlinePayPrice'
       },
       {
         bg: 'linear-gradient(137deg, #ECFFF7 0%, #F9F3FF 100%)',
         icon: work3,
-        title: '现金消费',
+        title: '订单现金收入',
         key: 'offlinePayPrice'
       },
       {
         bg: 'linear-gradient(137deg, #feffec 0%, #f9f3ff 100%)',
         icon: work4,
-        title: '其他收入',
+        title: '订单其他方式收入',
         key: 'otherPayPrice'
       },
       {
@@ -104,7 +106,7 @@ const Workbench = defineComponent({
             <div class={styles.body}>
               <div class={styles.left}>
                 <Card
-                  title="日营业额"
+                  title={`日营业额(${dayjs(new Date()).format('YYYY-MM-DD')})`}
                   contentClass={styles.baseGroup}
                   showDate
                   now
@@ -145,7 +147,9 @@ const Workbench = defineComponent({
               <div class={styles.right}>
                 <Card
                   class={`text-[#080808] ${styles.cardBody}`}
-                  title="当日顾客数量"
+                  title={`顾客消费情况(${dayjs(new Date()).format(
+                    'YYYY-MM-DD'
+                  )})`}
                   contentClass="pt-0 pb-0 pl-0 pr-0"
                   showDate
                   now
@@ -172,6 +176,11 @@ const Workbench = defineComponent({
                       <div class="text-[12px]">
                         消费金额:
                         {formatMoney(data?.value?.memberInfo?.totalPayPrice1)}
+                        <Tooltip title="会员消费金额：计算会员折扣卡消费金额">
+                          <QuestionCircleOutlined
+                            style={{ marginLeft: '10px' }}
+                          />
+                        </Tooltip>
                       </div>
                       <div class="text-[12px]">
                         退卡金额:
@@ -285,10 +294,13 @@ const Workbench = defineComponent({
                       class="ml-[0] w-[100%] h-[100%] bg-[#fff]"
                     />
                   )}
+                  {console.log(engineerList, 'engineerList')}
                   {(engineerList as any).value?.rows?.map((item: any) => (
                     <EngineerCard
                       nickName={item.nickName}
                       remark={item.remark}
+                      userId={String(item?.userId)}
+                      jsInfo={data?.value?.jsInfo}
                     />
                   ))}
                 </Card>

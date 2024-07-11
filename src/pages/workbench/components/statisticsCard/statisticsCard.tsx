@@ -5,6 +5,7 @@ import styles from './style.module.scss'
 import { ProjectStatistics } from '@/hooks/useWorkBench'
 import { isEmpty } from 'wa-utils'
 import EmptyImg from '@/assets/empty.svg'
+import dayjs from 'dayjs'
 
 export default defineComponent({
   name: 'Echarts',
@@ -122,7 +123,9 @@ export default defineComponent({
       return (
         <div class="flex">
           <div class={`w-[100%] text-[#080808] text-[16px] ${styles.body}`}>
-            <div class={styles.chartTitle}>当天项目消费热度统计</div>
+            <div class={styles.chartTitle}>
+              项目消费热度统计({dayjs(new Date()).format('YYYY-MM-DD')})
+            </div>
             <Segmented
               options={[
                 { label: '全部', value: '' },

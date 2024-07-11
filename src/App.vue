@@ -7,6 +7,7 @@
         colorBgBase: '#fff'
       }
     }"
+    :locale="zhCN"
   >
     <RouterView />
   </a-config-provider>
@@ -37,6 +38,9 @@ import { useRouter } from 'vue-router'
 import router from './route'
 import zhCN from 'ant-design-vue/es/locale/zh_CN'
 import { transformRoute } from './utils/menu'
+if (zhCN?.Modal) {
+  zhCN.Modal.justOkText = '确定'
+}
 
 // @ts-ignore
 zhCN.DatePicker.lang = {

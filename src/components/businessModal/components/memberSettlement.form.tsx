@@ -562,7 +562,7 @@ export default defineComponent({
           })
           return message.error('请输入正确的数字')
         }
-        if (+inputValue >= +receivePrice) {
+        if (+inputValue > +receivePrice) {
           message.error('实收金额不能大于应收金额')
           value.target.value = 0
           run({

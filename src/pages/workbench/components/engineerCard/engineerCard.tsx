@@ -1,11 +1,12 @@
-import { defineComponent } from 'vue'
-import En from '@/assets/en.webp'
+import { defineComponent, toRaw } from 'vue'
 import styles from './style.module.scss'
 
 const EngineerCard = defineComponent({
   props: {
     nickName: String,
-    remark: String
+    remark: String,
+    jsInfo: Object,
+    userId: String
   },
   setup(props) {
     return () => (
@@ -18,11 +19,15 @@ const EngineerCard = defineComponent({
         >
           空闲
         </span>
-        <div class="w-[100%] h-[100px] bg-purple-50"></div>
+        <div
+          class={`w-[100%] h-[100px] ${styles.js}`}
+          style={{ backgroundColor: 'rgb(250, 245, 255)' }}
+        ></div>
         <div class="px-[5px] py-[5px]">{props.nickName}</div>
         <div class="pr-[5px] text-gray-400 text-[12px] mt-[8px] relative scale-90">
           <div class="text-primary scale-[90%] block absolute top-0 right-[2px] scale-60">
-            上钟--次
+            上钟时长：
+            {props?.jsInfo?.[props?.userId || ''] || '--'}分钟
           </div>
         </div>
       </div>

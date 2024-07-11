@@ -12,6 +12,17 @@ export type ProjectStatistics = {
   }[]
 }
 
+export type Js = {
+  /**
+   * id
+   * */
+  operateUserId: number
+  /**
+   * 时长
+   * */
+  totalServiceNum: number
+}
+
 export type Turnover = {
   /**
    * 离线支付价格
@@ -78,7 +89,8 @@ const useWorkBench = (props?: { manaul: boolean }) => {
   const data = ref({
     projectStatistics: {} as ProjectStatistics,
     turnover: {} as Turnover,
-    memberInfo: {} as MemberInfo
+    memberInfo: {} as MemberInfo,
+    jsInfo: {} as Record<string, Js>
   })
 
   const getProjectStatistic = (params?: any) => {
@@ -161,11 +173,18 @@ const useWorkBench = (props?: { manaul: boolean }) => {
           url: '/dashboard/getTodayMemberStatistic',
           method: 'get'
         })
+        .catch((err) => Promise.resolve({})),
+      request
+        .request({
+          url: '/dashboard/getOperateUserStatistic',
+          method: 'get'
+        })
         .catch((err) => Promise.resolve({}))
     ]
-    const [projectStatistics, turnover, memberInfo] =
+    const [projectStatistics, turnover, memberInfo, jsInfo] =
       await Promise.all(requests)
     loading.value = false
+    console.log(jsInfo, 'jsInfo')
     data.value = {
       projectStatistics: {
         list: (projectStatistics as any)?.data as ProjectStatistics['list'],
@@ -178,7 +197,13 @@ const useWorkBench = (props?: { manaul: boolean }) => {
       memberInfo: {
         ...((memberInfo as any)?.data as MemberInfo),
         time: +new Date()
-      } as MemberInfo
+      } as MemberInfo,
+      jsInfo: Object.fromEntries(
+        (jsInfo as any)?.data?.map((i: any) => [
+          i?.operateUserId,
+          i?.totalServiceNum
+        ])
+      ) as Record<string, Js>
     }
   })
 
