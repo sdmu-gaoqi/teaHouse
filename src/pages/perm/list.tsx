@@ -10,7 +10,7 @@ import { Point, PointMap } from '@/types'
 import { useAccess } from '@/hooks'
 
 function buildTree(data: any, parentId: any) {
-  let tree = []
+  let tree: any[] = []
 
   for (let i = 0; i < data.length; i++) {
     if (data[i].parentId === parentId) {

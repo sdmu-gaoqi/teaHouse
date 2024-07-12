@@ -79,7 +79,7 @@ watch(
  * @param digitalValue
  */
 function initDigitalData(digitalValue: number) {
-  let integerArray = []
+  let integerArray: string[] = []
   // 显示小数位
   if (props.decimalPlaceNumber > 0) {
     const value = digitalValue.toFixed(props.decimalPlaceNumber)
@@ -115,7 +115,7 @@ function initDigitalData(digitalValue: number) {
  */
 function addSeparator(array: Array<string>) {
   const dataArray = array.reverse()
-  const separatorArray = []
+  const separatorArray: string[] = []
   while (dataArray.length) {
     separatorArray.push(dataArray.splice(0, 3).join(''))
   }

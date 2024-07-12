@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "noImplicitAny": false,
+    "jsxImportSource": "vue",
     "target": "ESNext",
     "useDefineForClassFields": true,
     "module": "ESNext",

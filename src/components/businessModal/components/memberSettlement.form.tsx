@@ -31,7 +31,7 @@ const member = new Member()
 
 const payKey = 'payMethod'
 
-const schema: Schema = {
+const schema: any = {
   type: 'object',
   rules: {
     [payKey]: [{ required: true, message: '请选择支付方式' }],
@@ -571,8 +571,8 @@ export default defineComponent({
                     +v?.settleType === 1
                       ? ''
                       : +v?.settleType === 2
-                      ? v?.threePayKey
-                      : v?.payMethod,
+                        ? v?.threePayKey
+                        : v?.payMethod,
                   ...(+v?.settleType === 1 &&
                     +v?.memberType === MemberType.次卡 &&
                     +v?.payPrice > 0 && {

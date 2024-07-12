@@ -12,7 +12,7 @@ import { cloneDeep } from 'wa-utils'
 import { transformProjectTypeTree } from '@/utils'
 import { ProjectTypeItem } from '@/types'
 
-const addSchema = {
+const addSchema: any = {
   type: 'object',
   rules: {
     categoryName: [
@@ -49,7 +49,7 @@ const addSchema = {
   }
 }
 
-const editSchema = {
+const editSchema: any = {
   type: 'object',
   col: 24,
   rules: {
