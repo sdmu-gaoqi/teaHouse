@@ -19,6 +19,30 @@ export const payTypes = [
   {
     label: '现金 ',
     value: 4
+  },
+
+  {
+    label: '其他 ',
+    value: 100
+  }
+]
+
+export const threePayTypes = [
+  {
+    label: '美团',
+    value: 5
+  },
+  {
+    label: '抖音',
+    value: 6
+  },
+  {
+    label: '大众点评 ',
+    value: 7
+  },
+  {
+    label: '其他 ',
+    value: 100
   }
 ]
 export const memberTypes = [

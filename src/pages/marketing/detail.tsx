@@ -348,7 +348,6 @@ const MarketingDetail = defineComponent({
               submit()
             }}
             v-slots={hanldSolts}
-            className="pb-[20px]"
           ></FormCard>
           <BusinessModal
             type={BusinessModalType.选择项目}

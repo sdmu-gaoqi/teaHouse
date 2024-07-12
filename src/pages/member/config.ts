@@ -363,6 +363,10 @@ export const editSchema: Schema = {
           {
             label: '现金 ',
             value: '4'
+          },
+          {
+            label: '其他 ',
+            value: '100'
           }
         ]
       },

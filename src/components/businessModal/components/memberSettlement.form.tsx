@@ -2,7 +2,7 @@
  * @file 会员结算
  * */
 import common from '@/servers/common'
-import { MemberType, payTypes } from '@/types'
+import { MemberType, payTypes, threePayTypes } from '@/types'
 import { formatMoney } from '@/utils'
 import { Input, Modal, Radio, Switch, Table, message } from 'ant-design-vue'
 import {
@@ -35,7 +35,7 @@ const schema: Schema = {
   type: 'object',
   rules: {
     [payKey]: [{ required: true, message: '请选择支付方式' }],
-    meituan: [{ required: true, message: '请输入美团金额' }],
+    threePayPrice: [{ required: true, message: '请输入美团金额' }],
     payPrice: [{ required: true, message: '请输入实收金额' }]
   },
   properties: {
@@ -165,10 +165,10 @@ const schema: Schema = {
       'ui:hidden':
         '(formState.value.settleType == 1 && !formState.value?.memberId?.memberId)'
     },
-    meituan: {
+    threePayPrice: {
       defaultValue: '0',
       labelClass: 'text-orange-500 text-[14px]',
-      title: '美团金额',
+      title: '第三方平台金额' /*  */,
       type: 'string',
       span: 12,
       widget: 'input',
@@ -178,6 +178,17 @@ const schema: Schema = {
           fontWeight: 'bold'
         }
       },
+      'ui:hidden': 'formState.value.settleType != 2'
+    },
+    threePayKey: {
+      title: '支付方式',
+      type: 'string',
+      defaultValue: 5,
+      props: {
+        options: threePayTypes,
+        placeholder: '请选择'
+      },
+      widget: 'radio',
       'ui:hidden': 'formState.value.settleType != 2'
     },
     timesDeductPrice: {
@@ -195,7 +206,7 @@ const schema: Schema = {
         }
       },
       'ui:hidden':
-        '!formState.value.memberId || formState.value.memberType != 2'
+        '!formState.value.memberId || formState.value.memberType != 2 || formState.value.settleType != 1'
     },
     discountPrice: {
       defaultValue: '0',
@@ -206,10 +217,6 @@ const schema: Schema = {
       props: {
         readonly: true,
         bordered: false
-        // style: {
-        //   color: 'red',
-        //   fontWeight: 'bold'
-        // }
       },
       'ui:hidden':
         '(formState.value.settleType == 1 && !formState.value?.memberId?.memberId) || formState.value.settleType == 2'
@@ -238,77 +245,11 @@ const schema: Schema = {
         readonly: true,
         bordered: false
       },
-      'ui:hidden':
-        'formState.value.settleType != 1  || formState.value.memberId?.memberType != 1 || formState.value.settleType == 2'
+      'ui:hidden': `formState.value.settleType != 1  || formState.value.memberId?.memberType != 1 || formState.value.settleType == 2`
     },
     占位11: {
       span: 12
     },
-    // store3: {
-    //   title: '支付方式',
-    //   type: 'string',
-    //   widget: 'input',
-    //   defaultValue: '按次卡',
-    //   colClass: 'cika',
-    //   props: {
-    //     readonly: true,
-    //     bordered: false
-    //   },
-    //   'ui:hidden':
-    //     'formState.value.settleType != 1  || formState.value.memberId?.memberType != 2'
-    // },
-    // store4: {
-    //   title: '支付方式',
-    //   type: 'string',
-    //   widget: 'input',
-    //   defaultValue: '美团核销',
-    //   props: {
-    //     readonly: true,
-    //     bordered: false
-    //   },
-    //   'ui:hidden': 'formState.value.settleType != 2'
-    // },
-    // z1: {
-    //   widget: 'input',
-    //   type: 'string',
-    //   defaultValue: '扣除',
-    //   span: 2,
-    //   colClass: 'z1',
-    //   props: {
-    //     readonly: true,
-    //     bordered: false
-    //   },
-    //   'ui:hidden':
-    //     'formState.value.settleType != 1  || formState.value.memberId?.memberType != 2'
-    // },
-    // useTimes: {
-    //   widget: 'input',
-    //   type: 'number',
-    //   span: 3,
-    //   colClass: 'useTimes',
-    //   props: {
-    //     suffix: '次',
-    //     min: 0,
-    //     precision: 0
-    //   },
-    //   label: '扣除',
-    //   'ui:hidden':
-    //     'formState.value.settleType != 1  || formState.value.memberId?.memberType != 2'
-    // },
-    // z2: {
-    //   widget: 'input',
-    //   type: 'string',
-    //   colStyle: {},
-    //   span: 6,
-    //   colClass: 'z2',
-    //   defaultValue: '还剩余 0 次',
-    //   props: {
-    //     readonly: true,
-    //     bordered: false
-    //   },
-    //   'ui:hidden':
-    //     'formState.value.settleType != 1  || formState.value.memberId?.memberType != 2'
-    // },
     replenishPrice: {
       title: '补充金额',
       widget: 'input',
@@ -331,8 +272,13 @@ const schema: Schema = {
         placeholder: '请选择'
       },
       widget: 'radio',
-      'ui:hidden':
-        'formState.value.settleType != 0 && (formState.value.replenishPrice || 0) <= 0'
+      'ui:hidden': `
+      (![0, 1].includes(+formState.value.settleType) && (formState.value.replenishPrice || 0) <= 0)
+      ||
+      (formState.value.settleType == 1 && formState.value.memberType == 1)
+      ||
+      (formState.value.settleType == 1 && formState.value.memberType == 2 && +formState.value.payPrice <= 0)
+      `
     },
     remark: {
       title: ' 备注',
@@ -375,7 +321,7 @@ export default defineComponent({
           replenishPrice: formatMoney(res?.data?.replenishPrice || 0),
           discountPrice: formatMoney(res?.data?.discountPrice || 0),
           payPrice: formatMoney(res?.data?.payPrice),
-          meituan: formatMoney(res.data?.payPrice),
+          threePayPrice: formatMoney(res.data?.payPrice),
           timesDeductPrice: formatMoney(res.data?.timesDeductPrice)
         }
         formRef.value.changeState(v)
@@ -501,7 +447,7 @@ export default defineComponent({
             replenishPrice: formatMoney(res?.data?.replenishPrice || 0),
             discountPrice: formatMoney(res?.data?.discountPrice || 0),
             payPrice: formatMoney(res?.data?.payPrice),
-            meituan: formatMoney(res.data?.payPrice)
+            threePayPrice: formatMoney(res.data?.payPrice)
           }
           formRef.value.changeState(v)
           formRef.value.formRef.clearValidate()
@@ -621,7 +567,17 @@ export default defineComponent({
                   discountPrice: defaultValue?.value?.metaData?.discountPrice,
                   remark: v?.remark || '',
                   receivePrice: formatMoney(v?.receivePrice),
-                  payMethod: v?.payMethod,
+                  payMethod:
+                    +v?.settleType === 1
+                      ? ''
+                      : +v?.settleType === 2
+                      ? v?.threePayKey
+                      : v?.payMethod,
+                  ...(+v?.settleType === 1 &&
+                    +v?.memberType === MemberType.次卡 &&
+                    +v?.payPrice > 0 && {
+                      payMethod: v?.payMethod
+                    }),
                   originalPrice: defaultValue?.value?.metaData?.originalPrice,
                   orderItemList: toRaw(
                     defaultValue?.value?.projectList?.map((item: any) => {
@@ -736,7 +692,7 @@ export default defineComponent({
                 receivePrice
               })
             }
-            if (key === 'meituan') {
+            if (key === 'threePayPrice') {
               if (!value?.target?.value) {
                 return
               }

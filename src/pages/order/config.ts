@@ -245,6 +245,10 @@ export const schema: TableProps['schema'] = {
       {
         label: '现金 ',
         value: '4'
+      },
+      {
+        label: '其他 ',
+        value: '100'
       }
     ]
   }
