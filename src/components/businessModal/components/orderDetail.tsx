@@ -179,10 +179,10 @@ const OrderDetail = defineComponent({
             discountPrice: formatMoney(res.data.discountPrice),
             settleType:
               res.data.settleType == '2'
-                ? '美团'
+                ? '第三方平台订单'
                 : res.data.settleType == '0'
-                ? '非会员'
-                : '会员',
+                  ? '非会员'
+                  : '会员',
             table: res?.data?.orderItemList?.map((item: any) => ({
               ...item,
               money: formatMoney(item?.discountPrice || 0),

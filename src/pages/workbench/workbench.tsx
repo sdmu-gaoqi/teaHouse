@@ -74,7 +74,7 @@ const Workbench = defineComponent({
         title: '日营业额（元）',
         key: 'totalPayPrice',
         tooltip:
-          '日营业额=会员充值金额+次卡会员其他项目消费金额+非会员消费金额+第三方平台消费金额'
+          '日营业额=会员充值金额+次卡会员其他项目消费金额+非会员消费金额+第三方平台消费金额+会员补充金额'
       },
       {
         bg: 'linear-gradient(137deg, #D9E2FF 0%, #F9F3FF 100%)',
@@ -180,7 +180,7 @@ const Workbench = defineComponent({
                       <div class="text-[12px]">
                         消费金额:
                         {formatMoney(data?.value?.memberInfo?.totalPayPrice1)}
-                        <Tooltip title="会员消费金额：计算会员折扣卡消费金额">
+                        <Tooltip title="会员消费金额：(1)计算折扣卡会员消费金额；(2)计算次卡会员做其他项目的消费金额；">
                           <QuestionCircleOutlined
                             style={{ marginLeft: '10px' }}
                           />
