@@ -88,7 +88,7 @@
                   查看版本日志
                 </div></template
               >
-              <div @click="goVersion">V1.4.0</div>
+              <div @click="goVersion">V1.5.0</div>
             </a-tooltip>
             <img
               :src="full ? notFullImg : fullImg"

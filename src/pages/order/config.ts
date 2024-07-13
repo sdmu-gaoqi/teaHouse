@@ -1,3 +1,4 @@
+import { allPayTypes } from '@/types'
 import { TableProps } from 'store-operations-ui'
 
 export const schema: TableProps['schema'] = {
@@ -27,8 +28,7 @@ export const schema: TableProps['schema'] = {
       {
         type: 'select',
         label: '支付方式',
-        key: 'threePay',
-        activeKey: '0'
+        key: 'payMethod'
       },
       {
         type: 'search',
@@ -79,6 +79,11 @@ export const schema: TableProps['schema'] = {
           dataIndex: 'price'
         },
         {
+          title: '支付方式',
+          dataIndex: 'payMethod',
+          options: allPayTypes
+        },
+        {
           title: '订单状态',
           dataIndex: 'status',
           options: [
@@ -101,7 +106,7 @@ export const schema: TableProps['schema'] = {
           title: '操作',
           dataIndex: 'options',
           options: ['detail'],
-          width: 200
+          width: 140
         }
       ]
     },
@@ -134,9 +139,15 @@ export const schema: TableProps['schema'] = {
           width: 160
         },
         {
+          title: '支付方式',
+          dataIndex: 'payMethod',
+          options: allPayTypes
+        },
+        {
           title: '会员信息',
           dataIndex: 'member',
-          width: 200
+          width: 250,
+          ellipsis: true
         },
         {
           title: '订单状态',
@@ -162,7 +173,7 @@ export const schema: TableProps['schema'] = {
           title: '操作',
           dataIndex: 'options',
           options: ['detail'],
-          width: 200
+          width: 140
         }
       ]
     },
@@ -185,16 +196,17 @@ export const schema: TableProps['schema'] = {
           dataIndex: 'price'
         },
         {
+          title: '支付方式',
+          dataIndex: 'payMethod',
+          options: allPayTypes
+        },
+        {
           title: '订单状态',
           dataIndex: 'status',
           options: [
             { value: 'SUBMIT', label: '已结算' },
             { value: 'CREATED', label: '未结算' }
           ]
-        },
-        {
-          title: '支付方式',
-          dataIndex: 'threePay'
         },
         {
           title: '创建日期',
@@ -211,7 +223,7 @@ export const schema: TableProps['schema'] = {
           title: '操作',
           dataIndex: 'options',
           options: ['detail'],
-          width: 200
+          width: 140
         }
       ]
     }
@@ -229,27 +241,6 @@ export const schema: TableProps['schema'] = {
       { label: '折扣会员', value: 1 },
       { label: '次卡会员', value: 2 }
     ],
-    threePay: [
-      {
-        label: '支付宝',
-        value: '1'
-      },
-      {
-        label: '微信',
-        value: '2'
-      },
-      {
-        label: '收钱吧 ',
-        value: '3'
-      },
-      {
-        label: '现金 ',
-        value: '4'
-      },
-      {
-        label: '其他 ',
-        value: '100'
-      }
-    ]
+    payMethod: allPayTypes
   }
 }

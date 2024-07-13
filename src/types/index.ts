@@ -45,6 +45,42 @@ export const threePayTypes = [
     value: 100
   }
 ]
+
+export const allPayTypes = [
+  {
+    label: '支付宝',
+    value: 1
+  },
+  {
+    label: '微信',
+    value: 2
+  },
+  {
+    label: '收钱吧 ',
+    value: 3
+  },
+  {
+    label: '现金 ',
+    value: 4
+  },
+  {
+    label: '美团',
+    value: 5
+  },
+  {
+    label: '抖音',
+    value: 6
+  },
+  {
+    label: '大众点评 ',
+    value: 7
+  },
+  {
+    label: '其他 ',
+    value: 100
+  }
+]
+
 export const memberTypes = [
   {
     label: '折扣卡',

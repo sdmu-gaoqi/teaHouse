@@ -5,7 +5,7 @@
     :request="common.orderList"
     ref="tableRef"
     :tableProps="{
-      scroll: { x: 1500 }
+      scroll: { x: 1600 }
     }"
   >
     <template #bodyCell="{ data }">
@@ -46,8 +46,12 @@
           </div>
         </div></template
       >
-      <template v-else-if="data.column.dataIndex === 'threePay'">
-        美团
+      <template v-else-if="data.column.dataIndex === 'payMethod'">
+        {{
+          data?.record?.memberType === MemberType.折扣卡
+            ? '折扣卡'
+            : data?.customer
+        }}
       </template>
       <template v-else-if="data.column.dataIndex === 'status'">
         <div :class="data.record?.status === 'SUBMIT' ? '' : 'text-red-500'">
@@ -92,15 +96,15 @@
         </div>
       </template>
       <template v-else-if="data.column.dataIndex === 'member'">
-        <div class="flex">
+        <div class="flex ell">
           <div class="w-[80px] text-right font-bold">会员姓名：</div>
           {{ data?.record?.memberName }}
         </div>
-        <div class="flex">
+        <div class="flex ell">
           <div class="w-[80px] text-right font-bold">会员卡号：</div>
           {{ data?.record?.memberNo }}
         </div>
-        <div class="flex">
+        <div class="flex ell">
           <div class="w-[80px] text-right font-bold">手机号码：</div>
           {{ data?.record?.phone }}
         </div>

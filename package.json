@@ -61,7 +61,7 @@
     "screenfull": "^6.0.2",
     "smooth-scrollbar": "^8.8.4",
     "store-operations-ui": "^0.4.6",
-    "store-request": "^0.1.1",
+    "store-request": "^0.1.2",
     "url": "^0.11.1",
     "vite-plugin-compression": "^0.5.1",
     "vite-plugin-mkcert": "^1.16.0",
