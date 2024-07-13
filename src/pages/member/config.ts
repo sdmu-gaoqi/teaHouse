@@ -4,6 +4,7 @@ import { isEmpty } from 'wa-utils'
 import { isTelNumber } from 'wa-utils/dist/regex/regex'
 import { Store } from 'store-request'
 import { discounts } from '@/constant'
+import dayjs, { Dayjs } from 'dayjs'
 
 const storeRequest = new Store()
 
@@ -238,7 +239,11 @@ export const editSchema: Schema = {
       type: 'string',
       widget: 'datePicker',
       props: {
-        placeholder: '请选择'
+        placeholder: '请选择',
+        disabledDate: (current: Dayjs) => {
+          // Can not select days before today and today
+          return current && current < dayjs().subtract(1, 'day').endOf('day')
+        }
       },
       'ui:hidden': 'formState.value.expiration !== "2"'
     },

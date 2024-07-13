@@ -22,8 +22,7 @@ export const schema: TableProps['schema'] = {
       {
         type: 'search',
         label: '项目名称',
-        key: 'serviceProjectName',
-        activeKey: '0'
+        key: 'serviceProjectName'
       },
       {
         type: 'select',

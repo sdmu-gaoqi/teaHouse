@@ -1,6 +1,8 @@
 import { defineComponent, onMounted, ref } from 'vue'
 import styles from './style.module.scss'
 import { formatMoney } from '@/utils'
+import { Tooltip } from 'ant-design-vue'
+import { QuestionCircleOutlined } from '@ant-design/icons-vue'
 
 const BaseCardProps = {
   title: String,
@@ -9,7 +11,8 @@ const BaseCardProps = {
   bg: String,
   icon: String,
   value: Number,
-  isCount: Boolean
+  isCount: Boolean,
+  tooltip: String
 }
 
 export default defineComponent({
@@ -17,10 +20,17 @@ export default defineComponent({
   props: BaseCardProps,
   setup(props) {
     return () => {
-      const { id } = props
+      const { id, tooltip } = props
       return (
         <div id={id} class={`${styles.card}`} style={{ background: props.bg }}>
-          <div class={styles.title}>{props.title}</div>
+          <div class={styles.title}>
+            {props.title}
+            {tooltip && (
+              <Tooltip title={tooltip}>
+                <QuestionCircleOutlined />
+              </Tooltip>
+            )}
+          </div>
           <div class={styles.money}>
             {props?.value
               ? props?.isCount

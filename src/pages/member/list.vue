@@ -88,6 +88,7 @@
           type="link"
           class="table-btn"
           v-if="memberRecharge"
+          :hidden="data?.record?.status !== 'ENABLED'"
           @click="
             () => {
               businessModalType = BusinessModalType.会员充值

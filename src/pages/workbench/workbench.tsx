@@ -66,12 +66,15 @@ const Workbench = defineComponent({
       icon: any
       title: string
       key: keyof Turnover
+      tooltip?: string
     }[] = [
       {
         bg: 'linear-gradient(137deg, #F0ECFF 0%, #F9F3FF 100%)',
         icon: work1,
         title: '日营业额（元）',
-        key: 'totalPayPrice'
+        key: 'totalPayPrice',
+        tooltip:
+          '日营业额=会员充值金额+次卡会员其他项目消费金额+非会员消费金额+第三方平台消费金额'
       },
       {
         bg: 'linear-gradient(137deg, #D9E2FF 0%, #F9F3FF 100%)',
@@ -123,6 +126,7 @@ const Workbench = defineComponent({
                       bg={item.bg}
                       value={data?.value?.turnover?.[item?.key]}
                       isCount={item.key === 'orderCnt'}
+                      tooltip={item?.tooltip}
                     />
                   ))}
                 </Card>
