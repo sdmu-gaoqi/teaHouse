@@ -10,7 +10,7 @@ export const schema: TableProps['schema'] = {
       {
         type: 'date',
         label: '月份',
-        key: 'createTime',
+        key: 'reportDate',
         format: 'month'
       }
     ]
@@ -23,7 +23,7 @@ export const schema: TableProps['schema'] = {
         {
           fixed: true,
           title: '日期',
-          dataIndex: 'time'
+          dataIndex: 'reportDate'
         },
         {
           title: '非会员',
@@ -31,23 +31,27 @@ export const schema: TableProps['schema'] = {
           children: [
             {
               title: '客数',
-              dataIndex: 'a1Number'
+              dataIndex: 'customNum0'
             },
             {
-              title: '支付宝/元',
-              dataIndex: 'a1Zfb'
+              title: '支付宝',
+              dataIndex: 'payMethod_1'
             },
             {
-              title: '微信/元',
-              dataIndex: 'a1Wx'
+              title: '微信',
+              dataIndex: 'payMethod_2'
             },
             {
               title: '收钱吧',
-              dataIndex: 'a1Wx'
+              dataIndex: 'payMethod_3'
             },
             {
-              title: '现金/元',
-              dataIndex: 'a1Rmb'
+              title: '现金',
+              dataIndex: 'payMethod_4'
+            },
+            {
+              title: '其他',
+              dataIndex: 'payMethod_100'
             }
           ]
         },
@@ -57,39 +61,57 @@ export const schema: TableProps['schema'] = {
           children: [
             {
               title: '客数',
-              dataIndex: 'a2Number'
+              dataIndex: 'customNum1'
             },
             {
-              title: '会员充值/元',
-              dataIndex: 'a2Zfb'
+              title: '会员充值',
+              dataIndex: 'rechargePrice',
+              format: 'money'
             },
             {
-              title: '会员卡消费/元',
-              dataIndex: 'a2Wx'
-            },
-            {
-              title: '新会员增长',
-              dataIndex: 'a2Rmb'
+              title: '会员卡消费',
+              dataIndex: 'payPrice1',
+              format: 'money'
             },
             {
               title: '不足扣款补充金额',
-              dataIndex: 'a2Rmb'
+              dataIndex: 'replenishPrice',
+              width: 200,
+              format: 'money'
+            }
+          ]
+        },
+        {
+          title: '第三方平台',
+          dataIndex: 'money',
+          children: [
+            {
+              title: '客数',
+              dataIndex: 'customNum2'
+            },
+            {
+              title: '消费金额',
+              dataIndex: 'payPrice2',
+              format: 'money'
             }
           ]
         },
         {
           title: '日总客数',
-          dataIndex: 'money'
+          dataIndex: 'totalCustomNum',
+          fixed: 'right'
         },
         {
-          title: '当日营业额/元',
-          dataIndex: 'money'
-        },
-        {
-          fixed: 'right',
-          title: '操作',
-          dataIndex: 'options'
+          title: '当日营业额',
+          dataIndex: 'totalPayPrice',
+          format: 'money',
+          fixed: 'right'
         }
+        // {
+        //   fixed: 'right',
+        //   title: '操作',
+        //   dataIndex: 'options'
+        // }
       ]
     }
   ],
@@ -190,4 +212,50 @@ export const editSchema = {
   displayType: 'row',
   column: 2,
   maxWidth: '340px'
+}
+
+export type chatType = {
+  /**
+   * 非会员客数
+   * */
+  customNum0: number
+  /**
+   * 会员客数
+   * */
+  customNum1: number
+  /**
+   * 第三方消费客数
+   * */
+  customNum2: number
+  payMethodInfo: { payMethodKey: string; totalPayPrice: number }[]
+  /**
+   * 会员卡消费金额
+   * */
+  payPrice1: number
+  /**
+   * 第三方消费金额
+   * */
+  payPrice2: number
+  /**
+   * 充值金额
+   * */
+  rechargePrice: number
+  /**
+   * 补充金额
+   * */
+  replenishPrice: number
+  /**
+   * 报告日期
+   * */
+  reportDate: string
+  status: 'FINISH' | 'INIT'
+  storeCode: string
+  /**
+   * 总客数
+   * */
+  totalCustomNum: number
+  /**
+   * 总营业额
+   * */
+  totalPayPrice: number
 }
