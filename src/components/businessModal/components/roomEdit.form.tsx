@@ -7,14 +7,14 @@ export const schema = {
   rules: {
     roomId: {
       required: true,
-      message: '请输入房间号',
+      message: '请输入包厢号',
       style: {
         width: '0'
       }
     },
     roomNo: {
       required: true,
-      message: '请输入房间号'
+      message: '请输入包厢号'
     },
     roomCap: {
       required: true,
@@ -23,14 +23,14 @@ export const schema = {
   },
   properties: {
     roomNo: {
-      title: '房间号',
+      title: '包厢号',
       type: 'string',
       props: {
         placeholder: '请输入'
       },
       required: true,
       message: {
-        required: '请输入房间名称'
+        required: '请输入包厢名称'
       },
       widget: 'input'
     },
@@ -48,7 +48,7 @@ export const schema = {
       widget: 'input'
     },
     description: {
-      title: '房间设备描述',
+      title: '包厢设备描述',
       type: 'string',
       widget: 'textArea',
       span: 24
@@ -94,7 +94,7 @@ export default defineComponent({
           schema={schema}
           onFinish={props.onFinish}
           onCancel={props.onCancel}
-          finishBefore="确认提交房间信息吗"
+          finishBefore="确认提交包厢信息吗"
           ref={formRef}
           onFieldsChanged={(v) => {
             formRef.value.changeState({

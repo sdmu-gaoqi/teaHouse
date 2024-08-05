@@ -1,28 +1,18 @@
 import { ProjectTypeItem } from '@/types'
-import { Storage, isEmpty } from 'wa-utils'
+import { Storage, cookie, isEmpty } from 'wa-utils'
 const storage = new Storage('local')
 
 export const isLogin = () => {
-  return !isEmpty(storage.baseGet('Admin-Token'))
+  return storage.get('cToken')
 }
 
 export const logout = () => {
-  storage.remove('Admin-Token')
+  location.hash = '/login'
+  storage.remove('cToken')
 }
 
 export const getToken = () => {
-  const token = storage.baseGet('Admin-Token')
-  return token
-}
-
-export function getParameterByName(name = '', byHash = false) {
-  // @ts-nocheck
-  // eslint-disable-next-line no-param-reassign
-  name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]')
-  const regex = new RegExp(`[\\?&]${name}=([^&#]*)`)
-  let results = regex.exec(location[byHash ? 'hash' : 'search'])
-  // eslint-disable-next-line eqeqeq
-  return results == null ? '' : decodeURIComponent(results[1])
+  return storage.get('cToken')
 }
 
 export const numberRule = {
@@ -38,24 +28,24 @@ export const numberRule = {
     }
   }
 }
-export function formatMoney(value: any) {
-  if (!value) {
-    return '0'
-  }
-  // 将参数转换为浮点数
-  let floatValue = parseFloat(value || 0)
+// export function formatMoney(value: any) {
+//   if (!value) {
+//     return '0'
+//   }
+//   // 将参数转换为浮点数
+//   let floatValue = parseFloat(value || 0)
 
-  // 检查是否是有效的数值
-  if (isNaN(floatValue)) {
-    return 'Invalid value'
-  }
+//   // 检查是否是有效的数值
+//   if (isNaN(floatValue)) {
+//     return 'Invalid value'
+//   }
 
-  // 使用toFixed()方法将浮点数转换为字符串，并指定小数位数为2
-  let formattedValue = floatValue.toFixed(2)
+//   // 使用toFixed()方法将浮点数转换为字符串，并指定小数位数为2
+//   let formattedValue = floatValue.toFixed(2)
 
-  // 返回格式化后的字符串
-  return formattedValue
-}
+//   // 返回格式化后的字符串
+//   return formattedValue
+// }
 
 export const moneyRule = ({
   min = 0,
@@ -87,7 +77,7 @@ export const transformProjectTypeTree = (
 ) => {
   const main = [
     {
-      categoryName: '价目表分类',
+      categoryName: '菜品分类',
       categoryId: 0,
       level: -1,
       categoryItems: data

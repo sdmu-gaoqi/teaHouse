@@ -20,7 +20,7 @@ import { BusinessModalType } from '@/components/businessModal/businessModal.type
 import dayjs from 'dayjs'
 import { Storage, isEmpty } from 'wa-utils'
 import common from '@/servers/common'
-import { formatMoney } from '@/utils'
+import { formatMoney } from 'wa-utils'
 
 type SelectListItem = {
   discountTimeBeforeAfter: 0 | 1 // 0前 1后

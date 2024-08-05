@@ -4,8 +4,8 @@ export enum BusinessModalType {
   会员消费记录 = 'memberConsumptionRecords',
   会员退卡 = 'memberRefund',
   会员结算 = 'memberSettlement',
-  编辑房间 = 'editRoom',
-  编辑价目表 = 'editProject',
+  编辑包厢 = 'editRoom',
+  编辑菜品 = 'editProject',
   订单详情 = 'orderDetail',
   编辑角色 = 'editRole',
   编辑权限点 = 'editPoint',
@@ -23,8 +23,8 @@ export type BusinessModalTypes =
   | BusinessModalType.会员消费记录
   | BusinessModalType.会员退卡
   | BusinessModalType.会员结算
-  | BusinessModalType.编辑房间
-  | BusinessModalType.编辑价目表
+  | BusinessModalType.编辑包厢
+  | BusinessModalType.编辑菜品
   | BusinessModalType.订单详情
   | BusinessModalType.编辑角色
   | BusinessModalType.编辑权限点

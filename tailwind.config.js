@@ -11,7 +11,7 @@ export default {
     extend: {
       colors: {
         ...colors,
-        primary: '#6102fd',
+        primary: '#bb5717',
         fontPrimary: '#6a6d82'
       }
     }
@@ -25,7 +25,7 @@ export default {
           userSelect: 'none',
           fontWeight: 'bold',
           fontSize: '12px',
-          color: '#6102fd',
+          color: '#bb5717',
           cursor: 'pointer',
           '&:hover': {
             opacity: '0.6'

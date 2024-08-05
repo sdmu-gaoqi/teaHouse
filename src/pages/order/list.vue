@@ -130,7 +130,7 @@ import { BusinessModalType } from '@/components/businessModal/businessModal.type
 import common from '@/servers/common'
 import { message } from 'ant-design-vue'
 import { useAccess } from '@/hooks'
-import { formatMoney } from '@/utils'
+import { formatMoney } from 'wa-utils'
 import { MemberType } from '@/types'
 const { orderSettlement } = useAccess()
 

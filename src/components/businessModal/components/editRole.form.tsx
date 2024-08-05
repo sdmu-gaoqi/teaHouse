@@ -1,5 +1,4 @@
-import { MemberType, payTypes } from '@/types'
-import { formatMoney } from '@/utils'
+import { formatMoney } from 'wa-utils'
 import { FormRender, FormRenderProps, Schema } from 'store-operations-ui'
 import { defineComponent, onMounted, ref } from 'vue'
 import { editSchema } from '@/pages/role/config'

@@ -1,7 +1,7 @@
 import { TableProps } from 'store-operations-ui'
 
 export const schema: TableProps['schema'] = {
-  title: '房间类型',
+  title: '包厢类型',
   form: {
     search: true,
     export: false,
@@ -9,7 +9,7 @@ export const schema: TableProps['schema'] = {
     fields: [
       {
         type: 'select',
-        label: '房间类型',
+        label: '包厢类型',
         key: 'type'
       }
     ]
@@ -25,7 +25,7 @@ export const schema: TableProps['schema'] = {
           dataIndex: 'no'
         },
         {
-          title: '房间类型',
+          title: '包厢类型',
           dataIndex: 'type'
         },
         {
@@ -55,13 +55,13 @@ export const schema: TableProps['schema'] = {
 
 export const editSchema = {
   rules: {
-    type: [{ required: true, message: '请输入房间类型' }],
+    type: [{ required: true, message: '请输入包厢类型' }],
     num: [{ required: true, message: '请输入容纳客数' }]
   },
   type: 'object',
   properties: {
     type: {
-      title: '房间类型',
+      title: '包厢类型',
       type: 'string',
       props: {
         placeholder: '请输入'

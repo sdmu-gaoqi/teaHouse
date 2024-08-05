@@ -4,7 +4,7 @@
 
 import common from '@/servers/common'
 import { RoyaltyType } from '@/types'
-import { formatMoney } from '@/utils'
+import { formatMoney } from 'wa-utils'
 import { FormRender, Schema } from 'store-operations-ui'
 import { defineComponent, onMounted, ref, watch } from 'vue'
 

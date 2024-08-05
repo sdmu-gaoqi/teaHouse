@@ -1,7 +1,7 @@
 import { TableProps } from 'store-operations-ui'
 
 export const schema: TableProps['schema'] = {
-  title: '房间列表',
+  title: '包厢列表',
   form: {
     search: true,
     export: false,
@@ -9,8 +9,13 @@ export const schema: TableProps['schema'] = {
     fields: [
       {
         type: 'search',
-        label: '房间号',
-        key: 'roomNo'
+        label: '包厢号',
+        key: 'code'
+      },
+      {
+        type: 'search',
+        label: '包厢名称',
+        key: 'name'
       },
       {
         type: 'range',
@@ -35,16 +40,36 @@ export const schema: TableProps['schema'] = {
           isIndex: true
         },
         {
-          title: '房间号',
-          dataIndex: 'roomNo'
+          title: '包厢号',
+          dataIndex: 'code'
+        },
+        {
+          title: '包厢名称',
+          dataIndex: 'name'
+        },
+        {
+          title: '包厢类型',
+          dataIndex: 'type'
+        },
+        {
+          title: '最低消费/元',
+          dataIndex: 'lowestSpendPrice'
+        },
+        {
+          title: '消费时长/小时',
+          dataIndex: 'lowestSpendPrice'
+        },
+        {
+          title: '超时收费/元',
+          dataIndex: 'lowestSpendPrice'
+        },
+        {
+          title: '启用状态',
+          dataIndex: 'status'
         },
         {
           title: '容纳客数',
-          dataIndex: 'roomCap'
-        },
-        {
-          title: '房间设备描述',
-          dataIndex: 'description'
+          dataIndex: 'capacityNum'
         },
         {
           title: '创建日期',
@@ -70,31 +95,42 @@ export const schema: TableProps['schema'] = {
 export const editSchema = {
   type: 'object',
   rules: {
-    roomNo: {
+    coode: {
       required: true,
-      message: '请输入房间号'
+      message: '请输入包厢号'
     },
-    roomCap: {
+    type: {
       required: true,
-      message: '请输入容纳客数'
+      message: '请选择包厢类型'
+    },
+    lowestPrice: {
+      required: true,
+      message: '请输入最低消费'
+    },
+    z1: {
+      required: true,
+      message: '请输入消费时长'
+    },
+    z2: {
+      required: true,
+      message: '请输入超时收费'
     }
   },
   properties: {
-    roomNo: {
-      title: '房间号',
+    code: {
+      title: '包厢号',
       type: 'string',
       props: {
         placeholder: '请输入'
       },
       required: true,
       message: {
-        required: '请输入房间名称'
+        required: '请输入包厢名称'
       },
       widget: 'input'
     },
-    占位: {},
-    roomCap: {
-      title: '容纳客数',
+    type: {
+      title: '包厢类型',
       type: 'string',
       props: {
         placeholder: '请输入'
@@ -105,11 +141,20 @@ export const editSchema = {
       },
       widget: 'input'
     },
-    description: {
-      title: '房间设备描述',
-      type: 'string',
-      widget: 'textArea',
-      span: 24
+    lowestPrice: {
+      title: '最低消费',
+      type: 'number',
+      widget: 'input'
+    },
+    z1: {
+      title: '消费时长',
+      type: 'number',
+      widget: 'input'
+    },
+    z2: {
+      title: '超时收费',
+      type: 'number',
+      widget: 'input'
     },
     remark: {
       title: '备注',

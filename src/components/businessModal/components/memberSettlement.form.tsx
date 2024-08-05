@@ -3,7 +3,7 @@
  * */
 import common from '@/servers/common'
 import { MemberType, payTypes, threePayTypes } from '@/types'
-import { formatMoney } from '@/utils'
+import { formatMoney } from 'wa-utils'
 import { Input, Modal, Radio, Switch, Table, message } from 'ant-design-vue'
 import {
   FormCard,

@@ -1,10 +1,15 @@
 <template>
   <TableRender
     :schema="schema"
-    :request="store.loginList"
+    :request="storeListRequest"
     :tableProps="{ scroll: { x: 1600 } }"
     ref="tableRef"
   >
+    <template #formButton
+      ><a-button type="primary" :onClick="goAdd" class="ml-[10px]"
+        >新增门店</a-button
+      ></template
+    >
     <template #bodyCell="{ data }">
       <div
         v-if="data?.column?.dataIndex === 'options'"
@@ -47,12 +52,14 @@ import { BusinessModalType } from '@/components/businessModal/businessModal.type
 import { ref } from 'vue'
 import dayjs from 'dayjs'
 import { message } from 'ant-design-vue'
-import { ossOrigin } from '@/constant'
+import { useRouter } from 'vue-router'
+import { storeListRequest } from '@/service/store'
 
 const open = ref(false)
 const formState = ref<any>({})
 const type = ref<'view' | 'edit'>('view')
 const tableRef = ref()
+const router = useRouter()
 
 const edit = (data: any, t: 'view' | 'edit') => {
   open.value = true
@@ -87,6 +94,10 @@ const onFinish = async (v: any) => {
   message.success('更新成功')
   formState.value = {}
   open.value = false
+}
+
+const goAdd = () => {
+  router.push('/stores/add')
 }
 
 const store = new Store()

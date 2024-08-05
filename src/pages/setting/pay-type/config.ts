@@ -46,11 +46,11 @@ export const editSchema = {
   rules: {
     name: {
       required: true,
-      message: '请输入房间名称'
+      message: '请输入包厢名称'
     },
     type: {
       required: true,
-      message: '请选择房间类型'
+      message: '请选择包厢类型'
     }
   },
   properties: {
@@ -62,7 +62,7 @@ export const editSchema = {
       },
       required: true,
       message: {
-        required: '请输入房间名称'
+        required: '请输入包厢名称'
       },
       widget: 'input'
     },

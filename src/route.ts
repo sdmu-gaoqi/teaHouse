@@ -15,20 +15,17 @@ import { toRaw } from 'vue'
 import { transformRoute } from './utils/menu'
 import { adminPerm } from './constant'
 import { getToken } from './utils'
+import request from './service'
+import { userInfoRequest } from './service/user'
 
 const baseRouter: any[] = [
   {
-    path: 'workbench',
-    name: '工作台',
-    component: () => import('./pages/workbench/workbench'),
+    path: 'home',
+    name: '首页',
+    component: () => import('./pages/home/home.vue'),
     meta: {
-      key: 'workbench'
+      key: 'home'
     }
-  },
-  {
-    path: '/password',
-    name: '修改密码',
-    component: () => import('./pages/user/password')
   },
   {
     path: '/403',
@@ -230,6 +227,15 @@ const asyncRouter: any[] = [
         }
       },
       {
+        path: 'add',
+        name: '新增门店',
+        component: () => import('./pages/stores/list.vue'),
+        meta: {
+          access: ['storeList'],
+          key: 'stores-list'
+        }
+      },
+      {
         path: 'updates/list',
         name: '门店动态列表',
         component: () => import('./pages/storeUpdates/list.vue'),
@@ -335,11 +341,11 @@ const asyncRouter: any[] = [
     children: [
       {
         path: '/room',
-        name: '房间管理',
+        name: '包厢管理',
         children: [
           {
             path: 'add',
-            name: '新增房间',
+            name: '新增包厢',
             component: () => import('./pages/setting/room/add.vue'),
             meta: {
               access: ['editRoom'],
@@ -348,7 +354,7 @@ const asyncRouter: any[] = [
           },
           {
             path: 'list',
-            name: '房间列表',
+            name: '包厢列表',
             component: () => import('./pages/setting/room/list.vue'),
             meta: {
               access: ['roomList'],
@@ -359,27 +365,27 @@ const asyncRouter: any[] = [
       },
       {
         path: '/room-type',
-        name: '房间类型',
+        name: '包厢类型',
         children: [
           {
             path: 'list',
-            name: '房间类型列表',
+            name: '包厢类型列表',
             component: () => import('./pages/setting/room-type/list.vue')
           },
           {
             path: 'add',
-            name: '新增房间类型',
+            name: '新增包厢类型',
             component: () => import('./pages/setting/room-type/add.vue')
           }
         ]
       },
       {
         path: 'project',
-        name: '价目表信息',
+        name: '菜品信息',
         children: [
           {
             path: 'list',
-            name: '价目表列表',
+            name: '菜品列表',
             component: () => import('./pages/setting/project/list.vue'),
             meta: {
               access: ['projectList'],
@@ -490,9 +496,9 @@ const route = createRouter({
     {
       path: '',
       component: Layout,
-      name: '门店管理系统',
+      name: '沐茗茶舍',
       redirect: () => {
-        return { path: '/workbench' }
+        return { path: '/home' }
       },
       children: [...baseRouter, ...asyncRouter]
     },
@@ -513,63 +519,24 @@ const initUserInfo = async () => {
   const s = new S()
   const store = useStore()
   const { dispatch, state } = store
-  if (!isEmpty(state.userInfo.perms)) {
-    return toRaw(state.userInfo)
-  }
-  const res = await user.getUserInfo()
-  const urlSearch = new URLSearchParams(location.search)
-  if (!res?.user?.storeHeadquartersCode) {
-    return
-  }
-  urlSearch.set('storeHeadquartersCode', res?.user?.storeHeadquartersCode)
-  urlSearch.set('storeCode', res?.user?.currentStoreCode)
-  location.search = urlSearch.toString()
-  const storeList = await s.loginList({})
-  const currentStoreCode = res?.user?.currentStoreCode
-  const currentStoreName = storeList?.rows?.find(
-    (item) => item.code == currentStoreCode
-  )?.name
+  const res = await userInfoRequest()
   dispatch('userInfo/changeUser', {
     data: {
-      ...res.user,
-      currentStoreName
+      ...res.data
     }
   })
-  dispatch('userInfo/setPerms', { data: res.permissions })
-  dispatch('common/changeMenus', { data: res.permissions })
-  transformRoute(res.permissions)
-  return {
-    perms: res.permissions,
-    userInfo: res.user
-  }
+  return res
 }
 
 route.beforeEach(async (to, from, next) => {
-  const toPath = to?.path
-  if (getToken() && ['/login'].includes(toPath)) {
-    next('/workbench')
-    return
-  }
-  if (!['/login', '/test'].includes(toPath) && !getToken()) {
-    next('/login')
-    return
-  }
-  if (['/login', '/404', '/'].includes(toPath) || !getToken()) {
+  console.log(to, 'to')
+  if (to?.path.includes('login')) {
     next()
     return
   }
-  let { perms = [] } = await initUserInfo()
-  const menuHasPerm = !isEmpty(to?.meta?.access)
-  if (menuHasPerm) {
-    const hasPerm =
-      to?.meta?.access?.some((item) => perms?.includes(item)) ||
-      perms.some((item) => item === adminPerm)
-    if (!hasPerm) {
-      next('/404')
-      return
-    }
-  }
+  await initUserInfo()
   next()
+  return
 })
 
 export default route

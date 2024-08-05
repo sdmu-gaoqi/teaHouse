@@ -1,5 +1,5 @@
 <template>
-  <FormCard title="新增房间">
+  <FormCard title="新增包厢">
     <template #content>
       <FormRender
         :on-finish="onFinish"

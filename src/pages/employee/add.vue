@@ -24,7 +24,7 @@ import role from '@/servers/role'
 import employee from '@/servers/employee'
 import { message } from 'ant-design-vue'
 import store from '@/store/store'
-import { getParameterByName } from '@/utils'
+import { getParameterByName } from 'wa-utils'
 import dayjs from 'dayjs'
 
 const {

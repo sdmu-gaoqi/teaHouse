@@ -13,7 +13,10 @@
         <a type="link" class="table-btn">编辑</a>
         <a type="link" class="table-btn-danger last">删除</a>
       </div>
-      <a-switch v-else-if="data?.column?.dataIndex === 'status'"></a-switch>
+      <a-switch
+        :checked="+data?.record !== 0"
+        v-else-if="data?.column?.dataIndex === 'status'"
+      ></a-switch>
       <template v-else>{{ data.text }}</template>
     </template>
   </TableRender>

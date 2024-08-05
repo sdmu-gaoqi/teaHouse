@@ -78,7 +78,7 @@ export default defineComponent({
       return (
         <FormRender
           schema={editSchema}
-          finishBefore="确认提交此项目信息吗"
+          finishBefore="确认提交此菜品信息吗"
           onFinish={(v: any) =>
             props.onFinish({
               ...(v || {}),

@@ -7,7 +7,16 @@ import store from './store/store'
 import './styles/global.scss'
 import './styles/tailwind.global.scss'
 import 'store-operations-ui/dist/style.css'
+import { changeTheme } from 'store-operations-ui'
 
-document.title = '日欣月益门店管理系统'
+document.title = '沐茗茶舍'
+
+changeTheme({
+  token: {
+    colorPrimary: '#bb5717',
+    colorTextBase: '#6a6d82',
+    colorBgBase: '#fff'
+  }
+})
 
 createApp(App).use(Antd).use(route).use(store).mount('#app')

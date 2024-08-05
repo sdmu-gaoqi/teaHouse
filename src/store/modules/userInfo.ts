@@ -20,10 +20,10 @@ export interface UserState {
     | 'permSet' // 权限点设置
     | 'turnoverManage' // 营业额标准设置
     | 'payTypeManage' // 支付方式管理
-    | 'projectList' // 价目表列表
-    | 'editProject' // 价目表编辑
-    | 'roomList' // 房间列表
-    | 'editRoom' // 编辑房间
+    | 'projectList' // 菜品列表
+    | 'editProject' // 菜品编辑
+    | 'roomList' // 包厢列表
+    | 'editRoom' // 编辑包厢
     | 'operateLog' // 系统操作日志
     | 'loginLog' // 系统登录日志
     | 'orderSettlement' // 订单结算

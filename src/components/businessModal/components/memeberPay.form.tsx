@@ -1,6 +1,6 @@
 import { discounts } from '@/constant'
 import { MemberType, payTypes } from '@/types'
-import { formatMoney } from '@/utils'
+import { formatMoney } from 'wa-utils'
 import { Input } from 'ant-design-vue'
 import { FormRender, FormRenderProps, Schema } from 'store-operations-ui'
 import { defineComponent, onMounted, ref, toRaw } from 'vue'

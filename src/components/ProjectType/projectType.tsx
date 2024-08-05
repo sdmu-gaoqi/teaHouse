@@ -122,9 +122,9 @@ const ProjectType = defineComponent({
     const treeData = ref<ProjectTypeItem[]>()
 
     const init = async () => {
-      const res: any = await common.projectTypeList()
-      const data = transformProjectTypeTree(res.data)
-      treeData.value = data
+      // const res: any = await common.projectTypeList()
+      // const data = transformProjectTypeTree(res.data)
+      // treeData.value = data
     }
 
     onMounted(() => {

@@ -22,10 +22,10 @@ const useAccess = () => {
     turnoverManage:
       perms.includes('turnoverManage') || perms.includes(adminPerm), // 营业额标准设置
     payTypeManage: perms.includes('payTypeManage') || perms.includes(adminPerm), // 支付方式管理
-    projectList: perms.includes('projectList') || perms.includes(adminPerm), // 价目表列表
-    editProject: perms.includes('editProject') || perms.includes(adminPerm), // 价目表编辑
-    roomList: perms.includes('roomList') || perms.includes(adminPerm), // 房间列表
-    editRoom: perms.includes('editRoom') || perms.includes(adminPerm), // 编辑房间
+    projectList: perms.includes('projectList') || perms.includes(adminPerm), // 菜品列表
+    editProject: perms.includes('editProject') || perms.includes(adminPerm), // 菜品编辑
+    roomList: perms.includes('roomList') || perms.includes(adminPerm), // 包厢列表
+    editRoom: perms.includes('editRoom') || perms.includes(adminPerm), // 编辑包厢
     operateLog: perms.includes('operateLog') || perms.includes(adminPerm), // 系统操作日志
     loginLog: perms.includes('loginLog') || perms.includes(adminPerm), // 系统登录日志
     orderSettlement:

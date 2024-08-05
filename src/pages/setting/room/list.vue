@@ -1,13 +1,21 @@
 <template>
   <TableRender
     :schema="schema"
-    :request="room.list"
-    :table-props="{ scroll: { x: 900 } }"
+    :request="
+      (params) => {
+        return getRoom({
+          ...(params || {}),
+          pageNo: params?.pageNum || 1,
+          pageSize: params?.pageSize || 20
+        })
+      }
+    "
+    :table-props="{ scroll: { x: 2000 } }"
     ref="tableRef"
   >
     <template #formButton>
-      <Button type="primary" :onClick="goAdd" class="ml-[10px]" v-if="editRoom"
-        >新增房间</Button
+      <Button type="primary" :onClick="goAdd" class="ml-[10px]"
+        >新增包厢</Button
       ></template
     >
     <template #bodyCell="{ data }">
@@ -15,16 +23,11 @@
         v-if="data?.column?.dataIndex === 'options'"
         class="flex justify-center items-center"
       >
-        <a
-          type="link"
-          class="table-btn"
-          @click="() => edit(data.record)"
-          v-if="editRoom"
+        <a type="link" class="table-btn" @click="() => edit(data.record)"
           >编辑</a
         >
         <a-popconfirm
           title="是否确认删除"
-          v-if="editRoom"
           :onConfirm="
             () => {
               room
@@ -46,12 +49,15 @@
           <a type="link" class="table-btn-danger last">删除</a>
         </a-popconfirm>
       </div>
+      <template v-else-if="data?.column?.dataIndex === 'status'">
+        <a-switch></a-switch>
+      </template>
       <template v-else>{{ data.customer }}</template>
     </template>
   </TableRender>
   <BusinessModal
     :open="open"
-    :type="BusinessModalType.编辑房间"
+    :type="BusinessModalType.编辑包厢"
     :onCancel="() => (open = false)"
     :onFinish="onFinish"
     :formState="formState"
@@ -69,6 +75,7 @@ import BusinessModal from '@/components/businessModal/businessModal'
 import { BusinessModalType } from '@/components/businessModal/businessModal.type'
 import { sleep } from 'wa-utils'
 import { useAccess } from '@/hooks'
+import request from '@/service'
 
 const { editRoom } = useAccess()
 
@@ -83,6 +90,17 @@ const edit = (data: any) => {
 const tableRef = ref()
 
 const room = new Room()
+
+const getRoom = async (data) => {
+  const res = await request.request({
+    url: '/admin-api/admin-api/guest-room/page',
+    params: data
+  })
+  return {
+    rows: res?.data?.list,
+    total: res?.data?.total
+  }
+}
 
 const router = useRouter()
 const goAdd = () => {

@@ -13,6 +13,10 @@
 //   font-size: calc(100vw / 120);
 // }
 
+:root {
+  --main-color: #bb5717 !important;
+}
+
 html {
   font-size: 16px;
   a {
@@ -88,7 +92,7 @@ html {
 }
 
 .ant-layout-sider-trigger {
-  background-color: #6102fd !important;
+  background-color: #bb5717 !important;
   svg {
     path {
       fill: #fff;
@@ -98,7 +102,7 @@ html {
 
 .ant-menu-submenu-title:hover {
   background: #fff !important;
-  color: #6102fd !important;
+  color: #bb5717 !important;
 }
 .ant-layout-sider-collapsed {
   .ant-menu-submenu-title {
@@ -125,7 +129,7 @@ html {
       opacity: 0.9;
       &:hover {
         a {
-          color: #6102fd !important;
+          color: #bb5717 !important;
         }
       }
     }

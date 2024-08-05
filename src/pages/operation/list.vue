@@ -51,7 +51,7 @@ import BusinessModal from '@/components/businessModal/businessModal'
 import { BusinessModalType } from '@/components/businessModal/businessModal.type'
 import { ref } from 'vue'
 import { request } from 'store-request'
-import { formatMoney } from '@/utils'
+import { formatMoney } from 'wa-utils'
 
 const router = useRouter()
 

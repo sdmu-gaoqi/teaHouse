@@ -1,5 +1,5 @@
 <template>
-  <TableRender :schema="schema" :request="common.projectList" ref="tableRef">
+  <TableRender :schema="schema" :request="getProject" ref="tableRef">
     <template #formButton
       ><a-button
         type="primary"
@@ -75,7 +75,7 @@
     </template></TableRender
   >
   <BusinessModal
-    :type="BusinessModalType.编辑价目表"
+    :type="BusinessModalType.编辑菜品"
     :open="open"
     :onCancel="() => (open = false)"
     :formState="detail"
@@ -93,8 +93,9 @@ import { ref, toRaw } from 'vue'
 import BusinessModal from '@/components/businessModal/businessModal'
 import { BusinessModalType } from '@/components/businessModal/businessModal.type'
 import { useAccess } from '@/hooks'
+import request from '@/service'
 
-const { editProject } = useAccess()
+const { editProject } = { editProject: true }
 
 const open = ref(false)
 const detail = ref<any>({})
@@ -118,5 +119,21 @@ const onFinish = async (value: any) => {
   message.success('编辑成功')
   open.value = false
   tableRef.value.run(tableRef.value.params?.[0])
+}
+
+const getProject = async (data) => {
+  const res = await request.request({
+    url: '/admin-api/admin-api/goods/page',
+    data: {
+      pageNo: data?.pageNum,
+      pageSize: data?.pageSize,
+      name: data?.name
+    },
+    method: 'post'
+  })
+  return {
+    rows: res?.data?.list,
+    total: res?.data?.total
+  }
 }
 </script>

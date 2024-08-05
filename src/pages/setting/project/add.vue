@@ -8,7 +8,7 @@
         className="pro-form"
         rowClassName="pro-form-row"
         bodyClassName="project-body"
-        finishBefore="确认提交此项目信息吗"
+        finishBefore="确认提交此菜品信息吗"
       >
         <template #left>
           <ProjectType
@@ -32,6 +32,7 @@ import { message } from 'ant-design-vue'
 import { useStore } from 'vuex'
 import ProjectType from '@/components/ProjectType/projectType'
 import { ref, toRaw } from 'vue'
+import request from '@/service'
 
 const {
   params: { id }
@@ -48,17 +49,17 @@ schema.properties.store.defaultValue =
 const router = useRouter()
 
 const onFinish = async (value: Record<string, any>) => {
-  if (isEdit) {
-    await common.updateProject({
-      ...value,
-      serviceProjectId: id,
-      categoryId: treeRef.value.selectedKeys?.[0] || ''
+  if (!isEdit) {
+    await request.request({
+      url: '/admin-api/admin-api/goods/save',
+      data: value,
+      method: 'post'
     })
   } else {
-    await common.addProject({
-      ...value,
-      categoryId: treeRef.value.selectedKeys?.[0] || '',
-      coverFileId: value?.image?.[0]?.response?.data?.fileId
+    await request.request({
+      url: '/admin-api/admin-api/goods/update',
+      data: value,
+      method: 'post'
     })
   }
   message.success('保存成功')

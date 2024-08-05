@@ -7,7 +7,6 @@ import {
   StatusMap,
   payTypes
 } from '@/types'
-import { formatMoney } from '@/utils'
 import { message } from 'ant-design-vue'
 import { FormRender, FormRenderProps, Schema } from 'store-operations-ui'
 import { defineComponent, onMounted, reactive, ref, watch } from 'vue'

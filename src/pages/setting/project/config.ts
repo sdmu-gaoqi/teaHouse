@@ -6,7 +6,7 @@ import { Storage } from 'wa-utils'
 const storage = new Storage('local')
 
 export const schema: TableProps['schema'] = {
-  title: '服务项目列表',
+  title: '菜品列表',
   form: {
     search: true,
     export: false,
@@ -32,50 +32,19 @@ export const schema: TableProps['schema'] = {
         },
         {
           fixed: true,
-          title: '项目分类',
+          title: '菜品编码',
           dataIndex: 'categoryName',
           width: 100
         },
         {
-          title: '服务项目',
+          title: '菜品名称',
           dataIndex: 'serviceName',
           width: 250
         },
         {
-          title: '项目价格 /元',
+          title: '价格 /元',
           dataIndex: 'price',
           format: 'money'
-        },
-        {
-          title: '项目时长/分钟',
-          dataIndex: 'duration',
-          width: 150
-        },
-        {
-          title: '启用状态',
-          dataIndex: 'enabled'
-        },
-        {
-          title: '所属门店',
-          dataIndex: 'storeName'
-        },
-        {
-          title: '排钟提成/元',
-          dataIndex: 'pzRoyalty',
-          format: 'money'
-        },
-        {
-          title: '点钟提成/元',
-          dataIndex: 'dzRoyalty',
-          format: 'money'
-        },
-        {
-          title: '是否参与折扣优惠',
-          dataIndex: 'canDiscount',
-          options: [
-            { label: '是', value: 1 },
-            { label: '否', value: 0 }
-          ]
         },
         {
           title: '创建日期',
@@ -113,11 +82,8 @@ export const editSchema = {
     pzRoyalty: [{ required: true, message: '请输入' }]
   },
   properties: {
-    'op-group-0': {
-      title: '项目基础信息'
-    },
-    serviceName: {
-      title: '项目名称',
+    name: {
+      title: '菜品名称',
       type: 'string',
       props: {
         placeholder: '请输入'
@@ -128,22 +94,12 @@ export const editSchema = {
       },
       widget: 'input'
     },
-    price: {
-      title: '项目价格',
+    unitPrice: {
+      title: '价格',
       type: 'number',
       props: {
         placeholder: '请输入',
         type: 'number'
-      },
-      widget: 'input'
-    },
-    duration: {
-      title: '项目时长',
-      type: 'number',
-      props: {
-        placeholder: '请输入',
-        suffix: 'time',
-        precision: 0
       },
       widget: 'input'
     },
@@ -168,37 +124,37 @@ export const editSchema = {
         ]
       }
     },
-    image: {
-      title: '封面图片',
-      type: 'uploadMultiple',
-      span: 24,
-      props: {
-        uploadProps: {
-          max: 1,
-          accept: 'image/jpg,image/png,image/jpeg',
-          action: `${ossOrigin}/file/uploadPic`,
-          headers: {
-            Authorization: `Bearer ${storage.baseGet('Admin-Token')}`
-          },
-          beforeUpload: (data: any) => {
-            if (data?.size / 1024 / 1024 > 10) {
-              message.error('图片不能超出10M')
-              return Promise.reject('图片不能超出10M')
-            }
-            return true
-          }
-        },
-        change: (file: any) => {
-          const isErr =
-            file?.file?.response?.code != 200 && file?.file?.status === 'done'
-          if (isErr) {
-            message.error(file?.file?.response?.msg)
-            file.fileList?.pop()
-          }
-          return file
-        }
-      }
-    },
+    // image: {
+    //   title: '封面图片',
+    //   type: 'uploadMultiple',
+    //   span: 24,
+    //   props: {
+    //     uploadProps: {
+    //       max: 1,
+    //       accept: 'image/jpg,image/png,image/jpeg',
+    //       action: `${ossOrigin}/file/uploadPic`,
+    //       headers: {
+    //         Authorization: `Bearer ${storage.baseGet('Admin-Token')}`
+    //       },
+    //       beforeUpload: (data: any) => {
+    //         if (data?.size / 1024 / 1024 > 10) {
+    //           message.error('图片不能超出10M')
+    //           return Promise.reject('图片不能超出10M')
+    //         }
+    //         return true
+    //       }
+    //     },
+    //     change: (file: any) => {
+    //       const isErr =
+    //         file?.file?.response?.code != 200 && file?.file?.status === 'done'
+    //       if (isErr) {
+    //         message.error(file?.file?.response?.msg)
+    //         file.fileList?.pop()
+    //       }
+    //       return file
+    //     }
+    //   }
+    // },
     remark: {
       title: '备注',
       type: 'string',
@@ -207,72 +163,6 @@ export const editSchema = {
       },
       widget: 'textArea',
       span: 24
-    },
-    'op-group-1': {
-      title: '项目提成信息'
-    },
-    'op-desc-1': {
-      title: '注(线下：顾客直接在收银台买单；线上：顾客在美团团购买单)'
-    },
-    pzRoyalty: {
-      title: '线下排钟提成',
-      type: 'number',
-      props: {
-        placeholder: '请输入',
-        suffix: 'money',
-        type: 'number'
-      },
-      widget: 'input'
-    },
-    dzRoyalty: {
-      title: '线下点钟提成',
-      type: 'number',
-      props: {
-        placeholder: '请输入',
-        suffix: 'money',
-        type: 'number'
-      },
-      widget: 'input'
-    },
-    pzRoyaltyOl: {
-      title: '线上排钟提成',
-      type: 'number',
-      props: {
-        placeholder: '请输入',
-        suffix: 'money',
-        type: 'number'
-      },
-      widget: 'input'
-    },
-    dzRoyaltyOl: {
-      title: '线上点钟提成',
-      type: 'number',
-      props: {
-        placeholder: '请输入',
-        suffix: 'money',
-        type: 'number'
-      },
-      widget: 'input'
-    },
-    ztRoyalty: {
-      title: '线下自推提成',
-      type: 'number',
-      props: {
-        placeholder: '请输入',
-        suffix: 'money',
-        type: 'number'
-      },
-      widget: 'input'
-    },
-    ztRoyaltyOl: {
-      title: '线上自推提成',
-      type: 'number',
-      props: {
-        placeholder: '请输入',
-        suffix: 'money',
-        type: 'number'
-      },
-      widget: 'input'
     }
   },
   displayType: 'row',

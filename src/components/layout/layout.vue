@@ -2,7 +2,7 @@
   <a-layout>
     <a-layout-sider
       width="160"
-      style="background: #6102fd"
+      style="background: #bb5717"
       class="shadow-lg sider"
       collapsible
       collapsedWidth="50"
@@ -88,7 +88,6 @@
                   查看版本日志
                 </div></template
               >
-              <div @click="goVersion">V1.5.0</div>
             </a-tooltip>
             <img
               :src="full ? notFullImg : fullImg"
@@ -105,7 +104,7 @@
                 src="https://tse1-mm.cn.bing.net/th/id/OIP-C.aMo33QDFG8U9D5fPZqmB9wHaHa"
                 class="w-[30px] h-[30px] mr-[5px] rounded-full"
               />
-              {{ userInfo?.userInfo?.userName || '未登录' }}
+              {{ userInfo?.userInfo?.username || '未登录' }}
             </div>
             <template #overlay>
               <div>
@@ -156,8 +155,7 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
 import { useRouter, RouterLink, useRoute } from 'vue-router'
-import { isLogin, logout } from '@/utils'
-import user from '@/servers/user'
+import { getToken, isLogin, logout } from '@/utils'
 import scrollBar from 'smooth-scrollbar'
 import { useRequest } from 'vue-hooks-plus'
 import { Store as S } from 'store-request'
@@ -166,6 +164,7 @@ import { useStore } from 'vuex'
 import fullImg from '@/assets/全屏.svg'
 import notFullImg from '@/assets/退出全屏.svg'
 import screenfull from 'screenfull'
+import request from '@/service'
 const canFull = document.fullscreenEnabled
 const routeData = useRoute()
 
@@ -182,7 +181,7 @@ const changeFull = () => {
 
 const s = new S()
 const store = useStore()
-const userInfo = store.state.userInfo || {}
+const userInfo = store.state.userInfo?.userInfo || {}
 const menus = store.state.common.menus || []
 
 const activeKey = ref<string[]>([])
@@ -190,25 +189,6 @@ const matched = ref<Record<string, any>[]>([])
 const routerData = ref<Record<string, any>>({})
 const router = useRouter()
 const urlSearch = new URLSearchParams(location.search)
-useRequest(() => s.list({ pageSize: 50 }), {
-  onSuccess: async (res: any) => {
-    const currentStoreCode = userInfo?.userInfo?.currentStoreCode
-    const hasLoginStore = res?.data?.find(
-      (item: any) => item?.code === currentStoreCode
-    )
-    if (!hasLoginStore) {
-      urlSearch.set('storeCode', res?.data?.[0]?.code)
-      await common.changeStore({ storeCode: res?.data?.[0]?.code })
-      location.search = `?${urlSearch?.toString()}`
-      return
-    }
-    store.dispatch('common/setStores', {
-      data: res?.data
-    })
-  }
-}) as any
-
-const path = useRoute()
 
 watch(
   () => router.currentRoute.value,
@@ -218,6 +198,7 @@ watch(
   },
   { immediate: true }
 )
+
 onMounted(() => {
   const dom = document.querySelector('#sideMenu') as HTMLElement
   if (dom && dom.classList.contains('ant-menu-inline')) {
@@ -240,8 +221,6 @@ watch(
 )
 
 const onLogout = async () => {
-  await user.logout()
-  logout()
   router.push('/login')
 }
 
@@ -276,7 +255,7 @@ const goVersion = () => {
 .sider {
   .ant-menu.ant-menu-root.ant-menu-vertical,
   .ant-menu.ant-menu-root.ant-menu-inline {
-    background: #6102fd;
+    background: #bb5717;
     color: #fff;
   }
 }

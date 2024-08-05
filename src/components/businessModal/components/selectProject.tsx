@@ -1,13 +1,11 @@
 /**
  * @file 选择项目
  * */
-import { MemberType, payTypes } from '@/types'
-import { formatMoney } from '@/utils'
+
 import { FormRenderProps, TableProps, TableRender } from 'store-operations-ui'
-import { defineComponent, onMounted, ref, toRaw, watch } from 'vue'
+import { defineComponent, ref, toRaw } from 'vue'
 import common from '@/servers/common'
 import ProjectType from '@/components/ProjectType/projectType'
-import { modalProps } from 'ant-design-vue/es/modal/Modal'
 
 export default defineComponent({
   props: {

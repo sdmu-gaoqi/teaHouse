@@ -2,7 +2,7 @@
   <a-config-provider
     :theme="{
       token: {
-        colorPrimary: '#6102fd',
+        colorPrimary: '#bb5717',
         colorTextBase: '#6a6d82',
         colorBgBase: '#fff'
       }

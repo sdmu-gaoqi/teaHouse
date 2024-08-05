@@ -21,12 +21,6 @@ interface State {
 
 const defaultMenu = [
   {
-    title: '工作台',
-    key: 'workbench',
-    path: '/workbench',
-    icon: 工作台
-  },
-  {
     title: '订单管理',
     access: ['orderList', 'orderOption'],
     key: 'order',
@@ -63,75 +57,53 @@ const defaultMenu = [
     path: '/member',
     icon: 会员
   },
-  {
-    title: '员工管理',
-    key: 'employee',
-    access: ['employeeList'],
-    children: [
-      {
-        title: '员工列表',
-        path: '/employee/list',
-        key: 'employee-list',
-        access: ['employeeList']
-      }
-      // {
-      //   title: '员工请假列表',
-      //   path: '/employee/leave/list',
-      //   key: 'employee-leave-list'
-      // }
-    ],
-    path: '/employee',
-    icon: 员工
-  },
-  {
-    title: '角色管理',
-    key: 'role',
-    access: ['roleList'],
-    children: [
-      {
-        title: '角色列表',
-        path: '/role/list',
-        key: 'role-list',
-        access: ['roleList']
-      }
-    ],
-    path: '/role',
-    icon: 角色
-  },
+  // {
+  //   title: '员工管理',
+  //   key: 'employee',
+  //   access: ['employeeList'],
+  //   children: [
+  //     {
+  //       title: '员工列表',
+  //       path: '/employee/list',
+  //       key: 'employee-list',
+  //       access: ['employeeList']
+  //     }
+  //     // {
+  //     //   title: '员工请假列表',
+  //     //   path: '/employee/leave/list',
+  //     //   key: 'employee-leave-list'
+  //     // }
+  //   ],
+  //   path: '/employee',
+  //   icon: 员工
+  // },
+  // {
+  //   title: '角色管理',
+  //   key: 'role',
+  //   access: ['roleList'],
+  //   children: [
+  //     {
+  //       title: '角色列表',
+  //       path: '/role/list',
+  //       key: 'role-list',
+  //       access: ['roleList']
+  //     }
+  //   ],
+  //   path: '/role',
+  //   icon: 角色
+  // },
   {
     title: '门店管理',
     key: 'stores',
-    access: ['storeList'],
     children: [
       {
         title: '门店信息',
         path: '/stores/list',
-        key: 'stores-list',
-        access: ['storeList']
-      },
-      {
-        title: '门店动态',
-        key: 'updates-list',
-        path: '/stores/updates/list',
-        access: ['cs:storeUpdates:view']
+        key: 'stores-list'
       }
     ],
     path: '/stores',
     icon: 门店
-  },
-  {
-    title: '营销管理',
-    key: 'marketing',
-    icon: 美团,
-    access: ['cs:marketing:view'],
-    children: [
-      {
-        title: '限时秒杀活动',
-        key: 'marketing-list',
-        path: '/marketing/list',
-        access: ['cs:marketing:view']
-      }
-    ]
   },
   {
     title: '统计报表',
@@ -166,14 +138,14 @@ const defaultMenu = [
     ],
     children: [
       {
-        title: '房间管理',
+        title: '包厢管理',
         path: '/room/list',
         key: 'home-list',
         access: ['roomList']
       },
-      // { title: '房间类型', path: '/room-type/list', key: 'room-type-list' },
+      // { title: '包厢类型', path: '/room-type/list', key: 'room-type-list' },
       {
-        title: '价目表信息',
+        title: '菜品信息',
         path: '/project/list',
         key: 'project-list',
         access: ['projectList']
@@ -224,7 +196,7 @@ const defaultMenu = [
 ]
 
 const state: State = {
-  menus: [],
+  menus: defaultMenu,
   stores: []
 }
 

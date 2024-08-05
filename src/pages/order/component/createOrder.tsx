@@ -4,7 +4,7 @@ import ProjectType from '@/components/ProjectType/projectType'
 import common from '@/servers/common'
 import employee from '@/servers/employee'
 import { RoyaltyType, royaltyTypeMap } from '@/types'
-import { formatMoney } from '@/utils'
+import { formatMoney } from 'wa-utils'
 import {
   Button,
   Input,
@@ -158,7 +158,7 @@ const CreateOrderModal = defineComponent({
         }
       },
       {
-        title: '房间',
+        title: '包厢',
         dataIndex: '',
         fixed: 'right',
         slots: {
@@ -250,7 +250,7 @@ const CreateOrderModal = defineComponent({
       room: ({ index, record }: any) => {
         return (
           <Select
-            placeholder="请选择房间"
+            placeholder="请选择包厢"
             options={roomList.value?.rows}
             value={record?.roomId} // roomNo
             style={{ width: '100%' }}
@@ -306,7 +306,7 @@ const CreateOrderModal = defineComponent({
           return
         }
         if (!((i?.roomId || '') + '')) {
-          message.error('请选择房间')
+          message.error('请选择包厢')
           return
         }
         if (!i?.royaltyType && i?.royaltyType !== 0) {
@@ -553,8 +553,8 @@ const CreateOrderModal = defineComponent({
                             {
                               customNum: 1, // 客数
                               operateUserId: '', // 技师id
-                              roomId: '', // 房间id
-                              roomNo: '', // 确认房间号
+                              roomId: '', // 包厢id
+                              roomNo: '', // 确认包厢号
                               royaltyType: RoyaltyType.排钟,
                               serviceNum: 1, // 上钟数
                               serviceProjectId: item.id, // 服务项目id
