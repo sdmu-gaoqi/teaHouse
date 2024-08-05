@@ -39,7 +39,6 @@ class R {
       if (request.data?.pageNum) {
         request.data.pageNo = request.data.pageNum
       }
-      console.log(request, 'request')
       return request
     })
 
@@ -49,8 +48,9 @@ class R {
       (res) => {
         let data: Record<string, any> = res.data
         if (data?.code === 0) {
-          if (data?.list) {
-            data.raws = data?.list
+          if (data?.data?.list) {
+            data.rows = data?.data?.list
+            data.total = data?.data?.total
           }
           return Promise.resolve(data)
         } else {
@@ -62,8 +62,6 @@ class R {
             msg: (errInfos as any)?.[data?.code] || data.msg
           })
         }
-        //比如响应一些报错信息
-        return Promise.resolve(data)
       },
       function (error) {
         message.error('网络错误, 请稍后再试~')

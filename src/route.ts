@@ -9,7 +9,6 @@ import {
 import Layout from './components/layout/layout.vue'
 import { isEmpty } from 'wa-utils'
 import user from './servers/user'
-import { Store as S } from 'store-request'
 import { useStore } from 'vuex'
 import { toRaw } from 'vue'
 import { transformRoute } from './utils/menu'
@@ -516,7 +515,6 @@ const route = createRouter({
 })
 
 const initUserInfo = async () => {
-  const s = new S()
   const store = useStore()
   const { dispatch, state } = store
   const res = await userInfoRequest()
@@ -529,7 +527,6 @@ const initUserInfo = async () => {
 }
 
 route.beforeEach(async (to, from, next) => {
-  console.log(to, 'to')
   if (to?.path.includes('login')) {
     next()
     return

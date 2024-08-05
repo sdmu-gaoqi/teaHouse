@@ -18,12 +18,9 @@ export const schema: TableProps['schema'] = {
         key: 'name'
       },
       {
-        type: 'range',
-        label: '创建日期',
-        placeholder: ['开始日期', '结束日期'],
-        key: 'createTime',
-        format: 'timestamp',
-        names: ['startCreateTime', 'endCreateTime']
+        type: 'select',
+        label: '包厢类型',
+        key: 'category'
       }
     ]
   },
@@ -49,7 +46,7 @@ export const schema: TableProps['schema'] = {
         },
         {
           title: '包厢类型',
-          dataIndex: 'type'
+          dataIndex: 'category'
         },
         {
           title: '最低消费/元',

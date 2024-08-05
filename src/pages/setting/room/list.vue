@@ -1,15 +1,7 @@
 <template>
   <TableRender
-    :schema="schema"
-    :request="
-      (params) => {
-        return getRoom({
-          ...(params || {}),
-          pageNo: params?.pageNum || 1,
-          pageSize: params?.pageSize || 20
-        })
-      }
-    "
+    :schema="listSchema"
+    :request="roomListRequest"
     :table-props="{ scroll: { x: 2000 } }"
     ref="tableRef"
   >
@@ -70,12 +62,34 @@ import { schema } from './config'
 import { useRouter } from 'vue-router'
 import { Button, message } from 'ant-design-vue'
 import { Room } from 'store-request'
-import { reactive, ref, toRaw } from 'vue'
+import { computed, ref, toRaw } from 'vue'
 import BusinessModal from '@/components/businessModal/businessModal'
 import { BusinessModalType } from '@/components/businessModal/businessModal.type'
 import { sleep } from 'wa-utils'
 import { useAccess } from '@/hooks'
-import request from '@/service'
+import { roomListRequest } from '@/service/room'
+import useDict from '@/hooks/useDict'
+import { Dict } from '@/service/typing'
+
+const { dictLists } = useDict(Dict.包厢类型)
+
+const listSchema = computed(() => {
+  const categoryField = schema.tabs[0].columns.find(
+    (i) => i.dataIndex === 'category'
+  )
+  if (categoryField) {
+    categoryField.options = toRaw(dictLists.value)
+  }
+
+  const returnSchema = {
+    ...schema,
+    options: {
+      category: toRaw(dictLists.value)
+    }
+  }
+  console.log(returnSchema, 'returnSchema')
+  return returnSchema
+})
 
 const { editRoom } = useAccess()
 
@@ -90,17 +104,6 @@ const edit = (data: any) => {
 const tableRef = ref()
 
 const room = new Room()
-
-const getRoom = async (data) => {
-  const res = await request.request({
-    url: '/admin-api/admin-api/guest-room/page',
-    params: data
-  })
-  return {
-    rows: res?.data?.list,
-    total: res?.data?.total
-  }
-}
 
 const router = useRouter()
 const goAdd = () => {

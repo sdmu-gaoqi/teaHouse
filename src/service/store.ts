@@ -7,7 +7,6 @@ import {
 } from './typing'
 
 export const storeListRequest = (data: ParamsStoreList) => {
-  console.log(data, 'data')
   return request.request<ReturnStoreList>({
     url: '/admin-api/system/store/page',
     method: 'post',
