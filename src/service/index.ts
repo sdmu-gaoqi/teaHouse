@@ -22,9 +22,7 @@ const isProd =
   getParameterByName('isProd')
 
 const _request = axios.create({
-  baseURL: isProd
-    ? 'http://111.229.138.125:18080'
-    : 'http://111.229.138.125:18080',
+  baseURL: isProd ? 'http://111.229.138.125:18080' : '',
   timeout: 150000,
   withCredentials: true
 })
@@ -33,9 +31,12 @@ class R {
   public commonData: any = {}
   constructor() {
     _request.interceptors.request.use((request) => {
-      if (getToken()) {
-        request.headers['Authorization'] = getToken()
-      }
+      // 先写死,接口鉴权有问题
+      // request.headers['authorization'] = `Basic YWRtaW46YWRtaW4xMjMh`
+      // if (getToken()) {
+      //   request.headers['Authorization'] = getToken()
+      // }
+      request.headers['content-type'] = 'application/x-www-form-urlencoded'
       if (request.data?.pageNum) {
         request.data.pageNo = request.data.pageNum
       }
@@ -57,9 +58,11 @@ class R {
           if (data?.code === ErrorCode.未登录) {
             logout()
           }
+          const msg = (errInfos as any)?.[data?.code] || data.msg
+          message?.error(msg)
           return Promise.reject({
             ...data,
-            msg: (errInfos as any)?.[data?.code] || data.msg
+            msg
           })
         }
       },

@@ -22,19 +22,10 @@
           title="是否确认删除"
           :onConfirm="
             () => {
-              room
-                .delete({
-                  roomId: data.record.roomId,
-                  roomNo: data.record.roomNo
-                })
-                .then(() => {
-                  message.success('删除成功')
-                  const params = {
-                    ...(toRaw(tableRef.params?.[0]) || {}),
-                    pageNum: 1
-                  }
-                  tableRef.run(params)
-                })
+              deleteRoomREquest(data?.record?.id).then(() => {
+                message.success('删除成功')
+                tableRef.reset?.()
+              })
             }
           "
         >
@@ -67,7 +58,7 @@ import BusinessModal from '@/components/businessModal/businessModal'
 import { BusinessModalType } from '@/components/businessModal/businessModal.type'
 import { sleep } from 'wa-utils'
 import { useAccess } from '@/hooks'
-import { roomListRequest } from '@/service/room'
+import { deleteRoomREquest, roomListRequest } from '@/service/room'
 import useDict from '@/hooks/useDict'
 import { Dict } from '@/service/typing'
 
@@ -96,8 +87,7 @@ const open = ref(false)
 const formState = ref<any>({})
 
 const edit = (data: any) => {
-  open.value = true
-  formState.value = data
+  router.push(`/room/edit/${data.id}`)
 }
 
 const tableRef = ref()

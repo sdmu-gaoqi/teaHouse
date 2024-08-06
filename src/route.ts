@@ -352,6 +352,15 @@ const asyncRouter: any[] = [
             }
           },
           {
+            path: 'edit/:id',
+            name: '编辑包厢',
+            component: () => import('./pages/setting/room/add.vue'),
+            meta: {
+              access: ['editRoom'],
+              key: 'home-list'
+            }
+          },
+          {
             path: 'list',
             name: '包厢列表',
             component: () => import('./pages/setting/room/list.vue'),

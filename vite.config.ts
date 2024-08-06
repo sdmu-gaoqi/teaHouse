@@ -33,7 +33,12 @@ export default defineConfig({
     }
   },
   server: {
-    https: false
+    https: true,
+    proxy: {
+      '/admin-api': {
+        target: 'http://111.229.138.125:18080'
+      }
+    }
   },
   css: {
     postcss: {

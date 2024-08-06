@@ -96,7 +96,7 @@ export const editSchema = {
       required: true,
       message: '请输入包厢号'
     },
-    type: {
+    category: {
       required: true,
       message: '请选择包厢类型'
     },
@@ -104,11 +104,11 @@ export const editSchema = {
       required: true,
       message: '请输入最低消费'
     },
-    z1: {
+    overtimeDuration: {
       required: true,
       message: '请输入消费时长'
     },
-    z2: {
+    overtimeUnitPrice: {
       required: true,
       message: '请输入超时收费'
     }
@@ -121,37 +121,82 @@ export const editSchema = {
         placeholder: '请输入'
       },
       required: true,
-      message: {
-        required: '请输入包厢名称'
-      },
       widget: 'input'
     },
-    type: {
-      title: '包厢类型',
+    name: {
+      title: '包厢名称',
       type: 'string',
       props: {
         placeholder: '请输入'
       },
       required: true,
       message: {
-        required: '请输入容纳客数'
+        required: '请输入包厢名称'
       },
       widget: 'input'
+    },
+    category: {
+      title: '包厢类型',
+      type: 'string',
+      props: {
+        options: [] as any[]
+      },
+      required: true,
+      widget: 'select'
+    },
+    isLowest: {
+      title: '是否有最低消费',
+      type: 'string',
+      widget: 'radio',
+      defaultValue: 1,
+      props: {
+        options: [
+          { label: '否', value: 0 },
+          { label: '是', value: 1 }
+        ]
+      }
+    },
+    capacityNum: {
+      title: '容纳人数',
+      type: 'number',
+      widget: 'input',
+      props: {
+        precision: 0
+      }
     },
     lowestPrice: {
       title: '最低消费',
       type: 'number',
-      widget: 'input'
+      widget: 'input',
+      defaultValue: '0',
+      props: {
+        placeholder: '请输入',
+        suffix: 'money',
+        type: 'number'
+      }
     },
-    z1: {
+    overtimeDuration: {
       title: '消费时长',
       type: 'number',
-      widget: 'input'
+      widget: 'input',
+      defaultValue: '0',
+      props: {
+        placeholder: '请输入',
+        suffix: '小时',
+        type: 'number',
+        precision: 0
+      }
     },
-    z2: {
+    overtimeUnitPrice: {
       title: '超时收费',
       type: 'number',
-      widget: 'input'
+      widget: 'input',
+      defaultValue: '0',
+      props: {
+        placeholder: '请输入',
+        suffix: 'money',
+        type: 'number'
+      }
     },
     remark: {
       title: '备注',

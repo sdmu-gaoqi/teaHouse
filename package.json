@@ -61,7 +61,7 @@
     "sass": "^1.64.1",
     "screenfull": "^6.0.2",
     "smooth-scrollbar": "^8.8.4",
-    "store-operations-ui": "^0.5.1",
+    "store-operations-ui": "^0.5.2",
     "store-request": "^0.1.2",
     "url": "^0.11.1",
     "vite-plugin-compression": "^0.5.1",
