@@ -87,7 +87,6 @@ const listSchema = computed(() => {
       category: toRaw(dictLists.value)
     }
   }
-  console.log(returnSchema, 'returnSchema')
   return returnSchema
 })
 

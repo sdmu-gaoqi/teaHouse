@@ -1,22 +1,26 @@
 import { dictDetailListRequest } from '@/service/dictData'
 import { Dict, ReturnDictDetailList } from '@/service/typing'
 import { onMounted, ref } from 'vue'
+import { useStore } from 'vuex'
 
 const useDict = (dictType: Dict) => {
-  const dictLists = ref<ReturnDictDetailList['data']>([])
-  const dictMaps =
-    ref<Record<Dict, Record<string, ReturnDictDetailList['data'][0]>>>()
+  const store = useStore()
+  const { dictMaps } = store.state.dict
+  const dictLists = ref<ReturnDictDetailList['data']>(
+    Object.values(dictMaps?.[dictType] || {})
+  )
 
   onMounted(async () => {
-    if (dictMaps?.value?.[dictType]) {
+    if (dictMaps?.[dictType]) {
       return
     }
     const res = await dictDetailListRequest({ dictType })
     dictLists.value = res?.data
-    dictMaps.value = {
-      ...(dictMaps.value || {}),
-      [dictType]: Object.fromEntries(res?.data?.map((i) => [i.value, i]))
-    }
+    store.dispatch('dict/setDict', {
+      data: {
+        [dictType]: Object.fromEntries(res?.data?.map((i) => [i.value, i]))
+      }
+    })
   })
 
   return {
