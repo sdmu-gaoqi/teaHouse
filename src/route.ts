@@ -1,23 +1,12 @@
-// @ts-nocheck
-
 import type { RouteRecordRaw } from 'vue-router'
-import {
-  createRouter,
-  createWebHashHistory,
-  createWebHistory
-} from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import Layout from './components/layout/layout.vue'
-import { isEmpty } from 'wa-utils'
-import user from './servers/user'
 import { useStore } from 'vuex'
-import { toRaw } from 'vue'
-import { transformRoute } from './utils/menu'
-import { adminPerm } from './constant'
-import { getToken } from './utils'
-import request from './service'
 import { userInfoRequest } from './service/user'
 
-const baseRouter: any[] = [
+export type RouteItem = RouteRecordRaw
+
+const baseRouter: RouteItem[] = [
   {
     path: 'home',
     name: '首页',
@@ -38,7 +27,7 @@ const baseRouter: any[] = [
   }
 ]
 
-const asyncRouter: any[] = [
+const asyncRouter: RouteItem[] = [
   {
     path: '/stores',
     name: '门店管理',
