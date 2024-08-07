@@ -50,25 +50,15 @@
       <template v-else>{{ data.customer }}</template>
     </template>
   </TableRender>
-  <BusinessModal
-    :open="open"
-    :type="BusinessModalType.编辑包厢"
-    :onCancel="() => (open = false)"
-    :onFinish="onFinish"
-    :formState="formState"
-  ></BusinessModal>
 </template>
 
 <script lang="ts" setup>
 import { TableRender } from 'store-operations-ui'
 import { schema } from './config'
 import { useRouter } from 'vue-router'
-import { Button, message } from 'ant-design-vue'
 import { Room } from 'store-request'
 import { computed, ref, toRaw } from 'vue'
-import BusinessModal from '@/components/businessModal/businessModal'
-import { BusinessModalType } from '@/components/businessModal/businessModal.type'
-import { sleep } from 'wa-utils'
+import { message } from 'ant-design-vue'
 import { useAccess } from '@/hooks'
 import {
   deleteRoomREquest,
@@ -97,11 +87,6 @@ const listSchema = computed(() => {
   return returnSchema
 })
 
-const { editRoom } = useAccess()
-
-const open = ref(false)
-const formState = ref<any>({})
-
 const edit = (data: any) => {
   router.push(`/room/edit/${data.id}`)
 }
@@ -113,14 +98,5 @@ const room = new Room()
 const router = useRouter()
 const goAdd = () => {
   router.push('/room/add')
-}
-const onFinish = async (v: any) => {
-  await room.update({
-    ...v
-  })
-  message.success('更新成功')
-  open.value = false
-  await sleep(300)
-  tableRef.value.run(tableRef.value.params?.[0])
 }
 </script>

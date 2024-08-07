@@ -54,13 +54,6 @@
       <template v-else>{{ data.text }}</template>
     </template></TableRender
   >
-  <BusinessModal
-    :type="BusinessModalType.编辑菜品"
-    :open="open"
-    :onCancel="() => (open = false)"
-    :formState="detail"
-    :onFinish="onFinish"
-  ></BusinessModal>
 </template>
 
 <script lang="ts" setup>
@@ -70,16 +63,9 @@ import { useRouter } from 'vue-router'
 import { CommonService } from 'store-request'
 import { message } from 'ant-design-vue'
 import { ref, toRaw } from 'vue'
-import BusinessModal from '@/components/businessModal/businessModal'
-import { BusinessModalType } from '@/components/businessModal/businessModal.type'
-import { useAccess } from '@/hooks'
-import request from '@/service'
 import { goodsListRequest } from '@/service/goods'
 
 const { editProject } = { editProject: true }
-
-const open = ref(false)
-const detail = ref<any>({})
 
 const tableRef = ref()
 
@@ -88,17 +74,5 @@ const common = new CommonService()
 const router = useRouter()
 const goAdd = () => {
   router.push('/project/add')
-}
-const onFinish = async (value: any) => {
-  await common.updateProject({
-    ...value,
-    serviceProjectId: detail.value?.id,
-    ...(value?.image?.[0]?.response?.data?.fileId && {
-      coverFileId: value?.image?.[0]?.response?.data?.fileId
-    })
-  })
-  message.success('编辑成功')
-  open.value = false
-  tableRef.value?.reset?.()
 }
 </script>

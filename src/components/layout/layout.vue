@@ -69,16 +69,6 @@
             :options="store?.state?.common?.stores"
             :fieldNames="{ label: 'name', value: 'code' }"
             :value="userInfo.userInfo.currentStoreCode"
-            @change="
-              (_: any, r: any) => {
-                common
-                  .changeStore({ storeCode: r.code })
-                  .then(() => {
-                    changeLoginSuccess(r.code)
-                  })
-                  .catch((err: any) => changeLoginErr(err, r.code))
-              }
-            "
           ></a-select>
           <div class="ml-auto flex justify-center items-center">
             <!-- version -->
@@ -155,11 +145,9 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
 import { useRouter, RouterLink, useRoute } from 'vue-router'
-import { getToken, isLogin, logout } from '@/utils'
+import { isLogin, logout } from '@/utils'
 import scrollBar from 'smooth-scrollbar'
-import { useRequest } from 'vue-hooks-plus'
 import { Store as S } from 'store-request'
-import common from '@/servers/common'
 import { useStore } from 'vuex'
 import fullImg from '@/assets/全屏.svg'
 import notFullImg from '@/assets/退出全屏.svg'

@@ -5,11 +5,11 @@
     :tableProps="{ scroll: { x: 1600 } }"
     ref="tableRef"
   >
-    <template #formButton
+    <!-- <template #formButton
       ><a-button type="primary" :onClick="goAdd" class="ml-[10px]"
         >新增门店</a-button
       ></template
-    >
+    > -->
     <template #bodyCell="{ data }">
       <div
         v-if="data?.column?.dataIndex === 'options'"
@@ -31,35 +31,19 @@
       <template v-else>{{ data.text }}</template>
     </template>
   </TableRender>
-  <BusinessModal
-    :type="BusinessModalType.门店详情"
-    :open="open"
-    :formState="formState"
-    :onFinish="onFinish"
-    :onCancel="() => (open = false)"
-    :modalProps="{
-      title: formState?.modalType === 'edit' ? '编辑门店' : '详细信息'
-    }"
-  />
 </template>
 
 <script lang="ts" setup>
 import { TableRender } from 'store-operations-ui'
 import { schema } from './config'
 import { Store } from 'store-request'
-import BusinessModal from '@/components/businessModal/businessModal'
-import { BusinessModalType } from '@/components/businessModal/businessModal.type'
 import { ref } from 'vue'
-import dayjs from 'dayjs'
-import { message } from 'ant-design-vue'
-import { useRouter } from 'vue-router'
 import { storeListRequest } from '@/service/store'
 
 const open = ref(false)
 const formState = ref<any>({})
 const type = ref<'view' | 'edit'>('view')
 const tableRef = ref()
-const router = useRouter()
 
 const edit = (data: any, t: 'view' | 'edit') => {
   open.value = true
@@ -69,35 +53,6 @@ const edit = (data: any, t: 'view' | 'edit') => {
     headquartersName: data.headquartersName
   }
   type.value = t
-}
-
-const onFinish = async (v: any) => {
-  const value = {
-    address: v?.address,
-    banner: v?.image?.map(
-      (item: any) =>
-        item?.response?.data?.filePath?.split('/file/download/')[1] ||
-        item?.url?.split('/file/download/')[1]
-    ),
-    businessHours: v?.businessHours
-      ?.map((item: string) => dayjs(item).format('HH:mm'))
-      ?.join('-'),
-    code: formState?.value?.code,
-    id: formState?.value?.id,
-    name: v?.name,
-    phone: v?.phone,
-    remark: v?.remark,
-    tel: v?.tel
-  }
-  await store.update(value)
-  tableRef.value.run(tableRef.value.params?.[0])
-  message.success('更新成功')
-  formState.value = {}
-  open.value = false
-}
-
-const goAdd = () => {
-  router.push('/stores/add')
 }
 
 const store = new Store()
