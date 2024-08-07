@@ -58,6 +58,42 @@ const asyncRouter: any[] = [
     ]
   },
   {
+    path: '/member',
+    name: '会员管理',
+    redirect: () => {
+      return { path: 'list' }
+    },
+    children: [
+      {
+        path: 'list',
+        name: '会员列表',
+        component: () => import('./pages/member/list'),
+        meta: {
+          access: ['storeList'],
+          key: 'member-list'
+        }
+      },
+      {
+        path: 'add',
+        name: '新增会员',
+        component: () => import('./pages/member/edit'),
+        meta: {
+          access: ['storeList'],
+          key: 'member-list'
+        }
+      },
+      {
+        path: 'edit/:id',
+        name: '编辑会员',
+        component: () => import('./pages/member/edit'),
+        meta: {
+          access: ['storeList'],
+          key: 'member-list'
+        }
+      }
+    ]
+  },
+  {
     path: '/',
     name: '系统管理',
     redirect: () => {

@@ -1,5 +1,5 @@
 import { defineComponent } from 'vue'
-import classify from '@/assets/classify.svg'
+import classify from '@/assets/svg/classify.svg'
 
 const FormGroup = defineComponent({
   props: {

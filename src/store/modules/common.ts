@@ -1,7 +1,7 @@
 import { CHANGEMENUDATA, CHANGESTORES } from '../actions'
-import 会员 from '@/assets/会员.svg'
-import 门店 from '@/assets/门店.svg'
-import 设置 from '@/assets/设置.svg'
+import member from '@/assets/svg/member.svg'
+import storeIcon from '@/assets/svg/store.svg'
+import setIcon from '@/assets/svg/set.svg'
 import type { UserState } from './userInfo'
 import { transformMenuByPerms } from '@/utils/menu'
 
@@ -25,7 +25,7 @@ const defaultMenu = [
       // { title: '会员模式', path: '/member/type/list', key: 'member-type-list' }
     ],
     path: '/member',
-    icon: 会员
+    icon: member
   },
   {
     title: '门店管理',
@@ -38,7 +38,7 @@ const defaultMenu = [
       }
     ],
     path: '/stores',
-    icon: 门店
+    icon: storeIcon
   },
   {
     title: '系统管理',
@@ -65,7 +65,7 @@ const defaultMenu = [
       }
     ],
     path: '/operation',
-    icon: 设置
+    icon: setIcon
   }
 ]
 

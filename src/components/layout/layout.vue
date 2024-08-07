@@ -25,8 +25,8 @@
         id="sideMenu"
       >
         <a-menu-item
-          v-for="item in menus.filter((item: any) => !item.children)"
           :key="item.key"
+          v-for="item in menus.filter((item: any) => !item.children)"
         >
           <template #icon v-if="item.icon"
             ><img :src="item.icon" class="w-[16px]"
@@ -149,8 +149,8 @@ import { isLogin, logout } from '@/utils'
 import scrollBar from 'smooth-scrollbar'
 import { Store as S } from 'store-request'
 import { useStore } from 'vuex'
-import fullImg from '@/assets/全屏.svg'
-import notFullImg from '@/assets/退出全屏.svg'
+import fullImg from '@/assets/svg/full.svg'
+import notFullImg from '@/assets/exitFull.svg'
 import screenfull from 'screenfull'
 
 const canFull = document.fullscreenEnabled

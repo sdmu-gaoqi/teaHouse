@@ -6,8 +6,8 @@
     ref="tableRef"
   >
     <template #formButton>
-      <Button type="primary" :onClick="goAdd" class="ml-[10px]"
-        >新增包厢</Button
+      <a-button type="primary" :onClick="goAdd" class="ml-[10px]"
+        >新增包厢</a-button
       ></template
     >
     <template #bodyCell="{ data }">

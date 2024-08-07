@@ -36,7 +36,7 @@ export const addGoodREquest = (data: ParamsAddGood) => {
   })
 }
 
-export const updateRoomREquest = (data: ParamsAddGood & { id: number }) => {
+export const updateGOodREquest = (data: ParamsAddGood & { id: number }) => {
   return request.request<Response<boolean>>({
     url: '/admin-api/admin-api/goods/update',
     method: 'post',
