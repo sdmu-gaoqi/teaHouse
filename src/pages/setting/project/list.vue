@@ -1,12 +1,12 @@
 <template>
-  <TableRender :schema="schema" :request="getProject" ref="tableRef">
+  <TableRender :schema="schema" :request="goodsListRequest" ref="tableRef">
     <template #formButton
       ><a-button
         type="primary"
         :onClick="goAdd"
         class="ml-[10px]"
         v-if="editProject"
-        >新增项目</a-button
+        >新增菜品</a-button
       ></template
     >
     <template #bodyCell="{ data }">
@@ -20,8 +20,7 @@
           v-if="editProject"
           @click="
             () => {
-              open = true
-              detail = data.record
+              $router.push(`/project/edit/${data?.record?.id}`)
             }
           "
           >编辑</a
@@ -51,25 +50,6 @@
           ></a-popconfirm
         >
       </div>
-      <a-switch
-        v-else-if="data?.column?.dataIndex === 'enabled'"
-        :checked="data.text == 1"
-        :disabled="!editProject"
-        @change="
-          (v: any) => {
-            const value = v ? 1 : 0
-            common
-              .projectStatus({
-                enabled: value,
-                serviceProjectId: data.record.id,
-                serviceName: data.record.serviceName
-              })
-              .then(() => {
-                data.record.enabled = value
-              })
-          }
-        "
-      ></a-switch>
       <template v-else-if="data.customer">{{ data.customer }}</template>
       <template v-else>{{ data.text }}</template>
     </template></TableRender
@@ -94,6 +74,7 @@ import BusinessModal from '@/components/businessModal/businessModal'
 import { BusinessModalType } from '@/components/businessModal/businessModal.type'
 import { useAccess } from '@/hooks'
 import request from '@/service'
+import { goodsListRequest } from '@/service/goods'
 
 const { editProject } = { editProject: true }
 
@@ -118,22 +99,6 @@ const onFinish = async (value: any) => {
   })
   message.success('编辑成功')
   open.value = false
-  tableRef.value.run(tableRef.value.params?.[0])
-}
-
-const getProject = async (data) => {
-  const res = await request.request({
-    url: '/admin-api/admin-api/goods/page',
-    data: {
-      pageNo: data?.pageNum,
-      pageSize: data?.pageSize,
-      name: data?.name
-    },
-    method: 'post'
-  })
-  return {
-    rows: res?.data?.list,
-    total: res?.data?.total
-  }
+  tableRef.value?.reset?.()
 }
 </script>

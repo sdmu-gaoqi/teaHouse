@@ -7,8 +7,9 @@ export const isLogin = () => {
 }
 
 export const logout = () => {
-  location.hash = '/login'
   storage.remove('cToken')
+  location.hash = '/login'
+  location.reload()
 }
 
 export const getToken = () => {

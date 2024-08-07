@@ -402,7 +402,16 @@ const asyncRouter: any[] = [
           },
           {
             path: 'add',
-            name: '新增项目',
+            name: '新增菜品',
+            component: () => import('./pages/setting/project/add.vue'),
+            meta: {
+              access: ['editProject'],
+              key: 'project-list'
+            }
+          },
+          {
+            path: 'edit/:id',
+            name: '编辑菜品',
             component: () => import('./pages/setting/project/add.vue'),
             meta: {
               access: ['editProject'],

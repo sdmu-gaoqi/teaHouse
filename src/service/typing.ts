@@ -3,7 +3,13 @@ export enum ErrorCode {
 }
 
 export enum Dict {
-  包厢类型 = 'infra_guest_room_category'
+  包厢类型 = 'infra_guest_room_category',
+  菜品类型 = 'infra_goods_category'
+}
+
+export enum GoodType {
+  菜品 = 0,
+  商品 = 1
 }
 
 export interface Response<T> {
@@ -124,6 +130,7 @@ export type ParamsAddRoom = {
   lowestPrice: number
   overtimeUnitPrice: number
   sort: number
+  status?: number
 }
 
 export type RoomItem = {
@@ -152,3 +159,67 @@ export type ReturnDictDetailList = Response<
     cssClass: string
   }[]
 >
+
+export type ParamsGoodsList = PageParams & {
+  code?: string
+  name?: string
+  category?: string
+}
+
+export type GoodItem = {
+  id: number
+  code: string
+  name: string
+  status: number
+  category: string
+  categoryName: string
+  canDiscount: number
+  unit: string
+  unitName: string
+  unitPrice: number
+  createTime: string
+  updateTime: string
+}
+
+export type GoodSetItem = {
+  id: number
+  code: string
+  name: string
+  status: number
+  category: string
+  categoryName: string
+  canDiscount: number
+  unit: string
+  unitName: string
+  unitPrice: number
+  createTime: string
+  updateTime: string
+  type: GoodType
+}
+
+export type ReturnGoods = Response<GoodItem[]>
+export type ReturnGoodsSet = Response<GoodSetItem[]>
+
+export type ParamsAddGood = {
+  id: number
+  name: string
+  category: string
+  /**
+   * 单位 数据字典infra_goods_unit
+   * */
+  unit: string
+  /**
+   * unitPrice
+   * */
+  unitPrice: number
+  /**
+   * 菜品类型 0菜品 1商品
+   * */
+  type: GoodType
+  status: number // 0 || 1
+  /**
+   * 位置 0-吧台 1-厨房
+   * */
+  position: string
+  sort: number
+}

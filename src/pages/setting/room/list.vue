@@ -33,7 +33,19 @@
         </a-popconfirm>
       </div>
       <template v-else-if="data?.column?.dataIndex === 'status'">
-        <a-switch></a-switch>
+        <a-switch
+          @change="
+            async () => {
+              const status = data?.record?.status ? 0 : 1
+              await updateRoomREquest({
+                ...data?.record,
+                status
+              })
+              data.record.status = status
+            }
+          "
+          :checked="data?.record?.status == 1"
+        ></a-switch>
       </template>
       <template v-else>{{ data.customer }}</template>
     </template>
@@ -58,7 +70,11 @@ import BusinessModal from '@/components/businessModal/businessModal'
 import { BusinessModalType } from '@/components/businessModal/businessModal.type'
 import { sleep } from 'wa-utils'
 import { useAccess } from '@/hooks'
-import { deleteRoomREquest, roomListRequest } from '@/service/room'
+import {
+  deleteRoomREquest,
+  roomListRequest,
+  updateRoomREquest
+} from '@/service/room'
 import useDict from '@/hooks/useDict'
 import { Dict } from '@/service/typing'
 

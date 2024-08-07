@@ -1,4 +1,5 @@
 import { ossOrigin } from '@/constant'
+import { goodTypeMap } from '@/constant/goods'
 import { message } from 'ant-design-vue'
 import { TableProps } from 'store-operations-ui'
 import { Storage } from 'wa-utils'
@@ -14,8 +15,13 @@ export const schema: TableProps['schema'] = {
     fields: [
       {
         type: 'search',
-        label: '服务项目',
-        key: 'serviceName'
+        label: '菜品编号',
+        key: 'code'
+      },
+      {
+        type: 'search',
+        label: '菜品名称',
+        key: 'name'
       }
     ]
   },
@@ -26,25 +32,42 @@ export const schema: TableProps['schema'] = {
       columns: [
         {
           fixed: true,
-          title: '项目编号',
-          dataIndex: 'id',
-          width: 100
+          title: '序号',
+          dataIndex: 'code',
+          width: 100,
+          isIndex: true
         },
         {
           fixed: true,
           title: '菜品编码',
-          dataIndex: 'categoryName',
+          dataIndex: 'code',
           width: 100
         },
         {
           title: '菜品名称',
-          dataIndex: 'serviceName',
+          dataIndex: 'name',
           width: 250
         },
         {
-          title: '价格 /元',
-          dataIndex: 'price',
+          title: '单价 /元',
+          dataIndex: 'unitPrice',
           format: 'money'
+        },
+        {
+          title: '是否参与折扣',
+          dataIndex: 'canDiscount',
+          options: [
+            { label: '否', value: 0 },
+            { label: '是', value: 1 }
+          ]
+        },
+        {
+          title: '销售状态',
+          dataIndex: 'statis',
+          options: [
+            { label: '在售', value: 0 },
+            { label: '已售完', value: 1 }
+          ]
         },
         {
           title: '创建日期',
@@ -94,14 +117,53 @@ export const editSchema = {
       },
       widget: 'input'
     },
+    type: {
+      title: '菜品类型',
+      type: 'number',
+      props: {
+        placeholder: '请输入',
+        type: 'number',
+        options: Object.entries(goodTypeMap).map(([value, label]) => ({
+          label,
+          value
+        }))
+      },
+      widget: 'select'
+    },
     unitPrice: {
-      title: '价格',
+      title: '单价',
       type: 'number',
       props: {
         placeholder: '请输入',
         type: 'number'
       },
       widget: 'input'
+    },
+    unit: {
+      title: '单位',
+      type: 'number',
+      props: {
+        options: [] as any[]
+      },
+      widget: 'select'
+    },
+    canDiscount: {
+      title: '是否参与优惠折扣',
+      type: 'number',
+      defaultValue: 1,
+      props: {
+        options: [
+          {
+            value: 0,
+            label: '否'
+          },
+          {
+            value: 1,
+            label: '是'
+          }
+        ]
+      },
+      widget: 'radio'
     },
     store: {
       title: '所属门店',
@@ -110,18 +172,6 @@ export const editSchema = {
       props: {
         readonly: true,
         bordered: false
-      }
-    },
-    canDiscount: {
-      title: '是否参与折扣优惠',
-      widget: 'radio',
-      type: 'string',
-      defaultValue: 1,
-      props: {
-        options: [
-          { label: '是', value: 1 },
-          { label: '否', value: 0 }
-        ]
       }
     },
     // image: {

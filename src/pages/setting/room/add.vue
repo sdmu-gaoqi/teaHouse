@@ -1,9 +1,8 @@
 <template>
-  <FormCard title="新增包厢">
+  <FormCard :title="title">
     <template #content>
       <FormRender
         ref="formRef"
-        :formState="formState"
         :on-finish="onFinish"
         :on-cancel="onCancel"
         :schema="schema"
@@ -35,6 +34,8 @@ const id = route?.params?.id
 
 const { dictLists } = useDict(Dict.包厢类型)
 
+const title = id ? '编辑包厢' : '新增包厢'
+
 const schema = computed(() => {
   const cloneSchema = cloneDeep(editSchema)
   cloneSchema.properties.category.props.options = dictLists.value
@@ -52,7 +53,10 @@ const onFinish = async (value: ParamsAddRoom) => {
       id: Number(id)
     })
   } else {
-    await addRoomREquest(value)
+    await addRoomREquest({
+      ...value,
+      status: 1
+    })
   }
   message.success('保存成功')
   await sleep(300)

@@ -36,7 +36,7 @@ class R {
       // if (getToken()) {
       //   request.headers['Authorization'] = getToken()
       // }
-      request.headers['content-type'] = 'application/x-www-form-urlencoded'
+      // request.headers['content-type'] = 'application/x-www-form-urlencoded'
       if (request.data?.pageNum) {
         request.data.pageNo = request.data.pageNum
       }

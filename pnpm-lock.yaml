@@ -63,8 +63,8 @@ dependencies:
     specifier: ^8.8.4
     version: 8.8.4
   store-operations-ui:
-    specifier: ^0.5.2
-    version: 0.5.2(@typescript-eslint/parser@6.21.0)(eslint@8.57.0)(react-dom@18.3.1)(react@18.3.1)(typescript@5.5.3)(vite@4.5.3)
+    specifier: ^0.5.3
+    version: 0.5.3(@typescript-eslint/parser@6.21.0)(eslint@8.57.0)(react-dom@18.3.1)(react@18.3.1)(typescript@5.5.3)(vite@4.5.3)
   store-request:
     specifier: ^0.1.2
     version: 0.1.2(react-dom@18.3.1)(react@18.3.1)(vue@3.4.31)
@@ -7034,8 +7034,8 @@ packages:
       internal-slot: 1.0.7
     dev: true
 
-  /store-operations-ui@0.5.2(@typescript-eslint/parser@6.21.0)(eslint@8.57.0)(react-dom@18.3.1)(react@18.3.1)(typescript@5.5.3)(vite@4.5.3):
-    resolution: {integrity: sha512-Dj0asSfO0cuT+UEOiVJRvjT7BWJoPUEWVng+Ult/HNdSry35uOA69+0Z9tZJMPWlwjvXZehs/1ZYSriBOodJFA==}
+  /store-operations-ui@0.5.3(@typescript-eslint/parser@6.21.0)(eslint@8.57.0)(react-dom@18.3.1)(react@18.3.1)(typescript@5.5.3)(vite@4.5.3):
+    resolution: {integrity: sha512-NXbYMAnFeHQQYEACPaU31DGK9kfCt/qb/os4KjKOj2qQrRM6/4Rq9Bzb8I6mkgzcBNFo6IPtrQc23N6WMtgAfw==}
     dependencies:
       '@ant-design/icons-vue': 7.0.1(vue@3.4.31)
       '@vitejs/plugin-vue': 4.6.2(vite@4.5.3)(vue@3.4.31)

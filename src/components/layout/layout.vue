@@ -164,7 +164,7 @@ import { useStore } from 'vuex'
 import fullImg from '@/assets/全屏.svg'
 import notFullImg from '@/assets/退出全屏.svg'
 import screenfull from 'screenfull'
-import request from '@/service'
+
 const canFull = document.fullscreenEnabled
 const routeData = useRoute()
 
@@ -208,7 +208,7 @@ onMounted(() => {
     })
   }
   if (!isLogin()) {
-    location.hash = '#/login'
+    logout()
     return
   }
 })

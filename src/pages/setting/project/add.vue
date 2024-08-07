@@ -27,12 +27,12 @@ import { FormRender, FormCard } from 'store-operations-ui'
 import { editSchema } from './config'
 import { useRoute, useRouter } from 'vue-router'
 import { debounce, sleep } from 'wa-utils'
-import common from '@/servers/common'
 import { message } from 'ant-design-vue'
 import { useStore } from 'vuex'
 import ProjectType from '@/components/ProjectType/projectType'
-import { ref, toRaw } from 'vue'
-import request from '@/service'
+import { onMounted, ref } from 'vue'
+import { ParamsAddGood } from '@/service/typing'
+import { addGoodREquest } from '@/service/goods'
 
 const {
   params: { id }
@@ -48,20 +48,23 @@ schema.properties.store.defaultValue =
 
 const router = useRouter()
 
-const onFinish = async (value: Record<string, any>) => {
-  if (!isEdit) {
-    await request.request({
-      url: '/admin-api/admin-api/goods/save',
-      data: value,
-      method: 'post'
-    })
-  } else {
-    await request.request({
-      url: '/admin-api/admin-api/goods/update',
-      data: value,
-      method: 'post'
-    })
-  }
+// onMounted(async () => {
+//   if (id) {
+//     const res = await good
+//   }
+// })
+
+const onFinish = async (value: ParamsAddGood) => {
+  // if (!isEdit) {
+  //   await addGoodREquest()
+  // } else {
+  //   await request.request({
+  //     url: '/admin-api/admin-api/goods/update',
+  //     data: value,
+  //     method: 'post'
+  //   })
+  // }
+  await addGoodREquest(value)
   message.success('保存成功')
   await sleep(300)
   router.back()
